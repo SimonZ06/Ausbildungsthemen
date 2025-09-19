@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>01 - TCP/IP, Routing, NAT</title>
+    <style>
+        body {
+            background-color: #000000f4;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: #181818;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgb(167, 0, 0);
+            padding: 32px 34px;
+        }
+        header {
+            background: linear-gradient(90deg, #000000 0%, #4f0098 100%);
+            color: #bcabd5;
+            padding: 24px 0 16px 0;
+            border-radius: 16px 16px 0 0;
+            text-align: center;
+            margin-bottom: 24px;
+            text-shadow: 0 0 1px #000000, 0 0 2px #000000;
+        }
+        h1 {
+            margin: 0;
+            font-size: 2em;
+            letter-spacing: 2px;
+        }
+        .section-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-top: 32px;
+            margin-bottom: 12px;
+            color: #a962ff;
+            text-shadow: 0 0 1px #000000, 0 0 2px #000000;
+        }
+        p {
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+        ul {
+            margin-bottom: 24px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        a {
+            color: #00ffcc;
+            text-decoration: underline;
+            font-weight: bold;
+            transition: color 0.2s;
+        }
+        a:visited {
+            color: #7b00ff;
+        }
+        a:hover {
+            color: #ff0066;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 24px;
+            color: #a962ff;
+            background: #1a1a1a;
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.2s, color 0.2s;
+            text-shadow: 0 0 1px #000000, 0 0 2px #000000;
+        }
+        .back-link:hover {
+            background: #000000;
+            color: #6e00e4;
+        }
+        @media (max-width: 800px) {
+            .container {
+                max-width: 98vw;
+                padding: 12px 6vw;
+            }
+            header {
+                font-size: 1em;
+                padding: 16px 0 8px 0;
+            }
+        }
+        .trennlinie {
+            border: none;
+            border-top: 2px solid #a962ffb7;
+            margin: 24px 0;
+            opacity: 0.5;
+            border-radius: 2px;
+        }
+        ul, ul ul {
+            list-style-type: disc;
+        }
+        ul, ul ul {
+        }
+        ul li::marker {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>01 - TCP/IP, Routing, NAT (Einfach/Erweitert)</h1>
+        </header>
+        <div class="section-title">1. Theoretische Grundlagen</div>
+        <h1>Das Default Gateway</h1>
+        <p>Ein Default Gateway ist das Gerät in einem Netzwerk, das Datenpakete aus dem lokalen Netz in andere Netze weiterleitet. In den allermeisten Fällen übernimmt der Router diese Rolle. Man kann sich das Gateway als "Tür zur Außenwelt" vorstellen: wenn ein Computer ein Ziel ansprechen möchte, das nicht im eigenen Subnetz liegt, dann schickt er die Daten an das Standardgateway.</p>
+        <p>Das Gateway entscheidet anhand seiner Routing-Tabelle, ob es die Pakete im eigenen Netz zustellen kann oder sie weiter ins Internet leitet. Der Rückweg funktioniert genauso: Antworten von außerhalb kommen am Gateway an und werden an das richtige Gerät im heimnetz zurückgeschickt.</p>
+        <br>
+        <b>Beispiel:</b>
+        <ul>
+            <li>PC: 192.168.1.100 möchte google.de erreichen.</li>
+            <li>Ziel liegt nicht im eigenen Subnetz &#8594; Paket geht an Default Gateway (192.168.1.1).</li>
+            <li>Router leitet es ins Internet.</li>
+            <li>Antwort von Google kommt zurück &#8594; Router weiß, dass PC 192.168.1.100 der Absender war &#8594; Weiterleitung zurück.</li>
+        </ul>
+        <b>Wichtigkeit des Default Gateways:</b>
+        <ul>
+            <li>Ohne Gateway &#8594; keine Kommunikation außerhalb des LAN.</li>
+            <li>Es übernimmt Routing-Entscheidungen für unbekannte Ziele.</li>
+            <li>Oft ist es gleichzeitig ein Kontroll- und Sicherheitspunkt (z. B. Firewall im Router).</li>
+        </ul>
+        <hr class="trennlinie">
+        <h1>NAT (Network Address Translation)</h1>
+        <p>Da die Anzahl an IPv4-Adressen begrenzt ist, nutzt man NAT, um viele private IP-Adressen aus einem Heimnetz über eine einzige öffentliche IP-Adresse ins Internet zu bringen.</p>
+        <p>Die Fritzbox setzt dazu PAT (Port Address Translation) ein. Dabei werden nicht nur die Adressen übersetzt, sondern auch Portnummern genutzt, um verschiedene Verbindungen auseinanderzuhalten.</p>
+        <br>
+        <b>Beispiel FritzBox:</b>
+        <ul>
+            <li>Laptop: 192.168.178.20 &#8594; Anfrage an Google.</li>
+            <li>FritzBox ersetzt die Absender-IP durch ihre öffentliche Adresse, z. B. 93.123.45.67.
+            <li>Sie merkt sich, dass die Anfrage von Laptop kam.</li>
+            <li>Antwort von Google an 93.123.45.67 &#8594; FritzBox ordnet sie wieder 192.168.178.20 zu.</li>
+        </ul>
+        <b>Vorteile von NAT:</b>
+        <ul>
+            <li>Mehrere Geräte nutzen eine öffentliche IP.</li>
+            <li>Sicherheit: Geräte sind von außen nicht direkt sichtbar.</li>
+            <li>Flexibilität durch Portfreigaben.</li>
+        </ul>
+        <b>Portfreigaben:</b>
+        <ul>
+            <li>Weiterleitung einzelner Ports auf ein Gerät im LAN.</li>
+            <li>Beispiel: Minecraft-Server (Port 25565) &#8594; wird an PC 192.168.178.20 durchgereicht.</li>
+        </ul>
+        <b>Exposed Host:</b>
+        <ul>
+            <li>Alle Ports an ein Gerät weitergeleitet &#8594; unsicher, nur zu Testzwecken.</li>
+        </ul>
+        <b>IPv6:</b>
+        <ul>
+            <li>Jedes Gerät bekommt eine öffentliche Adresse.</li>
+            <li>Kein NAT nötig &#8594; stattdessen übernimmt die FritzBox Firewallfunktionen.</li>
+        </ul>
+        <hr class="trennlinie">
+        <div class="section-title">2. Praktische Umsetzung</div>
+        <h1>TCP/IP-Konfiguration unter Windows</h1>
+        <p>Unter Windows lassen sich IP-Adressen automatisch (per DHCP) oder manuell konfigurieren.</p>
+        <b>Automatisch beziehen (DHCP):</b>
+        <ul>
+            <li>Der Rechner fragt beim Router nach einer Adresse.</li>
+            <li>Typischer Fall im Heimnetz.</li>
+        </ul>
+        <b>Manuell eintragen (statische IP):</b>
+        <ul>
+            <li>Nützlich bei Servern, VMs oder für Tests.</li>
+            <li>Erforderliche Angaben:</li>
+                <ul>
+                    <li>IP-Adresse (z. B. 192.168.1.100)</li>
+                    <li>Subnetzmaske (z. B. 255.255.255.0)</li>
+                </ul>
+        </ul>
+        <hr class="trennlinie">
+        <a href="Ausbildungsthemen.html" class="back-link">&larr; Zurück zum Inhaltsverzeichnis</a>
+    </div>
+</body>
+</html>
