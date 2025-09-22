@@ -45,6 +45,17 @@
             margin-bottom: 16px;
             line-height: 1.6;
         }
+        table td, table th {
+            padding-top: 10px;
+            padding-bottom: 10px;
+            line-height: 1.25;
+        }
+        table td:first-child {
+            padding-right: 32px;
+        }
+        table td:nth-child(2) {
+            padding-right: 32px;
+        }
         ul {
             margin-bottom: 24px;
         }
@@ -99,8 +110,6 @@
         ul, ul ul {
             list-style-type: disc;
         }
-        ul, ul ul {
-        }
         ul li::marker {
             color: #fff;
         }
@@ -114,7 +123,7 @@
         <div class="section-title">1. Theoretische Grundlagen</div>
         <h1>Das Default Gateway</h1>
         <p>Ein Default Gateway ist das Gerät in einem Netzwerk, das Datenpakete aus dem lokalen Netz in andere Netze weiterleitet. In den allermeisten Fällen übernimmt der Router diese Rolle. Man kann sich das Gateway als "Tür zur Außenwelt" vorstellen: wenn ein Computer ein Ziel ansprechen möchte, das nicht im eigenen Subnetz liegt, dann schickt er die Daten an das Standardgateway.</p>
-        <p>Das Gateway entscheidet anhand seiner Routing-Tabelle, ob es die Pakete im eigenen Netz zustellen kann oder sie weiter ins Internet leitet. Der Rückweg funktioniert genauso: Antworten von außerhalb kommen am Gateway an und werden an das richtige Gerät im heimnetz zurückgeschickt.</p>
+        <p>Das Gateway entscheidet anhand seiner Routing-Tabelle, in welches andere Netz ein Paket weitergeleitet wird. Befindet sich das Ziel im gleichen Subnetz, erfolgt die Zustellung direkt (z. B. über ARP). Der Rückweg funktioniert genauso: Antworten von außerhalb kommen am Gateway an und werden an das richtige Gerät im Heimnetz zurückgeschickt.</p>
         <br>
         <b>Beispiel:</b>
         <ul>
@@ -144,7 +153,7 @@
         <b>Vorteile von NAT:</b>
         <ul>
             <li>Mehrere Geräte nutzen eine öffentliche IP.</li>
-            <li>Sicherheit: Geräte sind von außen nicht direkt sichtbar.</li>
+            <li>Sicherheit: Geräte sind von außen nicht direkt sichtbar (kein Ersatz für eine Firewall, aber erschwert Angriffe).</li>
             <li>Flexibilität durch Portfreigaben.</li>
         </ul>
         <b>Portfreigaben:</b>
@@ -160,6 +169,7 @@
         <ul>
             <li>Jedes Gerät bekommt eine öffentliche Adresse.</li>
             <li>Kein NAT nötig &#8594; stattdessen übernimmt die FritzBox Firewallfunktionen.</li>
+            <li>(Hinweis: NAT66 existiert, wird aber kaum eingesetzt und in FritzBoxen nicht verwendet.)</li>
         </ul>
         <hr class="trennlinie">
         <div class="section-title">2. Praktische Umsetzung</div>
@@ -177,8 +187,137 @@
                 <ul>
                     <li>IP-Adresse (z. B. 192.168.1.100)</li>
                     <li>Subnetzmaske (z. B. 255.255.255.0)</li>
+                    <li>Standardgateway (meist Router, z. B. 192.168.1.1)</li>
+                    <li>DNS-Server (z. B. 8.8.8.8 von Google oder 1.1.1.1 von Cloudflare)</li>
                 </ul>
         </ul>
+        <b>Wann verwendet man was?</b>
+        <ul>
+            <li>Heimnetz &#8594; DHCP.</li>
+            <li>Server/VM &#8594; statische IP.</li>
+            <li>Probleme mit Namensauflösung &#8594; DNS gezielt einstellen (besser zentral am Router/DHCP, statt auf jedem Client).</li>
+        </ul>
+        <hr class="trennlinie">
+        <h1>Routing auf Windows-PC</h1>
+        <p>Die Routen lassen sich mit <small style="font-family:'Courier New'">route print</small> anzeigen. Die Tabelle enthält alle bekannten Wege zu Netzwerken.</p>
+        <ul>
+            <li> <b>Wichtige Einträge:</b> </li>
+                <ul>
+                    <li>0.0.0.0 &#8594; Standardroute = Default Gateway.</li>
+                    <li>Subnetze wie 192.168.1.0 &#8594; direkte Verbindung.</li>
+                </ul>
+            <li> <b>Routen hinzufügen:</b> </li>
+        </ul>
+        <small style="font-family:'Courier New'">&nbsp; &nbsp; cmd</small>
+        <br>
+        <small style="font-family:'Courier New'">&nbsp; &nbsp; route add 10.10.10.0 mask 255.255.255.0 192.168.1.1</small>
+        <br>
+        <br>
+        <ul>
+            <b><li>Routen löschen:</li></b>
+        </ul>
+        <small style="font-family:'Courier New'">&nbsp; &nbsp; cmd</small>
+        <br>
+        <small style="font-family:'Courier New'">&nbsp; &nbsp; route delete 10.10.10.0</small>
+        <br>
+        <br>
+        <ul>
+            <b><li>Standardgateway ändern</li></b>
+        </ul>
+        <small style="font-family:'Courier New'">&nbsp; &nbsp; cmd</small>
+        <br>
+        <small style="font-family:'Courier New'">&nbsp; &nbsp; route delete 0.0.0.0</small>
+        <br>
+        <small style="font-family:'Courier New'">&nbsp; &nbsp; route add 0.0.0.0 mask 0.0.0.0 192.168.2.1</small>
+        <br>
+        <br>
+        <p>(Hinweis: Ohne <small style="font-family:'Courier New'">-p </small>sind diese Änderungen nur bis zum Neustart gültig. Dauerhaft → <small style="font-family:'Courier New'">route -p add ...)</small></p>
+        <p>Achtung: falsche Routen = keine Internetverbindung.</p>
+        <hr class="trennlinie">
+        <div class="section-title">3. NAT-Einstellungen auf der FritzBox</div>
+        <p>Die FritzBox erledigt NAT automatisch. Anpassungen sind nur indirekt möglich:</p>
+        <ul>
+            <li><b>Portfreigaben:</b> gezielte Weiterleitungen für bestimmte Dienste.</li>
+            <li><b>Exposed Host:</b> Weiterleitung aller Ports an ein Gerät (unsicher).
+            <li><b>IPv6:</b> entfällt, stattdessen Firewallregeln zur Steuerung.
+            <li><b>NAT-Tabelle:</b> in einer FritzBox nicht sichtbar, nur indirekt über Tools (z. B. Wireshark oder Router-Diagnosen).
+        </ul>
+        <hr class="trennlinie">
+        <div class="section-title">4. Debugging-Tools in Windows</div>
+        <p>Zur Fehleranalyse in Netzwerken gibt es eine Reihe nützlicher Befehle:</p>
+        <table style="width:100%; border-collapse:collapse;">
+            <thead>
+                <tr>
+                    <th style="text-align:left;">Tool</th>
+                    <th style="text-align:left;">Zweck</th>
+                    <th style="text-align:left;">Beispiel</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><small style="font-family:'Courier New'">ipconfig</small></td>
+                    <td>Zeigt aktuelle IP, Gateway, DNS</td>
+                    <td><small style="font-family:'Courier New'">ipconfig /all</small></td>
+                </tr>
+                <tr>
+                    <td><small style="font-family:'Courier New'">ping</small></td>
+                    <td>Prüft Erreichbarkeit & Latenz</td>
+                    <td><small style="font-family:'Courier New'">ping google.com</small></td>
+                </tr>
+                <tr>
+                    <td><small style="font-family:'Courier New'">tracert</small></td>
+                    <td>Zeigt den Weg der Pakete</td>
+                    <td><small style="font-family:'Courier New'">tracert 8.8.8.8</small></td>
+                </tr>
+                <tr>
+                    <td><small style="font-family:'Courier New'">nslookup</small></td>
+                    <td>Testet DNS-Auflösung</td>
+                    <td><small style="font-family:'Courier New'">nslookup google.com</small></td>
+                </tr>
+                <tr>
+                    <td><small style="font-family:'Courier New'">netstat</small></td>
+                    <td>Zeigt offene Ports & Verbindungen</td>
+                    <td><small style="font-family:'Courier New'">netstat -ano</small></td>
+                </tr>
+                <tr>
+                    <td><small style="font-family:'Courier New'">route</small></td>
+                    <td>Zeigt/ändert Routingtabelle</td>
+                    <td><small style="font-family:'Courier New'">route print</small></td>
+                </tr>
+                <tr>
+                    <td><small style="font-family:'Courier New'">arp</small></td>
+                    <td>Zeigt MAC ↔ IP-Zuordnungen</td>
+                    <td><small style="font-family:'Courier New'">arp -a</small></td>
+                </tr>
+                <tr>
+                    <td><small style="font-family:'Courier New'">pathping</small></td>
+                    <td>Misst Latenz & Paketverluste pro Hop</td>
+                    <td><small style="font-family:'Courier New'">pathping google.com</small></td>
+                </tr>
+                <tr>
+                    <td><small style="font-family:'Courier New'">telnet</small></td>
+                    <td>Testet Erreichbarkeit bestimmter Ports</td>
+                    <td><small style="font-family:'Courier New'">telnet 192.168.178.1 80 (muss unter Windows 10/11 evtl. erst nachinstalliert werden)</small></td>
+                </tr>
+                <tr>
+                    <td><small style="font-family:'Courier New'">netsh</small></td>
+                    <td>Konfiguriert & repariert Netzwerk</td>
+                    <td><small style="font-family:'Courier New'">netsh winsock reset</small></td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <b>Praxis-Tipp:</b>
+        <ul>
+            <li>Beginne bei Problemen immer mit <small style="font-family:'Courier New'">ipconfig</small> und <small style="font-family:'Courier New'">ping</small>.</li>
+            <li>Prüfe mit <small style="font-family:'Courier New'">tracert</small>, wo die Verbindung abbricht.</li>
+            <li>Nutze <small style="font-family:'Courier New'">nslookup</small>, wenn Websiten nicht laden, aber IPs erreichbar sind.</li>
+            <li>Kontrolliere mit <small style="font-family:'Courier New'">netstat</small>, ob Ports blockiert oder belegt sind.</li>
+        </ul>
+        <hr class="trennlinie">
+        <b>Zusammenfassung</b>
+        <p>Das <b>Default Gateway</b> ist die Schnittstelle zwischen lokalem Netz und Internet. NAT mit PAT auf der FritzBox sorgt dafür, dass mehrere Geräte gleichzeitig über eine öffentliche IP-Adresse online sein können. Anpassungen an NAT machst du vor allem über Portfreigaben. Unter Windows kannst du IPs statisch oder per DHCP konfigurieren, die Routingtabelle einsehen und mit zahlreichen Tools Verbindungsprobleme untersuchen.</p>
+        <br>
         <hr class="trennlinie">
         <a href="Ausbildungsthemen.html" class="back-link">&larr; Zurück zum Inhaltsverzeichnis</a>
     </div>
