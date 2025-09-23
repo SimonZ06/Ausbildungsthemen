@@ -122,13 +122,13 @@
             <h1>02 - Switching / VLAN / PoE</h1>
         </header>
         <div class="section-title">1. Wie funktioniert ein Switch?</div>
-        <p>Ein Switch arbeitet auf OSI-Layer 2 (Sichtungsschicht) und nimmt Ethernet-Frames entgegen, liest die Layer-2-Informationen (vor allem MAC-Adressen) und entscheidet daraufhin zielgerichtet, an welcem Port ein Frame weitergeleitet werden muss. Anders als ein alter Hub, der empfangene Signale an alle Ports verteilt, versucht ein Switch, den Verkehr nur an jene Ports zu schicken, an denen das Zielgerät angeschlossen ist - dadurch wird das Netz effizienter und die Kollisionen werden drastisch reduziert.</p>
-        <p>Die Arbeitsweise des Switches basiert im Kern auf einer MAC-Adress-Tabelle (auch CAM-Table genannt). immer wenn ein Frame ankommt, merkt sich der Switch die Quell-MAC und den Port, an dem das Frame eingetrofffen ist - also eine Zuordnung "Quell-MAC &#8594; Port". Beim Senden sucht er die Ziel-MAC in dieser Tabelle: findet er einen Eintrag, schickt er das Frame nur an den entsprechenden Port; findet er die Ziel-MAC nicht, spricht man von unknown unicast und der Switch flutet das Frame an alle Ports innerhalb der gleichen VLAN-Domäne (außer dem Eingangsport).</p>
-        <p>Einträge in der MAC-Tabelle sind nicht permanent: sie haben ein Aging-Intervall (typisch einige Minuten, häufig ~300 s), damit Umstecken/Neuanordnungen erkannt werden und die Tabelle aktuell bleibt. Bei Broadcast-Frames (z. B. ARP-Requests an FF:FF:FF:FF:FF:FF) sendet der Switch das Frame an alle Ports eines VLANs; bei Multicast wird das Verhalten davon bestimmt, ob IGMP-Snooping aktiv ist - ohne IGMP-Snooping wird geflutet, mit IGMP-Snooping werden Multicast-Frames nur an Ports geschickt, an denen Hosts Mitglieder der Multicast-Gruppe sind.</p>
-        <p>Jeder Switch-Port stellt eine eigene Collision Domain dar; in moderneren Netzwerken arbeiten Ports im Full-Duplex, deshalb treten Kollisionen praktisch nicht mehr auf. Um jedoch physikalische Schleifen (Layer 2 Loops) zu verhindern, nutzen Netzwerke Spanning-Tree-Mechanismen (STP / RSTP / MSTP), die redundante Pfade erkennen und temporär blockieren, damit es nicht zu Broadcast-Stürmen kommt.</p>
+        <p>Ein Switch arbeitet auf <b>OSI-Layer 2 (Sicherungsschicht)</b> und nimmt Ethernet-Frames entgegen, liest die Layer-2-Informationen (vor allem MAC-Adressen) und entscheidet daraufhin zielgerichtet, an welchem Port ein Frame weitergeleitet werden muss. Anders als ein alter Hub, der empfangene Signale an alle Ports verteilt, versucht ein Switch, den Verkehr nur an jene Ports zu schicken, an denen das Zielgerät angeschlossen ist - dadurch wird das Netz effizienter und die Kollisionen werden drastisch reduziert.</p>
+        <p>Die Arbeitsweise des Switches basiert im Kern auf einer <b>MAC-Adress-Tabelle</b> (auch CAM-Table genannt). Immer wenn ein Frame ankommt, merkt sich der Switch die <b>Quell-MAC</b> und den Port, an dem das Frame eingetroffen ist - also eine Zuordnung "Quell-MAC &#8594; Port". Beim Senden sucht er die <b>Ziel-MAC</b> in dieser Tabelle: findet er einen Eintrag, schickt er das Frame nur an den entsprechenden Port; findet er die Ziel-MAC nicht, spricht man von unknown unicast und der Switch flutet das Frame an alle Ports innerhalb der gleichen VLAN-Domäne (außer dem Eingangsport).</p>
+        <p>Einträge in der MAC-Tabelle sind nicht permanent: sie haben ein <b>Aging</b>-Intervall (typisch einige Minuten, häufig ~300 s), damit Umstecken/Neuanordnungen erkannt werden und die Tabelle aktuell bleibt. Bei Broadcast-Frames (z. B. ARP-Requests an FF:FF:FF:FF:FF:FF) sendet der Switch das Frame an alle Ports eines VLANs; bei Multicast wird das Verhalten davon bestimmt, ob IGMP-Snooping aktiv ist - ohne IGMP-Snooping wird geflutet, mit IGMP-Snooping werden Multicast-Frames nur an Ports geschickt, an denen Hosts Mitglieder der Multicast-Gruppe sind.</p>
+        <p>Jeder Switch-Port stellt eine eigene <b>Collision Domain</b> dar; in moderneren Netzwerken arbeiten Ports im Full-Duplex, deshalb treten Kollisionen praktisch nicht mehr auf. Um jedoch physikalische Schleifen (Layer 2 Loops) zu verhindern, nutzen Netzwerke Spanning-Tree-Mechanismen (STP / RSTP / MSTP), die redundante Pfade erkennen und temporär blockieren, damit es nicht zu Broadcast-Stürmen kommt.</p>
         <p>Kurz gesagt: ein Switch leitet Unicast zielgerichtet, Broadcast an alle Geräte im VLAN und Multicast abhängig von Multicast abhängig von IGMP-Snooping.</p>
         <hr class="trennlinie">
-        <h1>2. Wofür benutzt ein Switch MAC-Adressen?</h1>
+        <div class="section-title">2. Wofür benutzt ein Switch MAC-Adressen?</div>
         <p>MAC-Adressen sind für einen Switch die grundlegende Information zur Identifikation von Endgeräten. Er nutzt MAC-Adressen in mehreren Rollen:</p>
         <ul>
             <li><b>Lernen (Source MAC):</b> Jedes ankommende Frame liefert die Quell-MAC, die der Switch in seine Tabelle schreibt, damit er künftig weiß, an welchem Port dieses Gerät erreichbar ist.</li>
@@ -139,8 +139,8 @@
         </ul>
         <p>Wichtig: MAC-basierte Sicherheitsmechanismen sind praktisch, ersetzen aber nicht eine ordentliche Authentifizierung (z. B. 802.1X + RADIUS), denn MAC-Adressen lassen sich fälschen.</p>
         <hr class="trennlinie">
-        <h1>3. Wer sieht welche Pakete im Netzwerk?</h1>
-        <p>Die Sicherheit von Packeten hängt von deren Typ ab:</p>
+        <div class="section-title">3. Wer sieht welche Pakete im Netzwerk?</div>
+        <p>Die Sicherheit von Paketen hängt von deren Typ ab:</p>
         <ul>
             <li><b>Unicast:</b> In einem normalen L2-Switch-Netzwerk erreicht ein Unicast-Frame nur den Absender- und den Zielport. Andere Geräte sehen dieses Frame nicht - es sei denn, es wurde Port-Mirroring (SPAN) aktiviert oder ein Netzwerk-Tap eingesetzt.</li>
             <br>
@@ -152,53 +152,136 @@
         </ul>
         <p>(IGMP-Snooping und dessen Wirkung: siehe Quelle unten.)</p>
         <hr class="trennlinie">
-        <h1>4. PoE - worauf achten? (Standards, Aushandlung, Budget)</h1>
+        <div class="section-title">4. PoE — worauf achten? (Standards, Aushandlung, Budget)</div>
         <p><b>Power over Ethernet (PoE)</b> erlaubt es, über das Standard-Ethernet-Kabel sowohl Daten als auch Strom zu transportieren. Dafür gibt es offizielle IEEE-Standards mit verschiedenen Leistungsstufen:</p>
         <ul>
-            <li><b>IEEE 801.2af (Type 1 /PoE):</b> Der Power-Sourcing-Equipment (PSE, z. B. Switch) liefertbis zu 15,4 W an der Schnittstelle; durch Verlust in der Leitung kommen typischerweise ~12,95 W beim Powered Device (PD) an.</li>
+            <li><b>IEEE 801.3af (Type 1 /PoE):</b> Der Power-Sourcing-Equipment (PSE, z. B. Switch) liefert bis zu 15,4 W an der Schnittstelle; durch Verlust in der Leitung kommen typischerweise ~12,95 W beim Powered Device (PD) an.</li>
             <br>
             <li><b>IEEE 802.3at (Type 2 /PoE+):</b> erhöht die Leistung auf bis zu 30 W PSE-Seite, davon sind beim PD ~25,5 W nutzbar.</li>
             <br>
             <li><b>IEEE 802.3bt (Type 3 und Type 4 /PoE++ /Hi-PoE):</b> Type 3 kann bis zu 60 W an der PSE liefern und liefert typischerweise ~51 W an das PD; Type 4 geht bis zu 100 W am PSE und liefert je nach Klasse ~71 W an das PD. Diese höheren Klassen nutzen vier Adernpaare (4-pair PoE) und werden für leistungsintensive Geräte wie High-End-Access-Points oder PTZ-Kammeras genutzt.</li>
         </ul>
-        <p>PoE arbeitet mit einer Erkennungs- und Klassifizierungsphase: der PSE detektiert per Signatur (z. B. Wiederstand) zunächst, ob ein PD angeschlossen ist, und kann dann eine Leistungsklasse austauschen oder per LLDP/LLDP-MED weiter feinjustieren (z. B. Zuordnung zu einem Voice-VLAN oder Tailoring des Leistungsbedarfs). Da der Gesamtstrom eines Switches begrenzt ist, musst du beim Design das PoE-Budget des Switches beachten: die Summe der benötigten Watt aller PDs darf das verfügbare Budget nicht überschreiten - sonst musst du Prioritäten oder Power-Management konfigurieren.</p>
+        <p>PoE arbeitet mit einer Erkennungs- und Klassifizierungsphase: der PSE detektiert per Signatur (z. B. Widerstand) zunächst, ob ein PD angeschlossen ist, und kann dann eine Leistungsklasse austauschen oder per LLDP/LLDP-MED weiter feinjustieren (z. B. Zuordnung zu einem Voice-VLAN oder Tailoring des Leistungsbedarfs). Da der Gesamtstrom eines Switches begrenzt ist, musst du beim Design das <b>PoE-Budget</b> des Switches beachten: die Summe der benötigten Watt aller PDs darf das verfügbare Budget nicht überschreiten - sonst musst du Prioritäten oder Power-Management konfigurieren.</p>
         <p>Weitere wichtige Punkte:</p>
         <ul>
             <li>Für 10/100 Mbit/s wird PoE über zwei Paare (Mode A oder Mode B) realisiert; für Gigabit und schneller werden alle vier Paare benutzt (4-pair / Phantom-Speisung).</li>
             <br>
             <li><b>Passive PoE</b> (feste Spannung, kein IEEE-Negotiation) ist nicht standardkonform und kann Geräte beschädigen, wenn diese nicht explizit dafür ausgelegt sind.</li>
             <br>
-            <li>Die Versorgungsspannung liegt typischerweise im Bereich von ~44-57 V (nominal ~48 V), abhängig vom Standard bzw. der Implementierung.</li>
+            <li>Die Versorgungsspannung liegt typischerweise im Bereich von <b>~44-57 V</b> (nominal ~48 V), abhängig vom Standard bzw. der Implementierung.</li>
             <p>(Quellen für PoE-Leistungswerte und Klassentabelle siehe unten.)</p>
         </ul>
-        <h1>5. Wie bekommen Geräte Strom - Varianten im Überblick</h1>
+        <div class="section-title">5. Wie bekommen Geräte Strom — Varianten im Überblick</div>
         <p>Es gibt drei gängige Varianten, wie Geräte mit PoE versorgt werden:</p>
         <ul>
-            <li><b>PoE-Switch (Endspan):</b> Der Switch selbst ist die Stromquelle und speist über die Ethernet-Kabel. Das ist die sauberste Lösung, weil Management/Monitoring/Power-Budget zentral zu Verfügung stehen.</li>
+            <li><b>PoE-Switch (Endspan):</b> Der Switch selbst ist die Stromquelle und speist über die Ethernet-Kabel. Das ist die sauberste Lösung, weil Management/Monitoring/Power-Budget zentral zur Verfügung stehen.</li>
             <br>
             <li><b>PoE-Injector (Midspan):</b> Ein zwischengeschaltetes Gerät, das in bestehende Non-PoE-Leitungen PoE einspeist; praktisch, wenn der Switch kein PoE unterstützt.</li>
             <br>
             <li><b>Lokales Netzteil:</b> Wenn weder PoE noch Injector vorhanden sind, bekommt das Gerät ein eigenes Netzteil (z. B. Steckernetzteil). Das ist die einfachste, aber kabelintensivere Lösung.</li>
         </ul>
         <hr class="trennlinie">
-        <h1>6. Verkabelungs-Voraussetzungen für PoE</h1>
+        <div class="section-title">6. Verkabelungs-Voraussetzungen für PoE</div>
         <p>Gute Verkabelung ist sehr wichtig, sonst entstehen Spannungsabfälle, Hitzeentwicklung oder Leistungsverluste, vor allem bei höheren PoE-Klassen:</p>
         <ul>
-            <li><b>Kabelkategorie:</b> Mindestens Cat5e ist nötig</li>
+            <li><b>Kabelkategorie:</b> Mindestens<b> Cat5e ist nötig </b>für höhere Power/geschwindigkeiten <b>Cat6 / Cat6a</b> empfohlen. <b>Vollkupfer</b> (no CCA) ist Pflicht, weil CCA (aluminium-beschichtete Leiter) einen höheren DC-Wiederstand haben und Wärme/Spannungsabfall erzeugen kann.</li>
             <br>
-            <li><b>Längenlimit:</b> Das Ethernet-Limit beträgt 100 m total (typisch 90 m Permanent Link + 2 x 5 m Patchkabel). Bei hohen PoE-Leistungen ist der Spannungsabfall über diese Distanz einzukalkulieren.</li>
+            <li><b>Längenlimit:</b> Das Ethernet-Limit beträgt <b>100 m total</b> (typisch 90 m Permanent Link + 2 x 5 m Patchkabel). Bei hohen PoE-Leistungen ist der Spannungsabfall über diese Distanz einzukalkulieren.</li>
             <br>
-            <li><b>Bündelung & Temperatur:</b> Viele verdrillte Paare in Bündeln erhöhen die Temperatur und damit den Leistungswiederstand: das kann die verfügbare Leistung reduzieren. Beachte Installationsnormen und Temperaturbegrenzungen, insbesondere bei 802.3bt.</li>
+            <li><b>Bündelung & Temperatur:</b> Viele verdrillte Paare in Bündeln erhöhen die Temperatur und damit den Leistungswiderstand: das kann die verfügbare Leistung reduzieren. Beachte Installationsnormen und Temperaturbegrenzungen, insbesondere bei 802.3bt.</li>
             <br>
             <li><b>Steckzyklen unter Last:</b> Beim Abziehen eines Kabels unter Last können Lichtbögen entstehen; verwende Hardware mit PoE-Rating und beachte Betriebsanweisungen.</li>
             <p>(Quelle zur Max-Länge: Standard-Angabe 100 m / 90 m Permanent Link.)</p>
         </ul>
         <hr class="trennlinie">
-        <h1>7. Was bedeutet VLAN?</h1>
-        <p><b>VLAN</b> steht für <i>Virtual Local Area Network</i> (IEEE 802.1Q) und erlaubt, ein physisches Netz logisch in mehrere seperate Broadcast-Domänen zu segmentieren. VLAN-Tagging fügt Ethernet-Frames eine 12-Bit VLAN-ID hinzu, so dass mehrere VLANs über denselben physischen Uplink transportiert werden können. Im Standard sind VLAN-IDs im Bereich <b>1-4094</b> verwendbar (0 und 4094 reserviert).</p>
+        <div class="section-title">7. Was bedeutet VLAN?</div>
+        <p><b>VLAN</b> steht für <i>Virtual Local Area Network</i> (IEEE 802.1Q) und erlaubt, ein physisches Netz logisch in mehrere seperate Broadcast-Domänen zu segmentieren. VLAN-Tagging fügt Ethernet-Frames eine 12-Bit VLAN-ID hinzu, so dass mehrere VLANs über denselben physischen Uplink transportiert werden können. Im Standard sind VLAN-IDs im Bereich <b>1-4094</b> verwendbar (0 und 4095 reserviert).</p>
         <p>Port-Typen, die du kennen solltest:</p>
         <ul>
-            <li><b></b></li>
+            <li><b>Access-Port:</b> Gehört genau zu einem VLAN; Frames, die an Endgeräte gehen, sind normalerweise untagged.</li>
+            <br>
+            <li><b>Trunk-Port:</b> Trägt mehrere VLANS; Frames zwischen Switches oder zu Routern/Servern sind oft getagged (802.1Q).</li>
+            <br>
+            <li><b>Native (untagged) VLAN:</b> Ein VLAN, das auf einem Trunk als untagged läuft - das Verhalten ist historisch bedingt und kann Sicherheitsfallen bergen, daher vorsichtig einsetzen.</li>
+            <br>
+            <li><b>Voice-VLAN:</b> Häufig ein seperates VLAN für IP-Telefone; Geräte können via LLDP-MED oder CDP die Voice-VLAN-Zuweisung erhalten.</li>
+        </ul>
+        <hr class="trennlinie">
+        <div class="section-title">8. Wofür nutzt man VLANs?</div>
+        <p>VLANs sind extrem praktisch, weil sie mehrere Anforderungen erfüllen: sie trennen Benutzer, Server, VoIP und loT logisch voneinander, wodurch Sicherheit erhöht und Broadcast-Last reduziert werden. Sie sind außerdem nützlich für organisatorische Trennung (z. B. Mandanten), vereinfachen QoS-Policies (Sprachverkehr priorisieren) und erlauben Skalierung, indem viele logische Netze über dieselbe physische Infrastruktur transportiert werden (Trunks). Allerdings braucht man für die Kommunikation zwischen VLANs<b> Inter-VLAN-Routing </b>(durch Router, Layer-3-Switch oder Firewall), und dabei müssen passende ACLs/Policies geplant werden.</p>
+        <hr class="trennlinie">
+        <div class="section-title">9. Dinge, die man beim Einsatz beachten muss (praktische Regeln)</div>
+        <p>Wenn du VLANs/Productive-Design planst, denk an:</p>
+        <ul>
+            <li><b>Konsistenz:</b> Gleiche VLAN-IDs und Namenskonventionen über das Netzwerk. Inkonsistenzen führen schnell zu schwer zu findenden Fehlern.</li>
+            <br>
+            <li><b>Trunks:</b> Konfiguriere nur die VLANs auf einem Trunk, die du wirklich brauchst; vermeide ungenutzte native VLANs.</li>
+            <br>
+            <li><b>Inter-VLAN-Routing & DHCP:</b> Jedes VLAN braucht einen DHCP-Scope oder einen DHCP-Relay (IP-Helper), damit Clients IPs bekommen können. Inter-VLAN-Routing passiert auf Layer-3-Geräten und sollte durch Policy/ACLs gesteuert werden.</li>
+            <br>
+            <li><b>Spanning Tree:</b> Wähle eine STP-Variante / Topologie mit Bedacht (STP/RSTP/MSTP oder vendorspezifische Varianten wie PVST), aktivere Schutzmechanismen wie BPDU-Guard auf Access-Ports.</li>
+            <br>
+            <li><b>Security:</b> Schütze vor VLAN-Hopping (keine offenen trunk links, native VLAN nicht für Userverkehr), nutze Port-Security, 802.1X für Authentifizierung.</li>
+            <br>
+            <li><b>Dokumentation:</b> Netzplan, VLAN-Matrix, Subnetze und ACLs dokumentieren. Ohne Dokumentation landet man im Chaos.</li>
+        </ul>
+        <p>(Kurze Erinnerung: Per-VLAN-STP ist oft ein Vendor-Feature - z. B. Cisco PVST - die IEEE-Standards sind STP (802.1D), RSTP (802.1w) und MSTP (802.1s).)</p>
+        <hr class="trennlinie">
+        <div class="section-title">10. Vor- und Nachteile von VLANs</div>
+        <p>Vorteile: klare Segmentierung, weniger Broadcast, bessere Qos/Fehlerdomänen und hohe Flexibilität/Skalierbarkeit. Nachteile: höhere Komplexität, notwendiges Routing/Policies zwischen VLANs und anspruchsvolleres Troubleshooting (Tags, Trunks, ACLs, STP).</p>
+        <hr class="trennlinie">
+        <div class="section-title">11. Was ist ein Trunk / Link-Aggregation (LACP)?</div>
+        <p>Man muss zwei Konzepte trennen: ein <b>802.1Q VLAN-Trunk</b> transportiert mehrere VLANs über einen Link durch Tagging; <b>Link-Aggregation / LAG</b> hingegen bündelt mehrere physische Links zu einer logischen Verbindung, um Bandbreite und Redundanz zu erhöhen. Der Standard für Link-Aggregation ist in der IEEE-Familie als 802.1AX (früher 802.3ad) definiert, und <b>LACP (Link Link Aggregation Control Protocol)</b> ist das Protokoll, das die dynamische Aushandlung und Überwachung eines LAG ermöglicht. Voraussetzung ist unter anderem, dass die Mitglieds-Links ähnliche Kapazität/Duplex besitzen und die VLAN-Konfiguration auf beiden Seiten identisch ist. Ein wichtiges Verhalten:<b> ein einzelner Fluss (z. B. eine TCP-Session) wird in der Regel hash-basiert auf genau einen physischen Link verteilt, </b>eine einzelne Verbindung nicht die Summe aller Links einer LAG erreichen kann; die Aggregate verbessern aber den Gesamtdurchsatz und sorgen für Redundanz.</p>
+        <hr class="trennlinie">
+        <div class="section-title">12. Vor- / Nachteile von LACP</div>
+        <p>Vorteile: höherer Gesamtdurchsatz (für mehrere parallele Flows), Redundanz bei Linkausfall, STP-sichtbar als ein Link &rarr; stabilere Topologie; funktioniert zusammen mir 802.1Q-Tunks. Nachteile: ein einzelner Flow bleibt auf maximaler Bandbreite eines einzelnen physikalischen Links, Hash-Algorithmus kann zu asymmetrischer Lastverteilung führen, und Multi-Chassis-LAGs (MLAG / vPC / VSX) sind oft vendor-abhängig und müssen korrekt konfiguriert werden.</p>
+        <hr class="trennlinie">
+        <div class="section-title">13. Sinnvolle Einsatzszenarien für LACP-Trunks</div>
+        <ul>
+            <li>Uplinks von Access- zu Distribution/Core (z. B. 2x oder 4x 1 GbE oder 2x/4x 10 GbE).</li>
+            <li>Server/Hypervisor NIC-Teaming (ESXi, Hyper-V) für höhere aggregate Bandbreite und Redundanz.</li>
+            <li>Storage/NAS-Anbindungen mit vielen parallelen Streams.</li>
+            <li>Firewalls / Load-Balancer zu Switches für breite, redundante Anbindung.</li>
+        </ul>
+        <hr class="trennlinie">
+        <div class="section-title">14. Praxis-Checklisten (kompakt)</div>
+        <ul>
+            <b>PoE-Projekt:</b>
+            <br>
+            <br>
+            <li>Liste alle PDs und deren Leistungsaufnahme auf &rarr; prüfe Switch-PoE-Budget.</li>
+            <li>Cat6/6a Vollkupfer verwenden; max. 100 m beachten; Temperatur bei Bündelung prüfen.</li>
+            <li>LLDP-MED aktivieren, wenn Voice oder Power-Management erforderlich.</li>
+            <li>Vermeide Passive PoE außer bei expliziter Kompatibilität.</li>
+            <br>
+            <br>
+            <b>VLAN-Design:</b>
+            <br>
+            <br>
+            <li>VLAN-IDs, Subnetze, DHCP-Scopes & ACLs planen und dokumentieren.</li>
+            <li>Management/Voice/Gast trennen; Native VLAN nicht produktiv nutzen.</li>
+            <li>Inter-VLAN-Routing & DHCP-Relay planen; STP-Variante festlegen.</li>
+            <li>Security: BPDU-Guard, Port-Security, 802.1X.</li>
+            <br>
+            <br>
+            <b>LACP-Trunk:</b>
+            <br>
+            <br>
+            <li>Gleiche Link-Eigenschaften (Speed/Duplex) auf allen Membern.</li>
+            <li>LACP-Mode passend (active/active oder active/passive).</li>
+            <li>VLAN-Liste auf beiden Seiten identisch.</li>
+            <li>Monitoring: Lastenverteilung, Flaps, Error-Rates beobachten.</li>
+        </ul>
+        <hr class="trennlinie">
+        <div class="section-title">Mini-FAQ — zur schnellen Widerholung</div>
+        <ul>
+            <li><b>Warum sieht nicht jeder alle Pakete?</b> &rarr; Weil ein Switch Unicast zielgerichtet weiterleitet; nur Broadcasts/unknown-Unicast werden geflutet.</li>
+            <br>
+            <li><b>Wozu VLANs?</b> &rarr; Segmentierung, Sicherheit, Broadcast-Kontrolle, Qos.</li>
+            <br>
+            <li><b>PoE-Gefahren?</b> &rarr; Passive PoE, schlechte Verkabelung (CCA), PoE-Budget und thermische Limits beachten.</li>
+            <br>
+            <li><b>Bringt LACP einer Verbindung 2x Bandbreite?</b> &rarr; Nein: ein einzelner Flow belegt maximal einen physischen Link; LACP erhöht jedoch den aggregate Durchsatz über viele Flows und bietet Redundanz.</li>
         </ul>
         <br>
         <hr class="trennlinie">
