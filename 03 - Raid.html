@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>03 - Raid</title>
+    <link rel="icon" type="image/x-icon" href="Icon.ico">
+    <style>
+        body {
+            background-color: #000000f4;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: #181818;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgb(167, 0, 0);
+            padding: 32px 34px;
+        }
+        header {
+            background: linear-gradient(90deg, #000000 0%, #4f0098 100%);
+            color: #bcabd5;
+            padding: 24px 0 16px 0;
+            border-radius: 16px 16px 0 0;
+            text-align: center;
+            margin-bottom: 24px;
+            text-shadow: 0 0 1px #000000, 0 0 2px #000000;
+        }
+        h1 {
+            margin: 0;
+            font-size: 2em;
+            letter-spacing: 2px;
+        }
+        .section-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-top: 32px;
+            margin-bottom: 12px;
+            color: #a962ff;
+            text-shadow: 0 0 1px #000000, 0 0 2px #000000;
+        }
+        p {
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+        table td, table th {
+            padding-top: 10px;
+            padding-bottom: 10px;
+            line-height: 1.25;
+        }
+        table td:first-child {
+            padding-right: 32px;
+        }
+        table td:nth-child(2) {
+            padding-right: 32px;
+        }
+        ul {
+            margin-bottom: 24px;
+        }
+        li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+        a {
+            color: #00ffcc;
+            text-decoration: underline;
+            font-weight: bold;
+            transition: color 0.2s;
+        }
+        a:visited {
+            color: #7b00ff;
+        }
+        a:hover {
+            color: #ff0066;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 24px;
+            color: #a962ff;
+            background: #1a1a1a;
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.2s, color 0.2s;
+            text-shadow: 0 0 1px #000000, 0 0 2px #000000;
+        }
+        .back-link:hover {
+            background: #000000;
+            color: #6e00e4;
+        }
+        @media (max-width: 800px) {
+            .container {
+                max-width: 98vw;
+                padding: 12px 6vw;
+            }
+            header {
+                font-size: 1em;
+                padding: 16px 0 8px 0;
+            }
+        }
+        .trennlinie {
+            border: none;
+            border-top: 2px solid #a962ffb7;
+            margin: 24px 0;
+            opacity: 0.5;
+            border-radius: 2px;
+        }
+        ul, ul ul {
+            list-style-type: disc;
+        }
+        ul li::marker {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>03 - Raid</h1>
+        </header>
+        <div class="section-title">Was ist ein RAID-System?</div>
+        <p>Ein RAID-System (Redundant Array of Independent Disks) fasst mehrere physische Laufwerke zu einem logischen Laufwerk zusammen, um drei Ziele zu erreichen: erhöhte Ausfallsicherheit, bessere Performance und/oder größere Gesamtkapazität. Je nach gewähltem RAID-Level steht eines dieser Ziele stärker im Vordergrund: manche Level konzentrieren sich auf Geschwindigkeit (z. B. RAID 0), andere auf Redundanz (z. B. RAID 1, RAID 6) oder auf einem Kompromiss aus beidem (RAID 5, RAID 10). Wichtig zu merken ist immer: <b>RAID ersetzt kein Backup</b> — RAID schützt vor Hardwareausfall, nicht vor versehentlichem Löschen, Ransomware oder Datenkorruption.</p>
+        <ul>
+            <b>Ziele von RAID (kurz erklärt)</b>
+            <br>
+            <br>
+            <li><b>Erhöhte Ausfallsicherheit:</b> Durch Spiegelung oder Parität können einzelne Laufwerke ausfallen, ohne dass Daten verloren gehen.</li>
+            <br>
+            <li><b>Höhere Geschwindigkeit:</b> Durch paralleles Lesen/Schreiben auf mehrere Platten steigt der Durchsatz.</li>
+            <br>
+            <li><b>Größere Kapazität:</b> Mehrere Platten werden zu einem großen logischen Volume zusammengefasst; nutzbare Kapazität hängt vom Level ab.</li>
+        </ul>
+        <hr class="trennlinie">
+        <div class="section-title">Hardware-RAID vs. Software-RAID (und "FakeRAID")</div>
+        <p>RAID kann auf verschiedene Arten realisiert werden:</p>
+        <ul>
+            <li><b>Hardware-RAID (dedizierter RAID-Controller):</b> Ein eigener Controller (z. B. PCIe-Karte oder eingebauter Server-Controller) organisiert Striping, Parität und Rebuilds. Vorteile sind Offload der CPU, oft integrierter Cache und Batterie/SuperCap-Absicherung des Chaches. Das macht Hardware-RAID bei hohen Lasten und in professionellen Umgebungen performant.</li>
+            <li><b>Software-RAID:</b> Das Betriebssystem (z. B. Linux <small>mdadm</small>, Windows Storage Spaces) verwaltet das RAID. Vorteil ist Kostenersparnis, Flexibilität und meist gute Performance auf modernen CPUs; Nachteil: CPU-Last und eventuell weniger Hardware-spezifische Features (z. B. Battery-Backed Cache).</li>
+            <li><b>Firmware/Host-RAID (oft "FakeRAID" genannt):</b> Eine Mischung aus BIOS/UEFI-Unterstützung und Treiber; lohnt sich meist nur in sehr speziellen Fällen und kann weniger portabel/robust sein.</li>
+        </ul>
+        <p>Wenn du Systeme planst, entscheide nach Anforderungen an Performance, Management-Funktionen (Monitoring, Hot-spare, Rebuild-Prioritäten) und Budget.</p>
+        <hr class="trennlinie">
+        <div class="section-title">Wichtige RAID-Level (mit Erklärungen und Beispielen)</div>
+        <b>RAID 0 — Striping (Leistung, keine Redundanz)</b>
+        <p>Bei RAID 0 werden Daten blockweise über die Platten verteilt ("striped"). Das erhöht Lese- und Schreibdurchsatz, weil mehrere Platten parallel arbeiten. Die Gesamtkapazität ist die Summe der Plattenkapazitäten. <b>es Gibt keine Redundanz:</b> fällt eine Platte aus, sind die Daten auf dem Array verloren.</p>
+        <p>Beispiel mit 2x4 TB &rarr; nutzbare Kapazität = 8 TB, hohe Performance, aber kein Schutz. Typische Einsatzzwecke: temporäre Daten (z. B. Videoschnitt-Cache), Testsysteme.</p>
+        <br>
+        <b>Raid 1 — Mirroring (Spiegelung)</b>
+        <br>
+        <hr class="trennlinie">
+        <a href="02 - Switching VLAN PoE.html" target="blank" class="back-link">&larr; Zurück zu 02 - Switching / VLAN / PoE</a> 
+        <br>
+        <a href="Ausbildungsthemen.html" class="back-link">&lArr; Zurück zum Inhaltsverzeichnis</a> 
+    </div>
+</body>
+</html>
