@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>03 - Raid</title>
+    <title>03 - RAID</title>
     <link rel="icon" type="image/x-icon" href="Icon.ico">
     <style>
         body {
@@ -120,7 +120,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>03 - Raid</h1>
+            <h1>03 - RAID</h1>
         </header>
         <div class="section-title">Was ist ein RAID-System?</div>
         <p>Ein RAID-System (Redundant Array of Independent Disks) fasst mehrere physische Laufwerke zu einem logischen Laufwerk zusammen, um drei Ziele zu erreichen: erhöhte Ausfallsicherheit, bessere Performance und/oder größere Gesamtkapazität. Je nach gewähltem RAID-Level steht eines dieser Ziele stärker im Vordergrund: manche Level konzentrieren sich auf Geschwindigkeit (z. B. RAID 0), andere auf Redundanz (z. B. RAID 1, RAID 6) oder auf einem Kompromiss aus beidem (RAID 5, RAID 10). Wichtig zu merken ist immer: <b>RAID ersetzt kein Backup</b> — RAID schützt vor Hardwareausfall, nicht vor versehentlichem Löschen, Ransomware oder Datenkorruption.</p>
@@ -138,7 +138,7 @@
         <div class="section-title">Hardware-RAID vs. Software-RAID (und "FakeRAID")</div>
         <p>RAID kann auf verschiedene Arten realisiert werden:</p>
         <ul>
-            <li><b>Hardware-RAID (dedizierter RAID-Controller):</b> Ein eigener Controller (z. B. PCIe-Karte oder eingebauter Server-Controller) organisiert Striping, Parität und Rebuilds. Vorteile sind Offload der CPU, oft integrierter Cache und Batterie/SuperCap-Absicherung des Chaches. Das macht Hardware-RAID bei hohen Lasten und in professionellen Umgebungen performant.</li>
+            <li><b>Hardware-RAID (dedizierter RAID-Controller):</b> Ein eigener Controller (z. B. PCIe-Karte oder eingebauter Server-Controller) organisiert Striping, Parität und Rebuilds. Vorteile sind Offload der CPU, oft integrierter Cache und Batterie/SuperCap-Absicherung des Caches (ohne funktionierendes Akku-/SuperCap-Modul fällt der Controller in den Write-Through-Modus). Das macht Hardware-RAID bei hohen Lasten und in professionellen Umgebungen performant.</li>
             <li><b>Software-RAID:</b> Das Betriebssystem (z. B. Linux <small>mdadm</small>, Windows Storage Spaces) verwaltet das RAID. Vorteil ist Kostenersparnis, Flexibilität und meist gute Performance auf modernen CPUs; Nachteil: CPU-Last und eventuell weniger Hardware-spezifische Features (z. B. Battery-Backed Cache).</li>
             <li><b>Firmware/Host-RAID (oft "FakeRAID" genannt):</b> Eine Mischung aus BIOS/UEFI-Unterstützung und Treiber; lohnt sich meist nur in sehr speziellen Fällen und kann weniger portabel/robust sein.</li>
         </ul>
@@ -146,10 +146,88 @@
         <hr class="trennlinie">
         <div class="section-title">Wichtige RAID-Level (mit Erklärungen und Beispielen)</div>
         <b>RAID 0 — Striping (Leistung, keine Redundanz)</b>
-        <p>Bei RAID 0 werden Daten blockweise über die Platten verteilt ("striped"). Das erhöht Lese- und Schreibdurchsatz, weil mehrere Platten parallel arbeiten. Die Gesamtkapazität ist die Summe der Plattenkapazitäten. <b>es Gibt keine Redundanz:</b> fällt eine Platte aus, sind die Daten auf dem Array verloren.</p>
+        <p>Bei RAID 0 werden Daten blockweise über die Platten verteilt ("striped"). Das erhöht Lese- und Schreibdurchsatz, weil mehrere Platten parallel arbeiten. Die Gesamtkapazität ist die Summe der Plattenkapazitäten. <b>Es gibt keine Redundanz:</b> fällt eine Platte aus, sind die Daten auf dem Array verloren.</p>
         <p>Beispiel mit 2x4 TB &rarr; nutzbare Kapazität = 8 TB, hohe Performance, aber kein Schutz. Typische Einsatzzwecke: temporäre Daten (z. B. Videoschnitt-Cache), Testsysteme.</p>
         <br>
-        <b>Raid 1 — Mirroring (Spiegelung)</b>
+        <b>RAID 1 — Mirroring (Spiegelung)</b>
+        <p>RAID 1 schreibt identische Daten auf zwei (oder mehr) Platten. Das ergibt hohe Ausfallsicherheit: eine Platte kann ausfallen, ohne dass Daten verloren gehen. Die nutzbare Kapazität entspricht der kleinsten Platte; bei zwei gleichen Platten ist sie also 50% der Rohkapazität. Lesezugriffe können beschleunigt werden (Parallellesen), Schreibzugriffe haben in der Praxis fast die Performance einer einzelnen Platte, da alle Spiegel gleichzeitig beschrieben werden.</p>
+        <p>Beispiel: 2x4 TB &rarr; nutzbar 4 TB, eine Platte darf ausfallen.</p>
+        <br>
+        <b>RAID 5 — Striping mit einfacher Parität</b>
+        <p>RAID 5 verteilt Datenblöcke und eine Paritätsinformation so über mehrere Platten, dass der Ausfall einer Platte durch Rekonstruktion aus den verbleibenden Daten und der Parität wiederhergestellt werden kann. Minimum sind 3 Platten. Nutzbare Kapazität = (n - 1) x Kapazität der kleinsten Platte. Lesen ist schnell (parallel), Schreiben benötigt zusätzliche Arbeit (Paritätsberechnung), sodass kleine zufällige Schreibvorgänge langsamer sind als bei RAID 1.</p>
+        <p>Beispiel: 3x4 TB &rarr; nutzbar 8 TB (3-1 = 2 x 4 TB).</p>
+        <p>Vorsicht: bei sehr großen Platten und vielen Spindeln steigt das Risiko, dass während eines Rebuilds ein weiterer Fehler (z. B. URE) auftritt.</p>
+        <br>
+        <b>RAID 6 — Striping mit doppelter Parität</b>
+        <p>RAID 6 erweitert RAID 5 um eine zweite, unabhängige Paritätsinformation. Dadurch überlebt das Array gleichzeitig zwei Plattenausfälle. Minimum sind 4 Platten. Nutzbare Kapazität = (n - 2) x Kapazität der kleinsten Platte. Leseleistung ist gut; Schreibperformance ist durch doppelte Paritätsberechnung stärker beeinträchtigt als bei RAID 5. RAID 6 ist für große Arrays mit großen HDDs häufig die sicherere Wahl.</p>
+        <p>Beispiel: 4x4 TB &rarr; nutzbar 8 TB (4-2 = 2 x 4 TB).</p>
+        <br>
+        <b>RAID 10 (1+0) — Mirrored Stripes (Spiegel + Striping)</b>
+        <p>RAID 10 ist eine Kombination aus Spiegelung und Striping: Zuerst werden Spiegelpaare (RAID-1) gebildet, diese Paare werden dann über Striping verbunden (RAID-0 über die Spiegel). Minimum sind 4 Platten (zwei Spiegelpaare). Die nutzbare Kapazität ist 50 % der Rohkapazität (wie bei RAID 1), bietet aber hohe Lese- und sehr gute Schreibperformance sowie sehr gute Ausfallsicherheit, da mehrere Platten ausfallen können, solange nicht beide Platten desselben Spiegelpaares verloren gehen. Wenn zufällig beide Platten eines Paares sterben, ist das Array tot - das ist ein zentrales Risiko. RAID 10 ist in vielen produktiven Umgebungen die bevorzugte Wahl, wenn Performance und Redundanz wichtig sind.</p>
+        <p>Beispiel: 4x4 TB &rarr; nutzbar 8 TB.</p>
+        <br>
+        <b>Kurzvergleich (vereinfachte Übersicht):</b>
+        <ul>
+            <li>RAID 0: min. 2 Platten; Kapazität = n x size; keine Redundanz; sehr hoch in Performance.</li>
+            <li>RAID 1: min. 2; Kapazität = 1 x size (bei 2 Platten); 1 Platte fällt aus; sehr sicher.</li>
+            <li>RAID 5: min. 3; Kapazität = (n-1)xsize; 1 Platte fällt aus; guter Kompromiss.</li>
+            <li>RAID 6: min. 4; Kapazität = (n-2)xsize; 2 Platten fallen aus; sehr sicher bei großen Arrays.</li>
+            <li>RAID 10: min. 4; Kapazität = (n ÷ 2) x size; sehr gute Performance + Redundanz.</li>
+        </ul>
+        <hr class="trennlinie">
+        <b>Typische Vor- und Nachteile (kurz erläutert)</b>
+        <ul>
+            <li><b>RAID 0:</b> + maximale Kapazität/Performance; - kein Schutz.</li>
+            <li><b>RAID 1:</b> + sehr stabil/schnelle Wiederherstellung; - nur 50 % Kapazität.</li>
+            <li><b>RAID 5:</b> + effizienter Platzgebrauch; - anfälliger bei großen Platten während Rebuild.</li>
+            <li><b>RAID 6:</b> + robust bei doppeltem Ausfall; - höherer Schreib-Overhead.</li>
+            <li><b>RAID 10:</b> + sehr gute Performance & Redundanz; - 50 % Kapazitätsverlust wie bei RAID 1, teurer.</li>
+        </ul>
+        <hr class="trennlinie">
+        <div class="section-title">Rebuilds — wie funktioniert Wiederherstellung praktisch?</div>
+        <p>Ein Rebuild ist der Prozess, mit dem ein RAID-Controller nach dem Austausch einer defekten Platte die fehlenden Daten auf die Ersatzplatte rekonstruiert.</p>
+        <ul>
+            <li><b>Allgemeines Prinzip:</b> Bei Paritäts-RAIDs (RAID 5/6) liest der Controller die entsprechenden Datenblöcke und schreibt diese auf die Ersatzplatte. Bei RAID 1 wird die neue Platte einfach kopiert (Block für Block) von der intakten Platte.</li>
+            <li><b>RAID 1:</b> Rebuild ist vergleichsweise schnell, weil nur eine Platte gelesen und die andere beschrieben wird; es gibt keine Paritätsberechnung. Dennoch gilt: Während des Rebuilds besteht keine Redundanz — fällt die verbliebene Platte aus, sind die Daten verloren. Lesefehler auf der verbleibenden Platte können den Rebuild abbrechen.</li>
+            <li><b>RAID 5:</b> Rebuild erfordert, dass bei jedem Block die anderen n-1 Platten gelesen werden; das belastet das Array stark und erhöht die Gefahr eines zweiten Fehlers (z. B. URE), besonders bei sehr großen Platten. Daher können Rebuilds viele Stunden bis Tage dauern (je nach Plattengröße und Systemlast).</li>
+            <li><b>Herstellerspezifische Hinweise (HPE & QNAP):</b></li>
+            <ul>
+                <li>Bei <b>HPE Smart Array Controllern</b> hängt die Rebuild-Performance stark vom Cache-Modul ab. Mit aktiviertem Write-Back-Cache und funktionierender Batterie-/SuperCap-Absicherung laufen Rebuilds deutlich schneller. Fällt die Absicherung aus, schaltet der Controller in den Write-Through-Modus, wodurch Rebuilds sehr viel länger dauern können.</li>
+                <li>Bei <b>QNAP NAS-Systemen</b> werden Rebuilds im QTS- oder QuTS-Betriebssystem meist standardmäßig im Hintergrund mit niedriger Priorität ausgeführt, um die laufenden Dienste (Dateifreigaben, VMs, Backups) nicht zu stark zu beeinträchtigen. Dadurch verlängert sich die Rebuild-Dauer erheblich, was aber die Produktivnutzung stabiler hält. Administratoren können die Priorität manuell anpassen, falls ein schnellerer Rebuild wichtiger ist als aktuelle Performance.</li>
+            </ul>
+            <li><b>Hot Spare:</b> Viele Systeme besitzen einen Hot-Spare (vorgehaltene Ersatzplatte). Fällt eine Platte aus, startet der Rebuild automatisch auf dem Hot-Spare. Das reduziert die Zeit ohne Redundanz. Manche Controller unterstützen auch „Global Hot-Spare“ (für alle Arrays) oder „Dedicated Hot-Spare“ (nur für ein bestimmtes Array).</li>
+            <li><b>URE-Risiko (Unrecoverable Read Error):</b> Große HDDs haben eine nicht-null Wahrscheinlichkeit für UREs beim Lesen großer Datenmengen; während eines RAID-5-Rebuilds kann ein URE zum kompletten Arrayverlust führen — deswegen sind RAID-6 oder RAID-10 bei großen Kapazitäten oft sicherer. UREs sind bei RAID 6 weniger kritisch, weil ein zusätzlicher Fehler noch abgefangen werden kann.</li>
+        </ul>
+        <p><b>Praktische Größenordnung:</b> Rebuildzeiten steigen mit Plattengröße; heute können 8-16 TB HDDs beim Rebuild viele Stunden bis über ein bis zwei Tage in Anspruch nehmen, je nach System-I/O und Priorisierung.</p>
+        <hr class="trennlinie">
+        <div class="section-title">Cache-Module & Absicherung (BBWC / SuperCap / FBWC)</div>
+        <p>Viele Hardware-Controller haben einen Cache (DRAM), der I/O-Operationen puffert. Der Cache kann im Write-Back-Modus die Schreiblatenz stark reduzieren, weil Writes als abgeschlossen gelten, sobald sie im Controller-Cache liegen. Damit diese Daten bei Stromausfall nicht verloren gehen, gibt es Absicherungen:</p>
+        <ul>
+            <li><b>BBWC (Battery-Backed Write Cache):</b> Ein Akku (Battery) sichert den Cache, bis Daten persistent geschrieben werden.</li>
+            <li><b>SuperCap / Flash-Backed (FBWC):</b> Moderne Systeme nutzen statt Akku einen Superkondensator (SuperCap), der kurzzeitig genug Energie liefert, damit der Cacheinhalt in nicht-flüchtigen Speicher (Flash) geschrieben wird. Daher die Bezeichnung Flash-Backed Write Cache (FBWC). Ohne funktionierende Absicherung wird der Controller oft in Write-Through-Modus gezwungen (Writes gehen sofort auf die Platten), was die Schreibperformance merklich senkt.</li>
+        </ul>
+        <p>Beim Rebuild hilft ein sicherer Cache, weil er Schreibvorgänge beschleunigt und so die Zeit reduziert, in der das Array ohne vollständige Redundanz läuft.</p>
+        <hr class="trennlinie">
+        <b>Wichtige Praxis-Tipps & Checkliste (für Planung und Betrieb)</b>
+        <ul>
+            <li><b>Backups:</b> RAID &ne; Backup. Plane regelmäßige Backups und teste Recovery-Szenarien.</li>
+            <li><b>Hot-Spare:</b> Wenn möglich, ein Hot-Spare vorsehen, damit Rebuilds sofort starten.</li>
+            <li><b>SMART-Monitoring:</b> SMART-Werte der Platten regelmäßig prüfen (Reallocated Sectors, Pending Sectors).</li>
+            <li><b>Firmware:</b> Laufwerks- und Controller-Firmware aktuell halten (Kompatibilitätslisten beachten). Nicht jede neue Firmware sofort einspielen, da Controller-/Disk-Firmware manchmal Bugs mitbringen. In Rechenzentren wird meist getestet, bevor upgedatet wird.</li>
+            <li><b>Rebuild-Priorität:</b> Bei hoher produktiver Belastung kann man Rebuild-Priorität anpassen (schneller rebuild vs. weniger Performance-Impact).</li>
+            <li><b>Scrubbing:</b> Periodische Daten-Integritätsprüfungen (scrub) durchführen, um fehlerhafte Blöcke früh zu finden.</li>
+            <li><b>Größenwahl:</b> Bei sehr großen HDDs lieber RAID 6 oder RAID 10 anstelle von RAID 5 wählen.</li>
+            <li><b>Dateisystemwahl:</b> Erwäge Dateisysteme mit Checksumming/Copy-On-Write (z. B. ZFS, Btrfs) — diese bieten zusätzlichen Schutz vor stillen Fehlern (silent corruption). ZFS hat RAIDZ(1/2)-Konzepte, die RAID5/6 ähneln, aber mit Checksummen und anderen Designunterschieden.</li>
+        </ul>
+        <hr class="trennlinie">
+        <div class="section-title">Kurze Hinweise zu modernen Alternativen / Begriffen</div>
+        <ul>
+            <li><b>RAIDZ (ZFS):</b> RAIDZ1 &asymp; RAID5 (einfach Parität), RAIDZ2 &asymp; RAID6 (doppelte Parität). ZFS bietet aber Checksumming, Copy-On-Write und "resilvering", was klassische RAID-Implementierungen in manchen Bereichen überlegen macht.</li>
+            <li><b>Scrubbing/Resilvering:</b> Periodisches Überprüfen und Wiederherstellen (bei ZFS heißt das "resilvering") reduziert das Risiko latenter Fehler.</li>
+        </ul>
+        <hr class="trennlinie">
+        <div class="section-title">Fazit — Wie wählst du das richtige RAID?</div>
+        <p>Die Wahl des RAID-Levels hängt von Anforderungen ab: willst du maximale Performance (RAID 0), einfache und kostengünstige Redundanz (RAID 1), effiziente Kapazitätsnutzung mit Kompromiss (RAID 5), höhere Sicherheit bei großen Arrays (RAID 6) oder eine robuste Kombination aus hohen Schreib-/Leseleistungen und Ausfallsicherheit (RAID 10)? Berücksichtige dabei immer Rebuild-Risiko, Plattengröße, Wartungsprozesse (Hot-Spares, Scrubbing) sowie Backups und Monitoring-Konzept.</p>
         <br>
         <hr class="trennlinie">
         <a href="02 - Switching VLAN PoE.html" target="blank" class="back-link">&larr; Zurück zu 02 - Switching / VLAN / PoE</a> 
