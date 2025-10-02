@@ -5,129 +5,225 @@
     <title>02 - Switching / VLAN / PoE</title>
     <link rel="icon" type="image/x-icon" href="Icon.ico">
     <style>
-        body {
-            background-color: #000000f4;
-            color: #fff;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 1000px;
-            margin: 40px auto;
-            background: #181818;
-            border-radius: 16px;
-            box-shadow: 0 4px 24px rgb(167, 0, 0);
-            padding: 32px 34px;
-        }
-        header {
-            background: linear-gradient(90deg, #000000 0%, #4f0098 100%);
-            color: #bcabd5;
-            padding: 24px 0 16px 0;
-            border-radius: 16px 16px 0 0;
-            text-align: center;
-            margin-bottom: 24px;
-            text-shadow: 0 0 1px #000000, 0 0 2px #000000;
-        }
-        h1 {
-            margin: 0;
-            font-size: 2em;
-            letter-spacing: 2px;
-        }
-        .section-title {
-            font-size: 1.3em;
-            font-weight: bold;
-            margin-top: 32px;
-            margin-bottom: 12px;
-            color: #a962ff;
-            text-shadow: 0 0 1px #000000, 0 0 2px #000000;
-        }
-        p {
-            margin-bottom: 16px;
-            line-height: 1.6;
-        }
-        table td, table th {
-            padding-top: 10px;
-            padding-bottom: 10px;
-            line-height: 1.25;
-        }
-        table td:first-child {
-            padding-right: 32px;
-        }
-        table td:nth-child(2) {
-            padding-right: 32px;
-        }
-        ul {
-            margin-bottom: 24px;
-        }
-        li {
-            margin-bottom: 8px;
-        }
-        a {
-            color: #00ffcc;
-            text-decoration: underline;
-            font-weight: bold;
-            transition: color 0.2s;
-        }
-        a:visited {
-            color: #7b00ff;
-        }
-        a:hover {
-            color: #ff0066;
-        }
-        .back-link {
-            display: inline-block;
-            margin-top: 24px;
-            color: #a962ff;
-            background: #1a1a1a;
-            padding: 8px 16px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: background 0.2s, color 0.2s;
-            text-shadow: 0 0 1px #000000, 0 0 2px #000000;
-        }
-        .back-link:hover {
-            background: #000000;
-            color: #6e00e4;
-        }
-        @media (max-width: 800px) {
-            .container {
-                max-width: 98vw;
-                padding: 12px 6vw;
-            }
-            header {
-                font-size: 1em;
-                padding: 16px 0 8px 0;
-            }
-        }
-        .trennlinie {
-            border: none;
-            border-top: 2px solid #a962ffb7;
-            margin: 24px 0;
-            opacity: 0.5;
-            border-radius: 2px;
-        }
-        ul, ul ul {
-            list-style-type: disc;
-        }
-        ul li::marker {
-            color: #fff;
-        }
+        :root {
+      --bg: #8d8d8db9;
+      --text: #2d2d2d;
+      --container-bg: #ffffff;
+      --header-bg: linear-gradient(90deg, #b46900f6, #d87e00);
+      --header-text: #ffffff;
+      --section-bg: #e2e2e2a0;
+      --section-title: #000000;
+      --section-title-bg: #cfcfcf54;
+      --section-title-border: #F18E00;
+      --h3: #cb6201cd;
+      --trennlinie: #e0e7ef;
+      --link: #d87e00;
+      --link-hover: #ae6600;
+      --back-link-bg: #9b948e40;
+      --back-link: #e87000;
+      --back-link-hover-bg: #ffffff;
+      --back-link-hover: #e38101;
+      --aside-bg: #e3e3e3;
+      --aside-shadow: rgba(50, 58, 78, 0.556);
+      --container-shadow: 0 2px 16px rgba(180,200,255,0.10);
+      --sublist-color: #717171;
+    }
+    body.dark {
+      --bg: #424242e7;
+      --text: #f3f3f3;
+      --container-bg: #353535fc;
+      --header-bg: linear-gradient(90deg, #b46900, #d87e00);
+      --header-text: #ffffff;
+      --section-bg: #414040b9;
+      --section-title: #ffffff;
+      --section-title-bg: #d05a004c;
+      --section-title-border: #d87e00;
+      --h3: #d87e00;
+      --trennlinie: #44495a;
+      --link: #d87e00;
+      --link-hover: #ae6600;
+      --back-link-bg: #9b948e40;
+      --back-link: #e87000;
+      --back-link-hover-bg: #c8c6c651;
+      --back-link-hover: #e38101;
+      --aside-bg: #453f3c53;
+      --aside-shadow: rgba(60,60,80,0.12);
+      --container-shadow: 0 2px 16px rgba(60,60,80,0.18);
+      --sublist-color: #cccccc;
+    }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      transition: background 0.3s, color 0.3s;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      background: var(--container-bg);
+      border-radius: 16px;
+      box-shadow: var(--container-shadow);
+      padding: 36px;
+      transition: background 0.3s;
+    }
+    header {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 24px 0 16px 0;
+      border-radius: 16px 16px 0 0;
+      text-align: center;
+      box-shadow: 0 2px 8px var(--aside-shadow);
+      transition: background 0.3s, color 0.3s;
+    }
+    h1 {
+      margin: 0;
+      font-size: 2em;
+      letter-spacing: 1px;
+      color: #ffffff;
+    }
+    section {
+      padding: 20px 24px;
+      border-radius: 12px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+      margin-bottom: 28px;
+      transition: background 0.3s;
+      background: var(--section-bg);
+    }
+    .section-title {
+      font-size: 1.4em;
+      font-weight: 600;
+      margin-top: 32px;
+      margin-bottom: 12px;
+      color: var(--section-title);
+      border-left: 4px solid var(--section-title-border);
+      padding-left: 8px;
+      background: var(--section-title-bg);
+      border-radius: 4px;
+      transition: background 0.3s, color 0.3s;
+    }
+    p {
+      margin-bottom: 16px;
+      line-height: 1.9;
+    }
+    b {
+        color: #df8d00ef;
+        background: rgba(152, 152, 152, 0.084)
+    }
+    ul {
+      margin-bottom: 24px;
+      padding-left: 20px;
+    }
+    li {
+      margin-bottom: 12px;
+      line-height: 1.6;
+    }
+    ul ul {
+      margin-top: 6px;
+      margin-bottom: 12px;
+      list-style-type: circle;
+      color: var(--sublist-color);
+    }
+    h3 {
+      margin-top: 20px;
+      color: var(--h3);
+    }
+    .trennlinie {
+      border: none;
+      border-top: 1px solid var(--trennlinie);
+      margin: 32px 0;
+      transition: border-color 0.3s;
+    }
+    a {
+      color: var(--link);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    a:hover {
+      color: var(--link-hover);
+    }
+    .back-link {
+      display: inline-block;
+      margin-top: 16px;
+      background: var(--back-link-bg);
+      color: var(--back-link);
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+      border: 1px solid var(--trennlinie);
+    }
+    .back-link:hover {
+      background: var(--back-link-hover-bg);
+      color: var(--back-link-hover);
+    }
+    aside {
+      background: var(--aside-bg);
+      border-radius: 8px;
+      padding: 18px 24px;
+      margin-top: 24px;
+      box-shadow: 0 1px 4px var(--aside-shadow);
+      transition: background 0.3s;
+    }
+    .mode-toggle {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 100;
+      background: #423c46af;
+      color: var(--back-link);
+      border: 1px solid var(--trennlinie);
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-size: 1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .mode-toggle:hover {
+      background: var(--back-link-hover-bg);
+      color: var(--back-link-hover);
+    }
+    @media (max-width: 800px) {
+      .container {
+        max-width: 95%;
+        padding: 16px;
+      }
+      h1 {
+        font-size: 1.5em;
+      }
+      .mode-toggle {
+        background: var(--back-link-bg);
+        top: 8px;
+        right: 8px;
+        padding: 8px 12px;
+      }
+    }
     </style>
 </head>
 <body>
+    <button class="mode-toggle" onclick="toggleMode()">🌙 Dunkelmodus</button>
     <div class="container">
+        <main>
         <header>
             <h1>02 - Switching / VLAN / PoE</h1>
         </header>
+
+        <section>
         <div class="section-title">1. Wie funktioniert ein Switch?</div>
         <p>Ein Switch arbeitet auf <b>OSI-Layer 2 (Sicherungsschicht)</b> und nimmt Ethernet-Frames entgegen, liest die Layer-2-Informationen (vor allem MAC-Adressen) und entscheidet daraufhin zielgerichtet, an welchem Port ein Frame weitergeleitet werden muss. Anders als ein alter Hub, der empfangene Signale an alle Ports verteilt, versucht ein Switch, den Verkehr nur an jene Ports zu schicken, an denen das Zielgerät angeschlossen ist - dadurch wird das Netz effizienter und die Kollisionen werden drastisch reduziert.</p>
         <p>Die Arbeitsweise des Switches basiert im Kern auf einer <b>MAC-Adress-Tabelle</b> (auch CAM-Table genannt). Immer wenn ein Frame ankommt, merkt sich der Switch die <b>Quell-MAC</b> und den Port, an dem das Frame eingetroffen ist - also eine Zuordnung "Quell-MAC &#8594; Port". Beim Senden sucht er die <b>Ziel-MAC</b> in dieser Tabelle: findet er einen Eintrag, schickt er das Frame nur an den entsprechenden Port; findet er die Ziel-MAC nicht, spricht man von unknown unicast und der Switch flutet das Frame an alle Ports innerhalb der gleichen VLAN-Domäne (außer dem Eingangsport).</p>
         <p>Einträge in der MAC-Tabelle sind nicht permanent: sie haben ein <b>Aging</b>-Intervall (typisch einige Minuten, häufig ~300 s), damit Umstecken/Neuanordnungen erkannt werden und die Tabelle aktuell bleibt. Bei Broadcast-Frames (z. B. ARP-Requests an FF:FF:FF:FF:FF:FF) sendet der Switch das Frame an alle Ports eines VLANs; bei Multicast wird das Verhalten davon bestimmt, ob IGMP-Snooping aktiv ist - ohne IGMP-Snooping wird geflutet, mit IGMP-Snooping werden Multicast-Frames nur an Ports geschickt, an denen Hosts Mitglieder der Multicast-Gruppe sind.</p>
         <p>Jeder Switch-Port stellt eine eigene <b>Collision Domain</b> dar; in moderneren Netzwerken arbeiten Ports im Full-Duplex, deshalb treten Kollisionen praktisch nicht mehr auf. Um jedoch physikalische Schleifen (Layer 2 Loops) zu verhindern, nutzen Netzwerke Spanning-Tree-Mechanismen (STP / RSTP / MSTP), die redundante Pfade erkennen und temporär blockieren, damit es nicht zu Broadcast-Stürmen kommt.</p>
         <p>Kurz gesagt: ein Switch leitet Unicast zielgerichtet, Broadcast an alle Geräte im VLAN und Multicast abhängig von Multicast abhängig von IGMP-Snooping.</p>
+        </section>
+
         <hr class="trennlinie">
+
+        <section>
         <div class="section-title">2. Wofür benutzt ein Switch MAC-Adressen?</div>
         <p>MAC-Adressen sind für einen Switch die grundlegende Information zur Identifikation von Endgeräten. Er nutzt MAC-Adressen in mehreren Rollen:</p>
         <ul>
@@ -138,7 +234,11 @@
             <li><b>Sicherheit & Zusammenfunktionen:</b> MAC-Adressen werden auch bei Sicherheitsmechanismen verwendet, etwa bei port-security (maximal erlaubte Anzahl an MACs pro Port, sticky MACs), bei MAC-based Access-Control oder als Teil von 802.1X-Zugangssteuerungen; außerdem können sie für dynamische VLAN-Zuweisung (z. B. via RADIUS) herangezogen werden.</li>
         </ul>
         <p>Wichtig: MAC-basierte Sicherheitsmechanismen sind praktisch, ersetzen aber nicht eine ordentliche Authentifizierung (z. B. 802.1X + RADIUS), denn MAC-Adressen lassen sich fälschen.</p>
+        </section>
+
         <hr class="trennlinie">
+        
+        <section>
         <div class="section-title">3. Wer sieht welche Pakete im Netzwerk?</div>
         <p>Die Sicherheit von Paketen hängt von deren Typ ab:</p>
         <ul>
@@ -151,7 +251,11 @@
             <li><b>Monitoring:</b> Für Analysezwecke oder IDS kann man gezielt Ports spiegeln (Port-Mirroring / SPAN) oder ein SPAN/ERSPAN einrichten, damit ein Analysehost alles oder selektierten Verkehr sieht.</li>
         </ul>
         <p>(IGMP-Snooping und dessen Wirkung: siehe Quelle unten.)</p>
+        </section>
+        
         <hr class="trennlinie">
+        
+        <section>
         <div class="section-title">4. PoE — worauf achten? (Standards, Aushandlung, Budget)</div>
         <p><b>Power over Ethernet (PoE)</b> erlaubt es, über das Standard-Ethernet-Kabel sowohl Daten als auch Strom zu transportieren. Dafür gibt es offizielle IEEE-Standards mit verschiedenen Leistungsstufen:</p>
         <ul>
@@ -171,6 +275,11 @@
             <li>Die Versorgungsspannung liegt typischerweise im Bereich von <b>~44-57 V</b> (nominal ~48 V), abhängig vom Standard bzw. der Implementierung.</li>
             <p>(Quellen für PoE-Leistungswerte und Klassentabelle siehe unten.)</p>
         </ul>
+        </section>
+        
+        <hr class="trennlinie">
+        
+        <section>
         <div class="section-title">5. Wie bekommen Geräte Strom — Varianten im Überblick</div>
         <p>Es gibt drei gängige Varianten, wie Geräte mit PoE versorgt werden:</p>
         <ul>
@@ -180,7 +289,11 @@
             <br>
             <li><b>Lokales Netzteil:</b> Wenn weder PoE noch Injector vorhanden sind, bekommt das Gerät ein eigenes Netzteil (z. B. Steckernetzteil). Das ist die einfachste, aber kabelintensivere Lösung.</li>
         </ul>
+        </section>
+        
         <hr class="trennlinie">
+        
+        <section>
         <div class="section-title">6. Verkabelungs-Voraussetzungen für PoE</div>
         <p>Gute Verkabelung ist sehr wichtig, sonst entstehen Spannungsabfälle, Hitzeentwicklung oder Leistungsverluste, vor allem bei höheren PoE-Klassen:</p>
         <ul>
@@ -193,7 +306,11 @@
             <li><b>Steckzyklen unter Last:</b> Beim Abziehen eines Kabels unter Last können Lichtbögen entstehen; verwende Hardware mit PoE-Rating und beachte Betriebsanweisungen.</li>
             <p>(Quelle zur Max-Länge: Standard-Angabe 100 m / 90 m Permanent Link.)</p>
         </ul>
+        </section>
+        
         <hr class="trennlinie">
+        
+        <section>
         <div class="section-title">7. Was bedeutet VLAN?</div>
         <p><b>VLAN</b> steht für <i>Virtual Local Area Network</i> (IEEE 802.1Q) und erlaubt, ein physisches Netz logisch in mehrere seperate Broadcast-Domänen zu segmentieren. VLAN-Tagging fügt Ethernet-Frames eine 12-Bit VLAN-ID hinzu, so dass mehrere VLANs über denselben physischen Uplink transportiert werden können. Im Standard sind VLAN-IDs im Bereich <b>1-4094</b> verwendbar (0 und 4095 reserviert).</p>
         <p>Port-Typen, die du kennen solltest:</p>
@@ -206,10 +323,18 @@
             <br>
             <li><b>Voice-VLAN:</b> Häufig ein seperates VLAN für IP-Telefone; Geräte können via LLDP-MED oder CDP die Voice-VLAN-Zuweisung erhalten.</li>
         </ul>
+        </section>
+        
         <hr class="trennlinie">
+        
+        <section>
         <div class="section-title">8. Wofür nutzt man VLANs?</div>
         <p>VLANs sind extrem praktisch, weil sie mehrere Anforderungen erfüllen: sie trennen Benutzer, Server, VoIP und loT logisch voneinander, wodurch Sicherheit erhöht und Broadcast-Last reduziert werden. Sie sind außerdem nützlich für organisatorische Trennung (z. B. Mandanten), vereinfachen QoS-Policies (Sprachverkehr priorisieren) und erlauben Skalierung, indem viele logische Netze über dieselbe physische Infrastruktur transportiert werden (Trunks). Allerdings braucht man für die Kommunikation zwischen VLANs<b> Inter-VLAN-Routing </b>(durch Router, Layer-3-Switch oder Firewall), und dabei müssen passende ACLs/Policies geplant werden.</p>
+        </section>
+        
         <hr class="trennlinie">
+        
+        <section>
         <div class="section-title">9. Dinge, die man beim Einsatz beachten muss (praktische Regeln)</div>
         <p>Wenn du VLANs/Productive-Design planst, denk an:</p>
         <ul>
@@ -226,16 +351,32 @@
             <li><b>Dokumentation:</b> Netzplan, VLAN-Matrix, Subnetze und ACLs dokumentieren. Ohne Dokumentation landet man im Chaos.</li>
         </ul>
         <p>(Kurze Erinnerung: Per-VLAN-STP ist oft ein Vendor-Feature - z. B. Cisco PVST - die IEEE-Standards sind STP (802.1D), RSTP (802.1w) und MSTP (802.1s).)</p>
+        </section>
+        
         <hr class="trennlinie">
+        
+        <section>
         <div class="section-title">10. Vor- und Nachteile von VLANs</div>
-        <p>Vorteile: klare Segmentierung, weniger Broadcast, bessere Qos/Fehlerdomänen und hohe Flexibilität/Skalierbarkeit. Nachteile: höhere Komplexität, notwendiges Routing/Policies zwischen VLANs und anspruchsvolleres Troubleshooting (Tags, Trunks, ACLs, STP).</p>
+        <p><b>Vorteile:</b> klare Segmentierung, weniger Broadcast, bessere Qos/Fehlerdomänen und hohe Flexibilität/Skalierbarkeit. Nachteile: höhere Komplexität, notwendiges Routing/Policies zwischen VLANs und anspruchsvolleres Troubleshooting (Tags, Trunks, ACLs, STP).</p>
+        </section>
+        
         <hr class="trennlinie">
+        
+        <section>
         <div class="section-title">11. Was ist ein Trunk / Link-Aggregation (LACP)?</div>
         <p>Man muss zwei Konzepte trennen: ein <b>802.1Q VLAN-Trunk</b> transportiert mehrere VLANs über einen Link durch Tagging; <b>Link-Aggregation / LAG</b> hingegen bündelt mehrere physische Links zu einer logischen Verbindung, um Bandbreite und Redundanz zu erhöhen. Der Standard für Link-Aggregation ist in der IEEE-Familie als 802.1AX (früher 802.3ad) definiert, und <b>LACP (Link Link Aggregation Control Protocol)</b> ist das Protokoll, das die dynamische Aushandlung und Überwachung eines LAG ermöglicht. Voraussetzung ist unter anderem, dass die Mitglieds-Links ähnliche Kapazität/Duplex besitzen und die VLAN-Konfiguration auf beiden Seiten identisch ist. Ein wichtiges Verhalten:<b> ein einzelner Fluss (z. B. eine TCP-Session) wird in der Regel hash-basiert auf genau einen physischen Link verteilt, </b>eine einzelne Verbindung nicht die Summe aller Links einer LAG erreichen kann; die Aggregate verbessern aber den Gesamtdurchsatz und sorgen für Redundanz.</p>
+        </section>
+        
         <hr class="trennlinie">
+        
+        <section>
         <div class="section-title">12. Vor- / Nachteile von LACP</div>
         <p>Vorteile: höherer Gesamtdurchsatz (für mehrere parallele Flows), Redundanz bei Linkausfall, STP-sichtbar als ein Link &rarr; stabilere Topologie; funktioniert zusammen mir 802.1Q-Tunks. Nachteile: ein einzelner Flow bleibt auf maximaler Bandbreite eines einzelnen physikalischen Links, Hash-Algorithmus kann zu asymmetrischer Lastverteilung führen, und Multi-Chassis-LAGs (MLAG / vPC / VSX) sind oft vendor-abhängig und müssen korrekt konfiguriert werden.</p>
+        </section>
+        
         <hr class="trennlinie">
+        
+        <section>
         <div class="section-title">13. Sinnvolle Einsatzszenarien für LACP-Trunks</div>
         <ul>
             <li>Uplinks von Access- zu Distribution/Core (z. B. 2x oder 4x 1 GbE oder 2x/4x 10 GbE).</li>
@@ -243,8 +384,13 @@
             <li>Storage/NAS-Anbindungen mit vielen parallelen Streams.</li>
             <li>Firewalls / Load-Balancer zu Switches für breite, redundante Anbindung.</li>
         </ul>
+        </section>
+        
         <hr class="trennlinie">
+        
+        <section>
         <div class="section-title">14. Praxis-Checklisten (kompakt)</div>
+        <br>
         <ul>
             <b>PoE-Projekt:</b>
             <br>
@@ -272,8 +418,14 @@
             <li>VLAN-Liste auf beiden Seiten identisch.</li>
             <li>Monitoring: Lastenverteilung, Flaps, Error-Rates beobachten.</li>
         </ul>
+        <br>
+        </section>
+        
         <hr class="trennlinie">
+        
+        <section>
         <div class="section-title">Mini-FAQ — zur schnellen Widerholung</div>
+        <br>
         <ul>
             <li><b>Warum sieht nicht jeder alle Pakete?</b> &rarr; Weil ein Switch Unicast zielgerichtet weiterleitet; nur Broadcasts/unknown-Unicast werden geflutet.</li>
             <br>
@@ -283,11 +435,27 @@
             <br>
             <li><b>Bringt LACP einer Verbindung 2x Bandbreite?</b> &rarr; Nein: ein einzelner Flow belegt maximal einen physischen Link; LACP erhöht jedoch den aggregate Durchsatz über viele Flows und bietet Redundanz.</li>
         </ul>
-        <br>
+        </section>
+        
         <hr class="trennlinie">
-        <a href="01 - TCP IP Routing NAT.html" target="blank" class="back-link">&larr; Zurück zu 01 - TCP IP Routing NAT</a> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="02 - Switching VLAN PoE.html" target="blank" class="back-link">03 - RAID &#8594;</a>
+        
+        <section>
+        <a href="01 - TCP IP Routing NAT.html" target="blank" class="back-link">&larr; Zurück zu 01 - TCP IP Routing NAT</a>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="03 - Raid.html" target="blank" class="back-link">03 - RAID &#8594;</a>
         <br>
         <a href="Ausbildungsthemen.html" class="back-link">&lArr; Zurück zum Inhaltsverzeichnis</a>
+        </section>
+        </main>
     </div>
+    <script>
+    function toggleMode() {
+    document.body.classList.toggle('dark');
+      const btn = document.querySelector('.mode-toggle');
+      if(document.body.classList.contains('dark')) {
+        btn.textContent = '☀️ Hellmodus';
+      } else {
+        btn.textContent = '🌙 Dunkelmodus';
+      }
+    }
+  </script>
 </body>
 </html>

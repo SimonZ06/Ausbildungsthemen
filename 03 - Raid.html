@@ -1,141 +1,228 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <title>03 - RAID</title>
-    <link rel="icon" type="image/x-icon" href="Icon.ico">
-    <style>
-        body {
-            background-color: #000000f4;
-            color: #fff;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 1000px;
-            margin: 40px auto;
-            background: #181818;
-            border-radius: 16px;
-            box-shadow: 0 4px 24px rgb(167, 0, 0);
-            padding: 32px 34px;
-        }
-        header {
-            background: linear-gradient(90deg, #000000 0%, #4f0098 100%);
-            color: #bcabd5;
-            padding: 24px 0 16px 0;
-            border-radius: 16px 16px 0 0;
-            text-align: center;
-            margin-bottom: 24px;
-            text-shadow: 0 0 1px #000000, 0 0 2px #000000;
-        }
-        h1 {
-            margin: 0;
-            font-size: 2em;
-            letter-spacing: 2px;
-        }
-        .section-title {
-            font-size: 1.3em;
-            font-weight: bold;
-            margin-top: 32px;
-            margin-bottom: 12px;
-            color: #a962ff;
-            text-shadow: 0 0 1px #000000, 0 0 2px #000000;
-        }
-        p {
-            margin-bottom: 16px;
-            line-height: 1.6;
-        }
-        table td, table th {
-            padding-top: 10px;
-            padding-bottom: 10px;
-            line-height: 1.25;
-        }
-        table td:first-child {
-            padding-right: 32px;
-        }
-        table td:nth-child(2) {
-            padding-right: 32px;
-        }
-        ul {
-            margin-bottom: 24px;
-        }
-        li {
-            margin-bottom: 8px;
-            line-height: 1.6;
-        }
-        a {
-            color: #00ffcc;
-            text-decoration: underline;
-            font-weight: bold;
-            transition: color 0.2s;
-        }
-        a:visited {
-            color: #7b00ff;
-        }
-        a:hover {
-            color: #ff0066;
-        }
-        .back-link {
-            display: inline-block;
-            margin-top: 24px;
-            color: #a962ff;
-            background: #1a1a1a;
-            padding: 8px 16px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: background 0.2s, color 0.2s;
-            text-shadow: 0 0 1px #000000, 0 0 2px #000000;
-        }
-        .back-link:hover {
-            background: #000000;
-            color: #6e00e4;
-        }
-        @media (max-width: 800px) {
-            .container {
-                max-width: 98vw;
-                padding: 12px 6vw;
-            }
-            header {
-                font-size: 1em;
-                padding: 16px 0 8px 0;
-            }
-        }
-        .trennlinie {
-            border: none;
-            border-top: 2px solid #a962ffb7;
-            margin: 24px 0;
-            opacity: 0.5;
-            border-radius: 2px;
-        }
-        ul, ul ul {
-            list-style-type: disc;
-        }
-        ul li::marker {
-            color: #fff;
-        }
+  <meta charset="UTF-8">
+  <title>03 - RAID</title>
+  <link rel="icon" type="image/x-icon" href="Icon.ico">
+  <style>
+    :root {
+      --bg: #8d8d8db9;
+      --back-link-bg: rgba(255,255,255,0.45);
+      --text: #2d2d2d;
+      --container-bg: #ffffff;
+      --header-bg: linear-gradient(90deg, #b46900f6, #d87e00);
+      --header-text: #ffffff;
+      --section-bg: #e2e2e2a0;
+      --section-title: #000000;
+      --section-title-bg: #cfcfcf54;
+      --section-title-border: #F18E00;
+      --h3: #cb6201cd;
+      --trennlinie: #e0e7ef;
+      --link: #d87e00;
+      --link-hover: #ae6600;
+      --back-link-bg: #9b948e40;
+      --back-link: #e87000;
+      --back-link-hover-bg: #ffffff;
+      --back-link-hover: #e38101;
+      --aside-bg: #e3e3e3;
+      --aside-shadow: rgba(50, 58, 78, 0.556);
+      --container-shadow: 0 2px 16px rgba(180,200,255,0.10);
+      --sublist-color: #717171;
+    }
+    body.dark {
+      --bg: #424242e7;
+      --back-link-bg: rgba(60,60,60,0.45);
+      --text: #f3f3f3;
+      --container-bg: #353535fc;
+      --header-bg: linear-gradient(90deg, #b46900, #d87e00);
+      --header-text: #ffffff;
+      --section-bg: #414040b9;
+      --section-title: #ffffff;
+      --section-title-bg: #d05a004c;
+      --section-title-border: #d87e00;
+      --h3: #d87e00;
+      --trennlinie: #44495a;
+      --link: #d87e00;
+      --link-hover: #ae6600;
+      --back-link-bg: #9b948e40;
+      --back-link: #e87000;
+      --back-link-hover-bg: #c8c6c651;
+      --back-link-hover: #e38101;
+      --aside-bg: #453f3c53;
+      --aside-shadow: rgba(60,60,80,0.12);
+      --container-shadow: 0 2px 16px rgba(60,60,80,0.18);
+      --sublist-color: #cccccc;
+    }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      transition: background 0.3s, color 0.3s;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      background: var(--container-bg);
+      border-radius: 16px;
+      box-shadow: var(--container-shadow);
+      padding: 36px;
+      transition: background 0.3s;
+    }
+    header {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 24px 0 16px 0;
+      border-radius: 16px 16px 0 0;
+      text-align: center;
+      box-shadow: 0 2px 8px var(--aside-shadow);
+      transition: background 0.3s, color 0.3s;
+    }
+    h1 {
+      margin: 0;
+      font-size: 2em;
+      letter-spacing: 1px;
+      color: #ffffff;
+    }
+    section {
+      padding: 20px 24px;
+      border-radius: 12px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+      margin-bottom: 28px;
+      transition: background 0.3s;
+      background: var(--section-bg);
+    }
+    .section-title {
+      font-size: 1.4em;
+      font-weight: 600;
+      margin-top: 32px;
+      margin-bottom: 12px;
+      color: var(--section-title);
+      border-left: 4px solid var(--section-title-border);
+      padding-left: 8px;
+      background: var(--section-title-bg);
+      border-radius: 4px;
+      transition: background 0.3s, color 0.3s;
+    }
+    p {
+      margin-bottom: 16px;
+      line-height: 1.9;
+    }
+    ul {
+      margin-bottom: 24px;
+      padding-left: 20px;
+    }
+    li {
+      margin-bottom: 14px;
+      line-height: 1.9;
+    }
+    ul ul {
+      margin-top: 6px;
+      margin-bottom: 12px;
+      list-style-type: circle;
+      color: var(--sublist-color);
+    }
+    h3 {
+      margin-top: 20px;
+      color: var(--h3);
+    }
+    .trennlinie {
+      border: none;
+      border-top: 1px solid var(--trennlinie);
+      margin: 32px 0;
+      transition: border-color 0.3s;
+    }
+    a {
+      color: var(--link);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    a:hover {
+      color: var(--link-hover);
+    }
+    .back-link {
+      display: inline-block;
+      margin-top: 16px;
+      background: var(--back-link-bg);
+      color: var(--back-link);
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+      border: 1px solid var(--trennlinie);
+    }
+    .back-link:hover {
+      background: var(--back-link-hover-bg);
+      color: var(--back-link-hover);
+    }
+    aside {
+      background: var(--aside-bg);
+      border-radius: 8px;
+      padding: 18px 24px;
+      margin-top: 24px;
+      box-shadow: 0 1px 4px var(--aside-shadow);
+      transition: background 0.3s;
+    }
+    .mode-toggle {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 100;
+      background: var(--back-link-bg);
+      color: var(--back-link);
+      border: 1px solid var(--trennlinie);
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-size: 1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .mode-toggle:hover {
+      background: var(--back-link-hover-bg);
+      color: var(--back-link-hover);
+    }
+    @media (max-width: 800px) {
+      .container {
+        max-width: 95%;
+        padding: 16px;
+      }
+      h1 {
+        font-size: 1.5em;
+      }
+      .mode-toggle {
+        top: 8px;
+        right: 8px;
+        padding: 8px 12px;
+      }
+    }
     </style>
 </head>
 <body>
+    <button class="mode-toggle" onclick="toggleMode()">🌙 Dunkelmodus</button>
     <div class="container">
+        <main>
         <header>
             <h1>03 - RAID</h1>
         </header>
-        <div class="section-title">Was ist ein RAID-System?</div>
+        <section>
+        <h2 class="section-title">1. Was ist ein RAID-System?</h2>
         <p>Ein RAID-System (Redundant Array of Independent Disks) fasst mehrere physische Laufwerke zu einem logischen Laufwerk zusammen, um drei Ziele zu erreichen: erhöhte Ausfallsicherheit, bessere Performance und/oder größere Gesamtkapazität. Je nach gewähltem RAID-Level steht eines dieser Ziele stärker im Vordergrund: manche Level konzentrieren sich auf Geschwindigkeit (z. B. RAID 0), andere auf Redundanz (z. B. RAID 1, RAID 6) oder auf einem Kompromiss aus beidem (RAID 5, RAID 10). Wichtig zu merken ist immer: <b>RAID ersetzt kein Backup</b> — RAID schützt vor Hardwareausfall, nicht vor versehentlichem Löschen, Ransomware oder Datenkorruption.</p>
+        <h3>Ziele von RAID (kurz erklärt)</h3>
         <ul>
-            <b>Ziele von RAID (kurz erklärt)</b>
-            <br>
-            <br>
             <li><b>Erhöhte Ausfallsicherheit:</b> Durch Spiegelung oder Parität können einzelne Laufwerke ausfallen, ohne dass Daten verloren gehen.</li>
-            <br>
             <li><b>Höhere Geschwindigkeit:</b> Durch paralleles Lesen/Schreiben auf mehrere Platten steigt der Durchsatz.</li>
-            <br>
             <li><b>Größere Kapazität:</b> Mehrere Platten werden zu einem großen logischen Volume zusammengefasst; nutzbare Kapazität hängt vom Level ab.</li>
         </ul>
+        </section>
+
         <hr class="trennlinie">
-        <div class="section-title">Hardware-RAID vs. Software-RAID (und "FakeRAID")</div>
+        
+        <section>
+        <div class="section-title">2. Hardware-RAID vs. Software-RAID (und "FakeRAID")</div>
         <p>RAID kann auf verschiedene Arten realisiert werden:</p>
         <ul>
             <li><b>Hardware-RAID (dedizierter RAID-Controller):</b> Ein eigener Controller (z. B. PCIe-Karte oder eingebauter Server-Controller) organisiert Striping, Parität und Rebuilds. Vorteile sind Offload der CPU, oft integrierter Cache und Batterie/SuperCap-Absicherung des Caches (ohne funktionierendes Akku-/SuperCap-Modul fällt der Controller in den Write-Through-Modus). Das macht Hardware-RAID bei hohen Lasten und in professionellen Umgebungen performant.</li>
@@ -143,39 +230,52 @@
             <li><b>Firmware/Host-RAID (oft "FakeRAID" genannt):</b> Eine Mischung aus BIOS/UEFI-Unterstützung und Treiber; lohnt sich meist nur in sehr speziellen Fällen und kann weniger portabel/robust sein.</li>
         </ul>
         <p>Wenn du Systeme planst, entscheide nach Anforderungen an Performance, Management-Funktionen (Monitoring, Hot-spare, Rebuild-Prioritäten) und Budget.</p>
+        </section>
+
         <hr class="trennlinie">
-        <div class="section-title">Wichtige RAID-Level (mit Erklärungen und Beispielen)</div>
-        <b>RAID 0 — Striping (Leistung, keine Redundanz)</b>
-        <p>Bei RAID 0 werden Daten blockweise über die Platten verteilt ("striped"). Das erhöht Lese- und Schreibdurchsatz, weil mehrere Platten parallel arbeiten. Die Gesamtkapazität ist die Summe der Plattenkapazitäten. <b>Es gibt keine Redundanz:</b> fällt eine Platte aus, sind die Daten auf dem Array verloren.</p>
-        <p>Beispiel mit 2x4 TB &rarr; nutzbare Kapazität = 8 TB, hohe Performance, aber kein Schutz. Typische Einsatzzwecke: temporäre Daten (z. B. Videoschnitt-Cache), Testsysteme.</p>
+        
+        <section>
+        <div class="section-title">3. Wichtige RAID-Level (mit Erklärungen und Beispielen)</div>
+        <article>
+            <h3>RAID 0 — Striping (Leistung, keine Redundanz)</h3>
+            <p>Bei RAID 0 werden Daten blockweise über die Platten verteilt ("striped"). Das erhöht Lese- und Schreibdurchsatz, weil mehrere Platten parallel arbeiten. Die Gesamtkapazität ist die Summe der Plattenkapazitäten. <b>Es gibt keine Redundanz:</b> fällt eine Platte aus, sind die Daten auf dem Array verloren.</p>
+            <p>Beispiel mit 2x4 TB &rarr; nutzbare Kapazität = 8 TB, hohe Performance, aber kein Schutz. Typische Einsatzzwecke: temporäre Daten (z. B. Videoschnitt-Cache), Testsysteme.</p>
+        </article>
         <br>
-        <b>RAID 1 — Mirroring (Spiegelung)</b>
-        <p>RAID 1 schreibt identische Daten auf zwei (oder mehr) Platten. Das ergibt hohe Ausfallsicherheit: eine Platte kann ausfallen, ohne dass Daten verloren gehen. Die nutzbare Kapazität entspricht der kleinsten Platte; bei zwei gleichen Platten ist sie also 50% der Rohkapazität. Lesezugriffe können beschleunigt werden (Parallellesen), Schreibzugriffe haben in der Praxis fast die Performance einer einzelnen Platte, da alle Spiegel gleichzeitig beschrieben werden.</p>
-        <p>Beispiel: 2x4 TB &rarr; nutzbar 4 TB, eine Platte darf ausfallen.</p>
+        <article>
+            <h3>RAID 1 — Mirroring (Spiegelung)</h3>
+            <p>RAID 1 schreibt identische Daten auf zwei (oder mehr) Platten. Das ergibt hohe Ausfallsicherheit: eine Platte kann ausfallen, ohne dass Daten verloren gehen. Die nutzbare Kapazität entspricht der kleinsten Platte; bei zwei gleichen Platten ist sie also 50% der Rohkapazität. Lesezugriffe können beschleunigt werden (Parallellesen), Schreibzugriffe haben in der Praxis fast die Performance einer einzelnen Platte, da alle Spiegel gleichzeitig beschrieben werden.</p>
+            <p>Beispiel: 2x4 TB &rarr; nutzbar 4 TB, eine Platte darf ausfallen.</p>
+        </article>
         <br>
-        <b>RAID 5 — Striping mit einfacher Parität</b>
-        <p>RAID 5 verteilt Datenblöcke und eine Paritätsinformation so über mehrere Platten, dass der Ausfall einer Platte durch Rekonstruktion aus den verbleibenden Daten und der Parität wiederhergestellt werden kann. Minimum sind 3 Platten. Nutzbare Kapazität = (n - 1) x Kapazität der kleinsten Platte. Lesen ist schnell (parallel), Schreiben benötigt zusätzliche Arbeit (Paritätsberechnung), sodass kleine zufällige Schreibvorgänge langsamer sind als bei RAID 1.</p>
-        <p>Beispiel: 3x4 TB &rarr; nutzbar 8 TB (3-1 = 2 x 4 TB).</p>
-        <p>Vorsicht: bei sehr großen Platten und vielen Spindeln steigt das Risiko, dass während eines Rebuilds ein weiterer Fehler (z. B. URE) auftritt.</p>
+        <article>
+            <h3>RAID 5 — Striping mit einfacher Parität</h3>
+            <p>RAID 5 verteilt Datenblöcke und eine Paritätsinformation so über mehrere Platten, dass der Ausfall einer Platte durch Rekonstruktion aus den verbleibenden Daten und der Parität wiederhergestellt werden kann. Minimum sind 3 Platten. Nutzbare Kapazität = (n - 1) x Kapazität der kleinsten Platte. Lesen ist schnell (parallel), Schreiben benötigt zusätzliche Arbeit (Paritätsberechnung), sodass kleine zufällige Schreibvorgänge langsamer sind als bei RAID 1.</p>
+            <p>Beispiel: 3x4 TB &rarr; nutzbar 8 TB (3-1 = 2 x 4 TB).</p>
+            <p>Vorsicht: bei sehr großen Platten und vielen Spindeln steigt das Risiko, dass während eines Rebuilds ein weiterer Fehler (z. B. URE) auftritt.</p>
+        </article>
         <br>
-        <b>RAID 6 — Striping mit doppelter Parität</b>
-        <p>RAID 6 erweitert RAID 5 um eine zweite, unabhängige Paritätsinformation. Dadurch überlebt das Array gleichzeitig zwei Plattenausfälle. Minimum sind 4 Platten. Nutzbare Kapazität = (n - 2) x Kapazität der kleinsten Platte. Leseleistung ist gut; Schreibperformance ist durch doppelte Paritätsberechnung stärker beeinträchtigt als bei RAID 5. RAID 6 ist für große Arrays mit großen HDDs häufig die sicherere Wahl.</p>
-        <p>Beispiel: 4x4 TB &rarr; nutzbar 8 TB (4-2 = 2 x 4 TB).</p>
+        <article>
+            <h3>RAID 6 — Striping mit doppelter Parität</h3>
+            <p>RAID 6 erweitert RAID 5 um eine zweite, unabhängige Paritätsinformation. Dadurch überlebt das Array gleichzeitig zwei Plattenausfälle. Minimum sind 4 Platten. Nutzbare Kapazität = (n - 2) x Kapazität der kleinsten Platte. Leseleistung ist gut; Schreibperformance ist durch doppelte Paritätsberechnung stärker beeinträchtigt als bei RAID 5. RAID 6 ist für große Arrays mit großen HDDs häufig die sicherere Wahl.</p>
+            <p>Beispiel: 4x4 TB &rarr; nutzbar 8 TB (4-2 = 2 x 4 TB).</p>
+        </article>
         <br>
-        <b>RAID 10 (1+0) — Mirrored Stripes (Spiegel + Striping)</b>
-        <p>RAID 10 ist eine Kombination aus Spiegelung und Striping: Zuerst werden Spiegelpaare (RAID-1) gebildet, diese Paare werden dann über Striping verbunden (RAID-0 über die Spiegel). Minimum sind 4 Platten (zwei Spiegelpaare). Die nutzbare Kapazität ist 50 % der Rohkapazität (wie bei RAID 1), bietet aber hohe Lese- und sehr gute Schreibperformance sowie sehr gute Ausfallsicherheit, da mehrere Platten ausfallen können, solange nicht beide Platten desselben Spiegelpaares verloren gehen. Wenn zufällig beide Platten eines Paares sterben, ist das Array tot - das ist ein zentrales Risiko. RAID 10 ist in vielen produktiven Umgebungen die bevorzugte Wahl, wenn Performance und Redundanz wichtig sind.</p>
-        <p>Beispiel: 4x4 TB &rarr; nutzbar 8 TB.</p>
+        <article>
+            <h3>RAID 10 (1+0) — Mirrored Stripes (Spiegel + Striping)</h3>
+            <p>RAID 10 ist eine Kombination aus Spiegelung und Striping: Zuerst werden Spiegelpaare (RAID-1) gebildet, diese Paare werden dann über Striping verbunden (RAID-0 über die Spiegel). Minimum sind 4 Platten (zwei Spiegelpaare). Die nutzbare Kapazität ist 50 % der Rohkapazität (wie bei RAID 1), bietet aber hohe Lese- und sehr gute Schreibperformance sowie sehr gute Ausfallsicherheit, da mehrere Platten ausfallen können, solange nicht beide Platten desselben Spiegelpaares verloren gehen. Wenn zufällig beide Platten eines Paares sterben, ist das Array tot - das ist ein zentrales Risiko. RAID 10 ist in vielen produktiven Umgebungen die bevorzugte Wahl, wenn Performance und Redundanz wichtig sind.</p>
+            <p>Beispiel: 4x4 TB &rarr; nutzbar 8 TB.</p>
+        </article>
         <br>
-        <b>Kurzvergleich (vereinfachte Übersicht):</b>
+        <h3>Kurzvergleich (vereinfachte Übersicht):</h3>
         <ul>
-            <li>RAID 0: min. 2 Platten; Kapazität = n x size; keine Redundanz; sehr hoch in Performance.</li>
-            <li>RAID 1: min. 2; Kapazität = 1 x size (bei 2 Platten); 1 Platte fällt aus; sehr sicher.</li>
-            <li>RAID 5: min. 3; Kapazität = (n-1)xsize; 1 Platte fällt aus; guter Kompromiss.</li>
-            <li>RAID 6: min. 4; Kapazität = (n-2)xsize; 2 Platten fallen aus; sehr sicher bei großen Arrays.</li>
-            <li>RAID 10: min. 4; Kapazität = (n ÷ 2) x size; sehr gute Performance + Redundanz.</li>
+            <li><b>RAID 0:</b> min. 2 Platten; Kapazität = n x size; keine Redundanz; sehr hoch in Performance.</li>
+            <li><b>RAID 1:</b> min. 2; Kapazität = 1 x size (bei 2 Platten); 1 Platte fällt aus; sehr sicher.</li>
+            <li><b>RAID 5:</b> min. 3; Kapazität = (n-1)xsize; 1 Platte fällt aus; guter Kompromiss.</li>
+            <li><b>RAID 6:</b> min. 4; Kapazität = (n-2)xsize; 2 Platten fallen aus; sehr sicher bei großen Arrays.</li>
+            <li><b>RAID 10:</b> min. 4; Kapazität = (n ÷ 2) x size; sehr gute Performance + Redundanz.</li>
         </ul>
-        <hr class="trennlinie">
-        <b>Typische Vor- und Nachteile (kurz erläutert)</b>
+        <h3>Typische Vor- und Nachteile (kurz erläutert)</h3>
         <ul>
             <li><b>RAID 0:</b> + maximale Kapazität/Performance; - kein Schutz.</li>
             <li><b>RAID 1:</b> + sehr stabil/schnelle Wiederherstellung; - nur 50 % Kapazität.</li>
@@ -183,8 +283,12 @@
             <li><b>RAID 6:</b> + robust bei doppeltem Ausfall; - höherer Schreib-Overhead.</li>
             <li><b>RAID 10:</b> + sehr gute Performance & Redundanz; - 50 % Kapazitätsverlust wie bei RAID 1, teurer.</li>
         </ul>
+        </section>
+
         <hr class="trennlinie">
-        <div class="section-title">Rebuilds — wie funktioniert Wiederherstellung praktisch?</div>
+
+        <section>
+        <div class="section-title">4. Rebuilds — wie funktioniert Wiederherstellung praktisch?</div>
         <p>Ein Rebuild ist der Prozess, mit dem ein RAID-Controller nach dem Austausch einer defekten Platte die fehlenden Daten auf die Ersatzplatte rekonstruiert.</p>
         <ul>
             <li><b>Allgemeines Prinzip:</b> Bei Paritäts-RAIDs (RAID 5/6) liest der Controller die entsprechenden Datenblöcke und schreibt diese auf die Ersatzplatte. Bei RAID 1 wird die neue Platte einfach kopiert (Block für Block) von der intakten Platte.</li>
@@ -199,16 +303,24 @@
             <li><b>URE-Risiko (Unrecoverable Read Error):</b> Große HDDs haben eine nicht-null Wahrscheinlichkeit für UREs beim Lesen großer Datenmengen; während eines RAID-5-Rebuilds kann ein URE zum kompletten Arrayverlust führen — deswegen sind RAID-6 oder RAID-10 bei großen Kapazitäten oft sicherer. UREs sind bei RAID 6 weniger kritisch, weil ein zusätzlicher Fehler noch abgefangen werden kann.</li>
         </ul>
         <p><b>Praktische Größenordnung:</b> Rebuildzeiten steigen mit Plattengröße; heute können 8-16 TB HDDs beim Rebuild viele Stunden bis über ein bis zwei Tage in Anspruch nehmen, je nach System-I/O und Priorisierung.</p>
+        </section>
+        
         <hr class="trennlinie">
-        <div class="section-title">Cache-Module & Absicherung (BBWC / SuperCap / FBWC)</div>
+        
+        <section>
+        <div class="section-title">5. Cache-Module & Absicherung (BBWC / SuperCap / FBWC)</div>
         <p>Viele Hardware-Controller haben einen Cache (DRAM), der I/O-Operationen puffert. Der Cache kann im Write-Back-Modus die Schreiblatenz stark reduzieren, weil Writes als abgeschlossen gelten, sobald sie im Controller-Cache liegen. Damit diese Daten bei Stromausfall nicht verloren gehen, gibt es Absicherungen:</p>
         <ul>
             <li><b>BBWC (Battery-Backed Write Cache):</b> Ein Akku (Battery) sichert den Cache, bis Daten persistent geschrieben werden.</li>
             <li><b>SuperCap / Flash-Backed (FBWC):</b> Moderne Systeme nutzen statt Akku einen Superkondensator (SuperCap), der kurzzeitig genug Energie liefert, damit der Cacheinhalt in nicht-flüchtigen Speicher (Flash) geschrieben wird. Daher die Bezeichnung Flash-Backed Write Cache (FBWC). Ohne funktionierende Absicherung wird der Controller oft in Write-Through-Modus gezwungen (Writes gehen sofort auf die Platten), was die Schreibperformance merklich senkt.</li>
         </ul>
         <p>Beim Rebuild hilft ein sicherer Cache, weil er Schreibvorgänge beschleunigt und so die Zeit reduziert, in der das Array ohne vollständige Redundanz läuft.</p>
+        </section>
+        
         <hr class="trennlinie">
-        <b>Wichtige Praxis-Tipps & Checkliste (für Planung und Betrieb)</b>
+        
+        <section>
+        <h3 class="section-title">Wichtige Praxis-Tipps & Checkliste (für Planung und Betrieb)</h3>
         <ul>
             <li><b>Backups:</b> RAID &ne; Backup. Plane regelmäßige Backups und teste Recovery-Szenarien.</li>
             <li><b>Hot-Spare:</b> Wenn möglich, ein Hot-Spare vorsehen, damit Rebuilds sofort starten.</li>
@@ -219,20 +331,42 @@
             <li><b>Größenwahl:</b> Bei sehr großen HDDs lieber RAID 6 oder RAID 10 anstelle von RAID 5 wählen.</li>
             <li><b>Dateisystemwahl:</b> Erwäge Dateisysteme mit Checksumming/Copy-On-Write (z. B. ZFS, Btrfs) — diese bieten zusätzlichen Schutz vor stillen Fehlern (silent corruption). ZFS hat RAIDZ(1/2)-Konzepte, die RAID5/6 ähneln, aber mit Checksummen und anderen Designunterschieden.</li>
         </ul>
+        </section>
+
         <hr class="trennlinie">
-        <div class="section-title">Kurze Hinweise zu modernen Alternativen / Begriffen</div>
+
+        <section>
+        <h3 class="section-title">Kurze Hinweise zu modernen Alternativen / Begriffen</h3>
         <ul>
             <li><b>RAIDZ (ZFS):</b> RAIDZ1 &asymp; RAID5 (einfach Parität), RAIDZ2 &asymp; RAID6 (doppelte Parität). ZFS bietet aber Checksumming, Copy-On-Write und "resilvering", was klassische RAID-Implementierungen in manchen Bereichen überlegen macht.</li>
             <li><b>Scrubbing/Resilvering:</b> Periodisches Überprüfen und Wiederherstellen (bei ZFS heißt das "resilvering") reduziert das Risiko latenter Fehler.</li>
         </ul>
+        </section>
+
         <hr class="trennlinie">
+
+        <section>
         <div class="section-title">Fazit — Wie wählst du das richtige RAID?</div>
         <p>Die Wahl des RAID-Levels hängt von Anforderungen ab: willst du maximale Performance (RAID 0), einfache und kostengünstige Redundanz (RAID 1), effiziente Kapazitätsnutzung mit Kompromiss (RAID 5), höhere Sicherheit bei großen Arrays (RAID 6) oder eine robuste Kombination aus hohen Schreib-/Leseleistungen und Ausfallsicherheit (RAID 10)? Berücksichtige dabei immer Rebuild-Risiko, Plattengröße, Wartungsprozesse (Hot-Spares, Scrubbing) sowie Backups und Monitoring-Konzept.</p>
-        <br>
+        </section>
+        
         <hr class="trennlinie">
-        <a href="02 - Switching VLAN PoE.html" target="blank" class="back-link">&larr; Zurück zu 02 - Switching / VLAN / PoE</a> 
+        
+        <a href="02 - Switching VLAN PoE.html" target="blank" class="back-link">&larr; Zurück zu 02 - Switching / VLAN / PoE</a> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="04 - Verschlüsselung.html" target="blank" class="back-link">04 - Verschlüsselung &#8594;</a> 
         <br>
         <a href="Ausbildungsthemen.html" class="back-link">&lArr; Zurück zum Inhaltsverzeichnis</a> 
+        </main>
     </div>
+    <script>
+    function toggleMode() {
+        document.body.classList.toggle('dark');
+        const btn = document.querySelector('.mode-toggle');
+        if(document.body.classList.contains('dark')) {
+            btn.textContent = '☀️ Hellmodus';
+        } else {
+            btn.textContent = '🌙 Dunkelmodus';
+        }
+    }
+  </script>
 </body>
 </html>

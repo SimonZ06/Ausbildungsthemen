@@ -5,100 +5,234 @@
     <title>Ausbildungsthemen</title>
     <link rel="icon" type="image/x-icon" href="Icon.ico">
     <style>
-        body {
-            background-color: #000;
-            color: #fff;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 700px;
-            margin: 40px auto;
-            background: #181818;
-            border-radius: 16px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.7);
-            padding: 32px 24px;
-        }
-        header {
-            background: linear-gradient(90deg, #000000 0%, #4f0098 100%);
-            color: #bcabd5;
-            padding: 24px 0 16px 0;
-            border-radius: 16px 16px 0 0;
-            text-align: center;
-            margin-bottom: 24px;
-        }
-        h1 {
-            margin: 1;
-            font-size: 2.2em;
-            letter-spacing: 2px;
-        }
-        .info {
-            font-size: 1.1em;
-            margin-bottom: 16px;
-        }
-        small {
-            display: block;
-            margin-bottom: 32px;
-            color: #aaa;
-        }
-        .verzeichnis {
-            margin-bottom: 32px;
-        }
-        .verzeichnis-title {
-            font-weight: bold;
-            font-size: 1.2em;
-            margin-bottom: 12px;
-        }
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-        ul li {
-            margin-bottom: 12px;
-        }
-        a {
-            color: #649bed;
-            text-decoration: underline;
-            font-weight: bold;
-            transition: color 0.2s;
-        }
-        a:visited {
-            color: #9500ff;
-        }
-        a:hover {
-            color: #d50000;
-        }
-        @media (max-width: 800px) {
-            .container {
-                max-width: 98vw;
-                padding: 12px 6vw;
-            }
-            header {
-                font-size: 1em;
-                padding: 16px 0 8px 0;
-            }
-        }
+        :root {
+      --bg: #8d8d8db9;
+      --back-link-bg: rgba(255,255,255,0.45);
+      --text: #2d2d2d;
+      --container-bg: #ffffff;
+      --header-bg: linear-gradient(90deg, #b46900f6, #d87e00);
+      --header-text: #ffffff;
+      --section-bg: #e2e2e2a0;
+      --section-title: #000000;
+      --section-title-bg: #cfcfcf54;
+      --section-title-border: #F18E00;
+      --h3: #cb6201cd;
+      --trennlinie: #e0e7ef;
+      --link: #d87e00;
+      --link-hover: #ae6600;
+      --back-link-bg: #9b948e40;
+      --back-link: #e87000;
+      --back-link-hover-bg: #ffffff;
+      --back-link-hover: #e38101;
+      --aside-bg: #e3e3e3;
+      --aside-shadow: rgba(50, 58, 78, 0.556);
+      --container-shadow: 0 2px 16px rgba(180,200,255,0.10);
+      --sublist-color: #717171;
+    }
+    body.dark {
+      --bg: #424242e7;
+      --back-link-bg: rgba(60,60,60,0.45);
+      --text: #f3f3f3;
+      --container-bg: #353535fc;
+      --header-bg: linear-gradient(90deg, #b46900, #d87e00);
+      --header-text: #ffffff;
+      --section-bg: #414040b9;
+      --section-title: #ffffff;
+      --section-title-bg: #d05a004c;
+      --section-title-border: #d87e00;
+      --h3: #d87e00;
+      --trennlinie: #44495a;
+      --link: #d87e00;
+      --link-hover: #ae6600;
+      --back-link-bg: #9b948e40;
+      --back-link: #e87000;
+      --back-link-hover-bg: #c8c6c651;
+      --back-link-hover: #e38101;
+      --aside-bg: #453f3c53;
+      --aside-shadow: rgba(60,60,80,0.12);
+      --container-shadow: 0 2px 16px rgba(60,60,80,0.18);
+      --sublist-color: #cccccc;
+    }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      transition: background 0.3s, color 0.3s;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      background: var(--container-bg);
+      border-radius: 16px;
+      box-shadow: var(--container-shadow);
+      padding: 36px;
+      transition: background 0.3s;
+    }
+    header {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 24px 0 16px 0;
+      border-radius: 16px 16px 0 0;
+      text-align: center;
+      box-shadow: 0 2px 8px var(--aside-shadow);
+      transition: background 0.3s, color 0.3s;
+    }
+    h1 {
+      margin: 0;
+      font-size: 2em;
+      letter-spacing: 1px;
+      color: #ffffff;
+    }
+    section {
+      padding: 20px 24px;
+      border-radius: 12px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+      margin-bottom: 28px;
+      transition: background 0.3s;
+      background: var(--section-bg);
+    }
+    .section-title {
+      font-size: 1.4em;
+      font-weight: 600;
+      margin-top: 32px;
+      margin-bottom: 12px;
+      color: var(--section-title);
+      border-left: 4px solid var(--section-title-border);
+      padding-left: 8px;
+      background: var(--section-title-bg);
+      border-radius: 4px;
+      transition: background 0.3s, color 0.3s;
+    }
+    p {
+      margin-bottom: 16px;
+      line-height: 1.9;
+    }
+    ul {
+      margin-bottom: 24px;
+      padding-left: 20px;
+    }
+    li {
+      margin-bottom: 12px;
+      line-height: 1.6;
+    }
+    ul ul {
+      margin-top: 6px;
+      margin-bottom: 12px;
+      list-style-type: circle;
+      color: var(--sublist-color);
+    }
+    h3 {
+      margin-top: 20px;
+      color: var(--h3);
+    }
+    .trennlinie {
+      border: none;
+      border-top: 1px solid var(--trennlinie);
+      margin: 32px 0;
+      transition: border-color 0.3s;
+    }
+    a {
+      color: var(--link);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    a:hover {
+      color: var(--link-hover);
+    }
+    .back-link {
+      display: inline-block;
+      margin-top: 16px;
+      background: var(--back-link-bg);
+      color: var(--back-link);
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+      border: 1px solid var(--trennlinie);
+    }
+    .back-link:hover {
+      background: var(--back-link-hover-bg);
+      color: var(--back-link-hover);
+    }
+    aside {
+      background: var(--aside-bg);
+      border-radius: 8px;
+      padding: 18px 24px;
+      margin-top: 24px;
+      box-shadow: 0 1px 4px var(--aside-shadow);
+      transition: background 0.3s;
+    }
+    .mode-toggle {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 100;
+      background: var(--back-link-bg);
+      color: var(--back-link);
+      border: 1px solid var(--trennlinie);
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-size: 1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .mode-toggle:hover {
+      background: var(--back-link-hover-bg);
+      color: var(--back-link-hover);
+    }
+    @media (max-width: 800px) {
+      .container {
+        max-width: 95%;
+        padding: 16px;
+      }
+      h1 {
+        font-size: 1.5em;
+      }
+      .mode-toggle {
+        top: 8px;
+        right: 8px;
+        padding: 8px 12px;
+      }
+    }
     </style>
 </head>
 <body>
+    <button class="mode-toggle" onclick="toggleMode()">🌙 Dunkelmodus</button>
     <div class="container">
         <header>
             <h1>Ausbildungsthemen</h1>
         </header>
+        <section>
         <div class="info">
             Hier findest du alle Ausbildungsthemen aus dem Wiki als Lerneinheit:
         </div>
-        <br>
         <div class="verzeichnis">
-            <div class="verzeichnis-title">Inhaltsverzeichnis</div>
+            <div class="section-title">Inhaltsverzeichnis</div>
             <ul>
                 <li><a href="01 - TCP IP Routing NAT.html" target="blank">01 - TCP/IP, Routing, NAT (Einfach/Erweitert)</a></li>
                 <li><a href="02 - Switching VLAN PoE.html" target="blank">02 - Switching / VLAN / POE</a></li>
                 <li><a href="03 - Raid.html" target="blank">03 - RAID</a></li>
+                <li><a href="04 - Verschlüsselung.html" target="blank">04 - Verschlüsselung</a></li>
             </ul>
         </div>
         <p>*Wird noch aktualisiert*</p>
     </div>
+        </section>
+    <script>
+    function toggleMode() {
+      document.body.classList.toggle('dark');
+      const btn = document.querySelector('.mode-toggle');
+      if(document.body.classList.contains('dark')) {
+        btn.textContent = '☀️ Hellmodus';
+      } else {
+        btn.textContent = '🌙 Dunkelmodus';
+      }
+    }
+  </script>
 </body>
 </html>

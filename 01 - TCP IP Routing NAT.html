@@ -5,124 +5,258 @@
     <title>01 - TCP/IP, Routing, NAT</title>
     <link rel="icon" type="image/x-icon" href="Icon.ico">
     <style>
-        body {
-            background-color: #000000f4;
-            color: #fff;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
+        :root {
+      --bg: #8d8d8db9;
+      --text: #2d2d2d;
+      --container-bg: #ffffff;
+      --header-bg: linear-gradient(90deg, #b46900f6, #d87e00);
+      --header-text: #ffffff;
+      --section-bg: #e2e2e2a0;
+      --section-title: #000000;
+      --section-title-bg: #cfcfcf54;
+      --section-title-border: #F18E00;
+      --h3: #cb6201cd;
+      --trennlinie: #e0e7ef;
+      --link: #d87e00;
+      --link-hover: #ae6600;
+      --back-link-bg: #9b948e40;
+      --back-link: #e87000;
+      --back-link-hover-bg: #ffffff;
+      --back-link-hover: #e38101;
+      --aside-bg: #e3e3e3;
+      --aside-shadow: rgba(50, 58, 78, 0.556);
+      --container-shadow: 0 2px 16px rgba(180,200,255,0.10);
+      --sublist-color: #717171;
         }
-        .container {
-            max-width: 1000px;
-            margin: 40px auto;
-            background: #181818;
-            border-radius: 16px;
-            box-shadow: 0 4px 24px rgb(167, 0, 0);
-            padding: 32px 34px;
-        }
-        header {
-            background: linear-gradient(90deg, #000000 0%, #4f0098 100%);
-            color: #bcabd5;
-            padding: 24px 0 16px 0;
-            border-radius: 16px 16px 0 0;
-            text-align: center;
-            margin-bottom: 24px;
-            text-shadow: 0 0 1px #000000, 0 0 2px #000000;
-        }
-        h1 {
-            margin: 0;
-            font-size: 2em;
-            letter-spacing: 2px;
-        }
-        .section-title {
-            font-size: 1.3em;
-            font-weight: bold;
-            margin-top: 32px;
-            margin-bottom: 12px;
-            color: #a962ff;
-            text-shadow: 0 0 1px #000000, 0 0 2px #000000;
-        }
-        p {
-            margin-bottom: 16px;
-            line-height: 1.6;
-        }
-        table td, table th {
-            padding-top: 10px;
-            padding-bottom: 10px;
-            line-height: 1.25;
-        }
-        table td:first-child {
-            padding-right: 32px;
-        }
-        table td:nth-child(2) {
-            padding-right: 32px;
-        }
-        ul {
-            margin-bottom: 24px;
-        }
-        li {
-            margin-bottom: 8px;
-        }
-        a {
-            color: #00ffcc;
-            text-decoration: underline;
-            font-weight: bold;
-            transition: color 0.2s;
-        }
-        a:visited {
-            color: #7b00ff;
-        }
-        a:hover {
-            color: #ff0066;
-        }
-        .back-link {
-            display: inline-block;
-            margin-top: 24px;
-            color: #a962ff;
-            background: #1a1a1a;
-            padding: 8px 16px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: background 0.2s, color 0.2s;
-            text-shadow: 0 0 1px #000000, 0 0 2px #000000;
-        }
-        .back-link:hover {
-            background: #000000;
-            color: #6e00e4;
-        }
-        @media (max-width: 800px) {
-            .container {
-                max-width: 98vw;
-                padding: 12px 6vw;
-            }
-            header {
-                font-size: 1em;
-                padding: 16px 0 8px 0;
-            }
-        }
-        .trennlinie {
-            border: none;
-            border-top: 2px solid #a962ffb7;
-            margin: 24px 0;
-            opacity: 0.5;
-            border-radius: 2px;
-        }
-        ul, ul ul {
-            list-style-type: disc;
-        }
-        ul li::marker {
-            color: #fff;
-        }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        font-size: 16px;
+      }
+
+      th, td {
+        border: 1px solid #ccc;
+        padding: 12px;
+        text-align: left;
+      }
+
+      :root td {
+        background-color: #f8f8f8e7;
+      }
+
+      :root th {
+        background-color: #f5f5f5df;
+      }
+    body.dark {
+      --bg: #424242e7;
+      --text: #f3f3f3;
+      --container-bg: #353535fc;
+      --header-bg: linear-gradient(90deg, #b46900, #d87e00);
+      --header-text: #ffffff;
+      --section-bg: #414040b9;
+      --section-title: #ffffff;
+      --section-title-bg: #d05a004c;
+      --section-title-border: #d87e00;
+      --h3: #d87e00;
+      --trennlinie: #44495a;
+      --link: #d87e00;
+      --link-hover: #ae6600;
+      --back-link-bg: #9b948e40;
+      --back-link: #e87000;
+      --back-link-hover-bg: #c8c6c651;
+      --back-link-hover: #e38101;
+      --aside-bg: #453f3c53;
+      --aside-shadow: rgba(60,60,80,0.12);
+      --container-shadow: 0 2px 16px rgba(60,60,80,0.18);
+      --sublist-color: #cccccc;
+    }
+    body.dark table {
+      color: #000000ff;
+    }
+
+    body.dark th, 
+    body.dark td {
+      border: 1px solid #555;
+      padding: 12px;
+      text-align: left;
+    }
+
+    body.dark th {
+      background-color: #333;
+      color: #ffcc66;
+    }
+
+    body.dark tr:nth-child(even) {
+      background-color: #2a2a2a;
+    }
+
+    body.dark tr:nth-child(odd) {
+      background-color: #1e1e1e;
+    }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      transition: background 0.3s, color 0.3s;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      background: var(--container-bg);
+      border-radius: 16px;
+      box-shadow: var(--container-shadow);
+      padding: 36px;
+      transition: background 0.3s;
+    }
+    header {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 24px 0 16px 0;
+      border-radius: 16px 16px 0 0;
+      text-align: center;
+      box-shadow: 0 2px 8px var(--aside-shadow);
+      transition: background 0.3s, color 0.3s;
+    }
+    h1 {
+      margin: 0;
+      font-size: 2em;
+      letter-spacing: 1px;
+      color: #ea9319ff;
+    }
+    section {
+      padding: 20px 24px;
+      border-radius: 12px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+      margin-bottom: 28px;
+      transition: background 0.3s;
+      background: var(--section-bg);
+    }
+    .section-title {
+      font-size: 1.4em;
+      font-weight: 600;
+      margin-top: 32px;
+      margin-bottom: 12px;
+      color: var(--section-title);
+      border-left: 4px solid var(--section-title-border);
+      padding-left: 8px;
+      background: var(--section-title-bg);
+      border-radius: 4px;
+      transition: background 0.3s, color 0.3s;
+    }
+    p {
+      margin-bottom: 16px;
+      line-height: 1.9;
+    }
+    b {
+        color: #df8d00ff;
+        background: rgba(152, 152, 152, 0.084);
+    }
+    ul {
+      margin-bottom: 24px;
+      padding-left: 20px;
+    }
+    li {
+      margin-bottom: 12px;
+      line-height: 1.6;
+    }
+    ul ul {
+      margin-top: 6px;
+      margin-bottom: 12px;
+      list-style-type: circle;
+      color: var(--sublist-color);
+    }
+    h3 {
+      margin-top: 20px;
+      color: var(--h3);
+    }
+    .trennlinie {
+      border: none;
+      border-top: 1px solid var(--trennlinie);
+      margin: 32px 0;
+      transition: border-color 0.3s;
+    }
+    a {
+      color: var(--link);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    a:hover {
+      color: var(--link-hover);
+    }
+    .back-link {
+      display: inline-block;
+      margin-top: 16px;
+      background: var(--back-link-bg);
+      color: var(--back-link);
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+      border: 1px solid var(--trennlinie);
+    }
+    .back-link:hover {
+      background: var(--back-link-hover-bg);
+      color: var(--back-link-hover);
+    }
+    aside {
+      background: var(--aside-bg);
+      border-radius: 8px;
+      padding: 18px 24px;
+      margin-top: 24px;
+      box-shadow: 0 1px 4px var(--aside-shadow);
+      transition: background 0.3s;
+    }
+    .mode-toggle {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 100;
+      background: #423c46af;
+      color: var(--back-link);
+      border: 1px solid var(--trennlinie);
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-size: 1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .mode-toggle:hover {
+      background: var(--back-link-hover-bg);
+      color: var(--back-link-hover);
+    }
+    @media (max-width: 800px) {
+      .container {
+        max-width: 95%;
+        padding: 16px;
+      }
+      h1 {
+        font-size: 1.5em;
+      }
+      .mode-toggle {
+        background: var(--back-link-bg);
+        top: 8px;
+        right: 8px;
+        padding: 8px 12px;
+      }
+    }
     </style>
 </head>
 <body>
+    <button class="mode-toggle" onclick="toggleMode()">🌙 Dunkelmodus</button>
     <div class="container">
+        <main>
         <header>
-            <h1>01 - TCP/IP, Routing, NAT (Einfach/Erweitert)</h1>
+            <h2>01 - TCP/IP, Routing, NAT (Einfach/Erweitert)</h2>
         </header>
+        <section>
         <div class="section-title">1. Theoretische Grundlagen</div>
-        <h1>Das Default Gateway</h1>
+        <h1 class="section-title">Das Default Gateway</h1>
         <p>Ein Default Gateway ist das Gerät in einem Netzwerk, das Datenpakete aus dem lokalen Netz in andere Netze weiterleitet. In den allermeisten Fällen übernimmt der Router diese Rolle. Man kann sich das Gateway als "Tür zur Außenwelt" vorstellen: wenn ein Computer ein Ziel ansprechen möchte, das nicht im eigenen Subnetz liegt, dann schickt er die Daten an das Standardgateway.</p>
         <p>Das Gateway entscheidet anhand seiner Routing-Tabelle, in welches andere Netz ein Paket weitergeleitet wird. Befindet sich das Ziel im gleichen Subnetz, erfolgt die Zustellung direkt (z. B. über ARP). Der Rückweg funktioniert genauso: Antworten von außerhalb kommen am Gateway an und werden an das richtige Gerät im Heimnetz zurückgeschickt.</p>
         <br>
@@ -139,8 +273,12 @@
             <li>Es übernimmt Routing-Entscheidungen für unbekannte Ziele.</li>
             <li>Oft ist es gleichzeitig ein Kontroll- und Sicherheitspunkt (z. B. Firewall im Router).</li>
         </ul>
+        </section>
+
         <hr class="trennlinie">
-        <h1>NAT (Network Address Translation)</h1>
+        
+        <section>
+        <h1 class="section-title">NAT (Network Address Translation)</h1>
         <p>Da die Anzahl an IPv4-Adressen begrenzt ist, nutzt man NAT, um viele private IP-Adressen aus einem Heimnetz über eine einzige öffentliche IP-Adresse ins Internet zu bringen.</p>
         <p>Die Fritzbox setzt dazu PAT (Port Address Translation) ein. Dabei werden nicht nur die Adressen übersetzt, sondern auch Portnummern genutzt, um verschiedene Verbindungen auseinanderzuhalten.</p>
         <br>
@@ -172,7 +310,11 @@
             <li>Kein NAT nötig &#8594; stattdessen übernimmt die FritzBox Firewallfunktionen.</li>
             <li>(Hinweis: NAT66 existiert, wird aber kaum eingesetzt und in FritzBoxen nicht verwendet.)</li>
         </ul>
+        </section>
+        
         <hr class="trennlinie">
+        
+        <section>
         <div class="section-title">2. Praktische Umsetzung</div>
         <h1>TCP/IP-Konfiguration unter Windows</h1>
         <p>Unter Windows lassen sich IP-Adressen automatisch (per DHCP) oder manuell konfigurieren.</p>
@@ -198,7 +340,11 @@
             <li>Server/VM &#8594; statische IP.</li>
             <li>Probleme mit Namensauflösung &#8594; DNS gezielt einstellen (besser zentral am Router/DHCP, statt auf jedem Client).</li>
         </ul>
+        </section>
+        
         <hr class="trennlinie">
+        
+        <section>
         <h1>Routing auf Windows-PC</h1>
         <p>Die Routen lassen sich mit <small style="font-family:'Courier New'">route print</small> anzeigen. Die Tabelle enthält alle bekannten Wege zu Netzwerken.</p>
         <ul>
@@ -210,31 +356,27 @@
             <li> <b>Routen hinzufügen:</b> </li>
         </ul>
         <small style="font-family:'Courier New'">&nbsp; &nbsp; cmd</small>
-        <br>
         <small style="font-family:'Courier New'">&nbsp; &nbsp; route add 10.10.10.0 mask 255.255.255.0 192.168.1.1</small>
-        <br>
-        <br>
         <ul>
             <b><li>Routen löschen:</li></b>
         </ul>
         <small style="font-family:'Courier New'">&nbsp; &nbsp; cmd</small>
-        <br>
         <small style="font-family:'Courier New'">&nbsp; &nbsp; route delete 10.10.10.0</small>
-        <br>
-        <br>
         <ul>
             <b><li>Standardgateway ändern</li></b>
         </ul>
         <small style="font-family:'Courier New'">&nbsp; &nbsp; cmd</small>
-        <br>
         <small style="font-family:'Courier New'">&nbsp; &nbsp; route delete 0.0.0.0</small>
-        <br>
         <small style="font-family:'Courier New'">&nbsp; &nbsp; route add 0.0.0.0 mask 0.0.0.0 192.168.2.1</small>
         <br>
         <br>
         <p>(Hinweis: Ohne <small style="font-family:'Courier New'">-p </small>sind diese Änderungen nur bis zum Neustart gültig. Dauerhaft → <small style="font-family:'Courier New'">route -p add ...)</small></p>
         <p>Achtung: falsche Routen = keine Internetverbindung.</p>
+        </section>
+        
         <hr class="trennlinie">
+        
+        <section>
         <div class="section-title">3. NAT-Einstellungen auf der FritzBox</div>
         <p>Die FritzBox erledigt NAT automatisch. Anpassungen sind nur indirekt möglich:</p>
         <ul>
@@ -243,7 +385,11 @@
             <li><b>IPv6:</b> entfällt, stattdessen Firewallregeln zur Steuerung.
             <li><b>NAT-Tabelle:</b> in einer FritzBox nicht sichtbar, nur indirekt über Tools (z. B. Wireshark oder Router-Diagnosen).
         </ul>
+        </section>
+        
         <hr class="trennlinie">
+        
+        <section>
         <div class="section-title">4. Debugging-Tools in Windows</div>
         <p>Zur Fehleranalyse in Netzwerken gibt es eine Reihe nützlicher Befehle:</p>
         <table style="width:100%; border-collapse:collapse;">
@@ -315,12 +461,31 @@
             <li>Nutze <small style="font-family:'Courier New'">nslookup</small>, wenn Websiten nicht laden, aber IPs erreichbar sind.</li>
             <li>Kontrolliere mit <small style="font-family:'Courier New'">netstat</small>, ob Ports blockiert oder belegt sind.</li>
         </ul>
+        </section>
+        
         <hr class="trennlinie">
+        
+        <aside>
         <b>Zusammenfassung</b>
         <p>Das <b>Default Gateway</b> ist die Schnittstelle zwischen lokalem Netz und Internet. NAT mit PAT auf der FritzBox sorgt dafür, dass mehrere Geräte gleichzeitig über eine öffentliche IP-Adresse online sein können. Anpassungen an NAT machst du vor allem über Portfreigaben. Unter Windows kannst du IPs statisch oder per DHCP konfigurieren, die Routingtabelle einsehen und mit zahlreichen Tools Verbindungsprobleme untersuchen.</p>
-        <br>
+        </aside>
+        
         <hr class="trennlinie">
+        
+        
         <a href="Ausbildungsthemen.html" class="back-link">&larr; Zurück zum Inhaltsverzeichnis</a> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="02 - Switching VLAN PoE.html" target="blank" class="back-link">02 - Switching / VLAN / PoE &#8594;</a>
+        </main>
     </div>
+    <script>
+    function toggleMode() {
+    document.body.classList.toggle('dark');
+      const btn = document.querySelector('.mode-toggle');
+      if(document.body.classList.contains('dark')) {
+        btn.textContent = '☀️ Hellmodus';
+      } else {
+        btn.textContent = '🌙 Dunkelmodus';
+      }
+    }
+    </script>
 </body>
 </html>

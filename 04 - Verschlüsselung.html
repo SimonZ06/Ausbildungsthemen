@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>04 - Verschlüsselung</title>
+  <link rel="icon" type="image/x-icon" href="Icon.ico">
+  <style>
+    :root {
+      --bg: #8d8d8db9;
+      --text: #2d2d2d;
+      --container-bg: #ffffff;
+      --header-bg: linear-gradient(90deg, #b46900f6, #d87e00);
+      --header-text: #ffffff;
+      --section-bg: #e2e2e2a0;
+      --section-title: #000000;
+      --section-title-bg: #cfcfcf54;
+      --section-title-border: #F18E00;
+      --h3: #cb6201cd;
+      --trennlinie: #e0e7ef;
+      --link: #d87e00;
+      --link-hover: #ae6600;
+      --back-link-bg: #9b948e40;
+      --back-link: #e87000;
+      --back-link-hover-bg: #ffffff;
+      --back-link-hover: #e38101;
+      --aside-bg: #e3e3e3;
+      --aside-shadow: rgba(50, 58, 78, 0.556);
+      --container-shadow: 0 2px 16px rgba(180,200,255,0.10);
+      --sublist-color: #717171;
+    }
+    body.dark {
+      --bg: #424242e7;
+      --text: #f3f3f3;
+      --container-bg: #353535fc;
+      --header-bg: linear-gradient(90deg, #b46900, #d87e00);
+      --header-text: #ffffff;
+      --section-bg: #414040b9;
+      --section-title: #ffffff;
+      --section-title-bg: #d05a004c;
+      --section-title-border: #d87e00;
+      --h3: #d87e00;
+      --trennlinie: #44495a;
+      --link: #d87e00;
+      --link-hover: #ae6600;
+      --back-link-bg: #9b948e40;
+      --back-link: #e87000;
+      --back-link-hover-bg: #c8c6c651;
+      --back-link-hover: #e38101;
+      --aside-bg: #453f3c53;
+      --aside-shadow: rgba(60,60,80,0.12);
+      --container-shadow: 0 2px 16px rgba(60,60,80,0.18);
+      --sublist-color: #cccccc;
+    }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      transition: background 0.3s, color 0.3s;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      background: var(--container-bg);
+      border-radius: 16px;
+      box-shadow: var(--container-shadow);
+      padding: 36px;
+      transition: background 0.3s;
+    }
+    header {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 24px 0 16px 0;
+      border-radius: 16px 16px 0 0;
+      text-align: center;
+      box-shadow: 0 2px 8px var(--aside-shadow);
+      transition: background 0.3s, color 0.3s;
+    }
+    h1 {
+      margin: 0;
+      font-size: 2em;
+      letter-spacing: 1px;
+      color: #ffffff;
+    }
+    section {
+      padding: 20px 24px;
+      border-radius: 12px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+      margin-bottom: 28px;
+      transition: background 0.3s;
+      background: var(--section-bg);
+    }
+    .section-title {
+      font-size: 1.4em;
+      font-weight: 600;
+      margin-top: 32px;
+      margin-bottom: 12px;
+      color: var(--section-title);
+      border-left: 4px solid var(--section-title-border);
+      padding-left: 8px;
+      background: var(--section-title-bg);
+      border-radius: 4px;
+      transition: background 0.3s, color 0.3s;
+    }
+    p {
+      margin-bottom: 16px;
+      line-height: 1.9;
+    }
+    ul {
+      margin-bottom: 24px;
+      padding-left: 20px;
+    }
+    li {
+      margin-bottom: 12px;
+      line-height: 1.6;
+    }
+    ul ul {
+      margin-top: 6px;
+      margin-bottom: 12px;
+      list-style-type: circle;
+      color: var(--sublist-color);
+    }
+    h3 {
+      margin-top: 20px;
+      color: var(--h3);
+    }
+    .trennlinie {
+      border: none;
+      border-top: 1px solid var(--trennlinie);
+      margin: 32px 0;
+      transition: border-color 0.3s;
+    }
+    a {
+      color: var(--link);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    a:hover {
+      color: var(--link-hover);
+    }
+    .back-link {
+      display: inline-block;
+      margin-top: 16px;
+      background: var(--back-link-bg);
+      color: var(--back-link);
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+      border: 1px solid var(--trennlinie);
+    }
+    .back-link:hover {
+      background: var(--back-link-hover-bg);
+      color: var(--back-link-hover);
+    }
+    aside {
+      background: var(--aside-bg);
+      border-radius: 8px;
+      padding: 18px 24px;
+      margin-top: 24px;
+      box-shadow: 0 1px 4px var(--aside-shadow);
+      transition: background 0.3s;
+    }
+    .mode-toggle {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 100;
+      background: #423c46af;
+      color: var(--back-link);
+      border: 1px solid var(--trennlinie);
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-size: 1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .mode-toggle:hover {
+      background: var(--back-link-hover-bg);
+      color: var(--back-link-hover);
+    }
+    @media (max-width: 800px) {
+      .container {
+        max-width: 95%;
+        padding: 16px;
+      }
+      h1 {
+        font-size: 1.5em;
+      }
+      .mode-toggle {
+        background: var(--back-link-bg);
+        top: 8px;
+        right: 8px;
+        padding: 8px 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <button class="mode-toggle" onclick="toggleMode()">🌙 Dunkelmodus</button>
+  <div class="container">
+    <main>
+      <header>
+        <h1>04 – Verschlüsselung</h1>
+      </header>
+  <section>
+    <h2 class="section-title">Einleitung</h2>
+    <p>Verschlüsselung ist ein zentraler Baustein in der IT-Sicherheit. Sie schützt Daten während der Übertragung und Speicherung vor unbefugtem Zugriff, Abhören oder Manipulation. Bei Netzplan und unseren Kunden findet Verschlüsselung in vielen Bereichen Anwendung - von der Kommunikation bis hin zur Datenspeicherung.</p>
+  </section>
+      
+  <hr class="trennlinie">
+
+  <section>
+    <h2 class="section-title">1. Typische Einsatzorte</h2>
+    <ul>
+      <li><b>VPN-Verbindungen (z. B. SSL-VPN oder IPsec-VPN)</b></li>
+      <ul>
+        <li>Verbindung zwischen Außendienst/Homeoffice und Firmenstandort wird verschlüsselt.</li>
+        <li>Schutz vor Abhören durch Dritte im Internet.</li>
+      </ul>
+      <li><b>E-Mails (z. B. S/MIME oder PGP)</b></li>
+      <ul>
+        <li>Vertrauliche Kommunikation mit Kunden und Partnern.</li>
+        <li>Schutz vor unbefugtem Mitlesen und Manipulation.</li>
+      </ul>
+      <li><b>Festplatten-/Datenträgerverschlüsselung (z. B. BitLocker, VeraCrypt)</b></li>
+      <ul>
+        <li>Verschlüsselte Notebooks und PCs bei Mitarbeitern.</li>
+        <li>Schutz bei Verlust oder Diebstahl von Geräten.</li>
+      </ul>
+      <li><b>Webseiten / interne Portale (HTTPS mit TLS-Zertifikat)</b></li>
+      <ul>
+        <li>Zugriff auf Firmenportale, OWA oder Kundensysteme.</li>
+        <li>Verhindert, dass Passwörter oder Daten im Klartext übertragen werden.</li>
+      </ul>
+    </ul>
+</section>
+      
+        <hr class="trennlinie">
+
+        <section>
+          <h2 class="section-title">2. Praktische Umsetzung</h2>
+          <article>
+            <h3>VPN-Verschlüsselung</h3>
+            <p>VPNs sind Standard für Remote-Work und Standortkopplungen. Typischerweise werden sie auf Firewalls (z. B. WatchGuard) oder QNAP-Systemen eingerichtet. Dabei kommen starke Algorithmen wie AES-256 sowie sichere Schlüsselverfahren wie IKEv2 zum Einsatz.</p>
+          </article>
+          <article>
+            <h3>E-Mail-Verschlüsselung</h3>
+            <p>Mitarbeiter erhalten Zertifikate (z. B. von einer internen oder öffentlichen CA.) Zusätzlich wird die Übertragung über TLS abgesichert. Für echte Ende-zu-Ende-Verschlüsselung kommen S/MIME oder PGP zum Einsatz. (TLS = „auf Transportebene“, S/MIME/PGP = „Ende-zu-Ende“)</p>
+          </article>
+          <article>
+            <h3>Festplattenverschlüsselung</h3>
+            <p>Notebooks und PCs werden mit BitLocker (Microsoft) oder Tools wie VeraCrypt geschützt. Schlüssel werden im TPM-Chip gespeichert oder zentral über Gruppenrichtlinien verwaltet.</p>
+          </article>
+          <article>
+            <h3>Web-Verschlüsselung (HTTPS)</h3>
+            <p>Alle internen und externen Webseiten laufen über TLS-Zertifikate. Diese stammen entweder von öffentlichen CAs (z.B. Let's Encrypt, DigiCert) oder von einer internen CA. HTTPS schützt vor Man-in-the-Middle-Angriffen und stellt sicher, dass keine Daten im Klartext übertragen werden.</p>
+          </article>
+        </section>
+      
+        <hr class="trennlinie">
+
+        <section>
+          <h2 class="section-title">3. Grundprinzipien</h2>
+          <article>
+            <h3>Symmetrische Verschlüsselung</h3>
+            <ul>
+              <li>Ein Schlüssel wird sowohl zum Ver- als auch zum Entschlüsseln benutzt.</li>
+              <li>Vorteil: sehr schnell, geeignet für große Datenmengen.</li>
+              <li>Nachteil: Schlüssel muss sicher verteilt werden.</li>
+              <li>Beispiele: AES (Standard für VPNs, Festplatten), DES/3DES (veraltet).</li>
+            </ul>
+          </article>
+          <article>
+            <h3>Asymmetrische Verschlüsselung</h3>
+            <ul>
+              <li>Es gibt zwei Schlüssel: einen öffentlichen (Public Key) und einen privaten (Private Key).</li>
+              <li>Public Key verschlüsselt, Private Key entschlüsselt.</li>
+              <li>Asymmetrische Verfahren werden oft nur für den Schlüsselaustausch genutzt und danach symmetrisch verschlüsselt (weil schneller).</li>
+              <li>Vorteil: sicherer Schlüsseltausch und digitale Signaturen.</li>
+              <li>Nachteil: langsamer als symmetrische Verfahren.</li>
+              <li>Beispiele: RSA (in TLS, S/MIME), ECC (moderner, effizienter).</li>
+            </ul>
+          </article>
+          <article>
+            <h3>Öffentliche und private Schlüssel</h3>
+            <ul>
+              <li>Öffentlicher Schlüssel: frei verteilt, dient zum Verschlüsseln oder zur Signaturprüfung.</li>
+              <li>Privater Schlüssel: bleibt geheim, dient zum Entschlüsseln oder zum Signieren.</li>
+              <li>Merksatz: Public Key = Vorhängeschloss, das jeder benutzen darf. Private Key = Schlüssel, den nur der Besitzer hat.</li>
+            </ul>
+          </article>
+        </section>
+      
+        <hr class="trennlinie">
+
+        <section>
+          <h2 class="section-title">4. E-Mail-Verschlüsselung mit S/MIME</h2>
+          <article>
+            <h3>Funktionsweise</h3>
+            <ul>
+              <li>Jeder Benutzer erhält ein Zertifikat mit Public/Private Key.</li>
+              <li>Absender verschlüsselt mit dem Public Key des Empfängers.</li>
+              <li>Empfänger entschlüsselt mit seinem Private Key.</li>
+              <li>Zum Signieren nutzt der Absender seinen Private Key.</li>
+            </ul>
+            <h3>Vorteile</h3>
+            <ul>
+              <li>Vertraulichkeit (nur der richtige Empfänger kann lesen).</li>
+              <li>Integrität (Schutz vor Manipulation).</li>
+              <li>Authentizität (Absender ist wirklich der Absender)</li>
+            </ul>
+            <h3>S/MIME in Outlook (Client-basiert)</h3>
+            <ul>
+              <li>Vorteile: einfache Integration, keine zusätzliche Hardware nötig.</li>
+              <li>Nachteile: Verwaltung pro Benutzer aufwendig, Schlüssel liegen auf Endgeräten.</li>
+            </ul>
+            <h3>S/MIME mit Serverlösung (z. B. NoSpamProxy)</h3>
+            <ul>
+              <li>Vorteile: zentrale Verwaltung, automatische Ver- und Entschlüsselung auf dem Mailserver.</li>
+              <li>Nachteile: höhere Kosten, Abhängigkeit vom Mail-Gateway.</li>
+            </ul>
+          </article>
+        </section>
+      
+        <hr class="trennlinie">
+
+        <aside>
+          <h2 class="section-title">Merksätze für die Prüfung</h2>
+          <ul>
+            <li>VPN → Schutz der Verbindung</li>
+            <li>E-Mail → Schutz der Kommunikation</li>
+            <li>Festplatte → Schutz gespeicherter Daten</li>
+            <li>HTTPS → Schutz beim Zugriff auf Webdienste</li>
+            <li>Symmetrisch = ein Schlüssel, schnell (AES)</li>
+            <li>Asymmetrisch = zwei Schlüssel, sicherer Schlüsseltausch (RSA/ECC)</li>
+            <li>S/MIME = Zertifikate für E-Mail-Verschlüsselung & Signatur</li>
+            <li>Outlook = dezentral, NoSpamProxy = zentral</li>
+          </ul>
+        </aside>
+        <br>
+        <hr class="trennlinie">
+        <a href="03 - Raid.html" target="blank" class="back-link">&larr; Zurück zu 03 - Raid</a>&nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="04 - Verschlüsselung.html" target="blank" class="back-link">04 - Verschlüsselung &#8594;</a> 
+        <br>
+        <a href="Ausbildungsthemen.html" class="back-link">&lArr; Zurück zum Inhaltsverzeichnis</a> 
+      </main>
+    </div>
+    <script>
+    function toggleMode() {
+      document.body.classList.toggle('dark');
+      const btn = document.querySelector('.mode-toggle');
+      if(document.body.classList.contains('dark')) {
+        btn.textContent = '☀️ Hellmodus';
+      } else {
+        btn.textContent = '🌙 Dunkelmodus';
+      }
+    }
+  </script>
+</body>
+</html>
