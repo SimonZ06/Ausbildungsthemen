@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <title>Ausbildungsthemen</title>
-    <link rel="icon" type="image/x-icon" href="Icon.ico">
-    <style>
-        :root {
+  <meta charset="UTF-8">
+  <title>05 - Datensicherungskonzepte</title>
+  <link rel="icon" type="image/x-icon" href="Icon.ico">
+  <style>
+    :root {
       --bg: #8d8d8db9;
-      --back-link-bg: rgba(255,255,255,0.45);
       --text: #2d2d2d;
       --container-bg: #ffffff;
       --header-bg: linear-gradient(90deg, #b46900f6, #d87e00);
@@ -31,7 +30,6 @@
     }
     body.dark {
       --bg: #424242e7;
-      --back-link-bg: rgba(60,60,60,0.45);
       --text: #f3f3f3;
       --container-bg: #353535fc;
       --header-bg: linear-gradient(90deg, #b46900, #d87e00);
@@ -78,6 +76,62 @@
       text-align: center;
       box-shadow: 0 2px 8px var(--aside-shadow);
       transition: background 0.3s, color 0.3s;
+    }
+    .logo-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 400px;
+      left: 55px;
+      right: 55px;
+      z-index: 1000;
+    }
+    .logo-bar a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 350px;
+      height: 220px;
+      /* Hintergrund entfernt */
+      background: none;
+      border-radius: 0;
+      box-shadow: none;
+      padding: 0;
+      text-align: center;
+      transition: none;
+    }
+    .logo-bar img {
+      max-width: 320px;
+      max-height: 200px;
+      border-radius: 0;
+      display: block;
+      /* Optional: gleiche Größe erzwingen */
+      width: 320px;
+      height: 200px;
+      object-fit: contain;
+      background: none;
+    }
+    .logo-bar a:hover {
+      background: none;
+      box-shadow: none;
+    }
+    @media (max-width: 800px) {
+      .logo-bar {
+        top: 8px;
+        left: 8px;
+        right: 8px;
+      }
+      .logo-bar a {
+        width: 90px;
+        height: 48px;
+      }
+      .logo-bar img {
+        max-width: 80px;
+        max-height: 40px;
+        width: 80px;
+        height: 40px;
+      }
     }
     h1 {
       margin: 0;
@@ -171,7 +225,7 @@
       top: 24px;
       right: 24px;
       z-index: 100;
-      background: var(--back-link-bg);
+      background: #423c46af;
       color: var(--back-link);
       border: 1px solid var(--trennlinie);
       border-radius: 8px;
@@ -185,42 +239,35 @@
       background: var(--back-link-hover-bg);
       color: var(--back-link-hover);
     }
-    .logo-bar {
+    .bottom-links {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 0;
+      background: var(--container-bg);
+      box-shadow: 0 -2px 12px rgba(0,0,0,0.07);
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      position: fixed;
-      top: 400px;
-      left: 55px;
-      right: 55px;
-      z-index: 1000;
+      align-items: flex-end;
+      padding: 12px 36px;
+      z-index: 200;
+      border-radius: 12px 12px 0 0;
+      gap: 12px;
+      max-width: 1000px;
+      width: 100%;
     }
-    .logo-bar a {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 350px;
-      height: 220px;
-      background: none;
-      border-radius: 0;
-      box-shadow: none;
-      padding: 0;
-      text-align: center;
-      transition: none;
+    @media (max-width: 1000px) {
+      .bottom-links {
+        max-width: 95vw;
+        padding: 8px 8px;
+      }
     }
-    .logo-bar img {
-      max-width: 320px;
-      max-height: 200px;
-      border-radius: 0;
-      display: block;
-      width: 320px;
-      height: 200px;
-      object-fit: contain;
-      background: none;
-    }
-    .logo-bar a:hover {
-      background: none;
-      box-shadow: none;
+    @media (max-width: 800px) {
+      .bottom-links {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
     }
     @media (max-width: 800px) {
       .container {
@@ -231,62 +278,47 @@
         font-size: 1.5em;
       }
       .mode-toggle {
+        background: var(--back-link-bg);
         top: 8px;
         right: 8px;
         padding: 8px 12px;
       }
-        .floating-logo {
-          top: 8px;
-          left: 8px;
-          width: 48px;
-          height: 48px;
-        }
-        .floating-logo img {
-          max-width: 38px;
-          max-height: 38px;
-        }
-        .logo-bar {
+    .floating-logo {
         top: 8px;
         left: 8px;
-        right: 8px;
-      }
-      .logo-bar a {
-        width: 90px;
+        width: 48px;
         height: 48px;
       }
-      .logo-bar img {
-        max-width: 80px;
-        max-height: 40px;
-        width: 80px;
-        height: 40px;
+      .floating-logo img {
+        max-width: 38px;
+        max-height: 38px;
       }
     }
-      /* Logo oben links, immer sichtbar */
-      .floating-logo {
-        position: fixed;
-        top: 24px;
-        left: 24px;
-        width: 80px;
-        height: 80px;
-        z-index: 101;
-        background: rgba(255, 255, 255, 0.782);
-        border-radius: 16px;
-        box-shadow: 0 2px 8px var(--aside-shadow);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: background 0.3s, box-shadow 0.3s;
-      }
-      .floating-logo img {
-        max-width: 65px;
-        max-height: 65px;
-        display: block;
-        border-radius: 8px;
-      }
-      body.dark .floating-logo {
-        background: rgba(40, 40, 40, 0.85);
-      }
-    </style>
+    .floating-logo {
+      position: fixed;
+      top: 24px;
+      left: 24px;
+      width: 80px;
+      height: 80px;
+      z-index: 101;
+      background: rgba(255, 255, 255, 0.782);
+      border-radius: 16px;
+      box-shadow: 0 2px 8px var(--aside-shadow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    .floating-logo img {
+      max-width: 65px;
+      max-height: 65px;
+      display: block;
+      border-radius: 8px;
+    }
+    body.dark .floating-logo {
+      background: rgba(40, 40, 40, 0.85); 
+    }
+  </style>
 </head>
 <body>
   <div class="logo-bar">
@@ -302,27 +334,45 @@
       <img id="teccle-logo" src="TeccleLogo.png" alt="Teccle Logo" title="Teccle Group Logo">
     </a>
   </div>
-    <button class="mode-toggle" onclick="toggleMode()">🌙 Dunkelmodus</button>
-    <div class="container">
-        <header>
-            <h1>Ausbildungsthemen</h1>
-        </header>
-        <section>
-        <div class="info">
-            Hier findest du alle Ausbildungsthemen aus dem Wiki als Lerneinheit:
+  <button class="mode-toggle" onclick="toggleMode()">🌙 Dunkelmodus</button>
+  <div class="container">
+    <main>
+      <header>
+        <h1>05 - Datensicherungskonzepte</h1>
+      </header>
+      <section>
+        <h2 class="section-title">Einleitung</h2>
+        <p>Datensicherung ist ein zentraler Bestandteil der IT-Sicherheit. Sie dient dazu, Datenverluste duchr technische Defekte, Fehlbedingungen, Schadsoftware oder menschliche Fehler zu verhindern bzw. rückgängig zu machen.</p>
+        <p>Ein gutes Sicherungskonzept sorgt dafür, dass wichtige Daten schnell und zuverlässig wiederhergestellt werden können - je nach Anforderung des Unternehmens entweder mit Fokus auf Geschwindigkeit, Speicherplatz oder Langzeitarchivierung.</p>
+        <p>In der Praxis kommen verschiedene Sicherungsmethoden zum Einsatz, die sich in Aufwand, Speicherbedarf und Wiederherstellungsdauer unterscheiden.</p>
+      </section>
+
+        <hr class="trennlinie">
+        
+      <section>
+        <h2 class="section-title">1. Vollsicherung</h2>
+        <h3>Wie funktioniert das?</h3>
+        <p>Bei einer Vollsicherung werden alle ausgewählten Daten vollständig kopiert - unabhängig davon, ob sie sich seit der letzten Sicherung verändert haben oder nicht.</p>
+        <p>Beispiel: Wenn eine virtuelle Maschine (VM) 100 GB groß ist, werden bei jeder Vollsicherung erneut 100 GB gesichert.</p>
+        <b>Vorteile:</b>
+        <ul>
+            <li>Einfache Wiederherstellung: Es wird nur diese eine Sicherungsdatei benötigt.</li>
+            <li>Robust: Fehler in anderen Backups wirken sich nicht aus.</li>
+            <li>Übersichtliche Struktur.</li>
+        </ul>
+        <b>Nachteile:</b>
+        <ul>
+            <li>Lange dauer, da jedes Mal alle Daten kopiert werden.</li>
+            <li>Sehr hoher Speicherbedarf.</li>
+        </ul>
+      </section>
+
+        <div class="bottom-links">
+          <a href="Ausbildungsthemen.html" class="back-link">&lArr; Zurück zum Inhaltsverzeichnis</a>
+          <a href="03 - Raid.html" target="blank" class="back-link">&larr; Zurück zu 03 - RAID</a>
         </div>
-        <div class="verzeichnis">
-            <div class="section-title">Inhaltsverzeichnis</div>
-            <ul>
-                <li><a href="01 - TCP IP Routing NAT.html" target="blank">01 - TCP/IP, Routing, NAT (Einfach/Erweitert)</a></li>
-                <li><a href="02 - Switching VLAN PoE.html" target="blank">02 - Switching / VLAN / POE</a></li>
-                <li><a href="03 - Raid.html" target="blank">03 - RAID</a></li>
-                <li><a href="04 - Verschlüsselung.html" target="blank">04 - Verschlüsselung</a></li>
-            </ul>
-        </div>
-        <p>*Wird noch aktualisiert*</p>
+      </main>
     </div>
-        </section>
     <script>
     function setLogoByMode() {
       const logo = document.getElementById('teccle-logo');

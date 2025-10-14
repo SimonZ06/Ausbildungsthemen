@@ -67,6 +67,8 @@
       box-shadow: var(--container-shadow);
       padding: 36px;
       transition: background 0.3s;
+      position: relative;
+      z-index: 10;
     }
     header {
       background: var(--header-bg);
@@ -236,14 +238,125 @@
     body.dark .floating-logo {
       background: rgba(40, 40, 40, 0.85);
     }
+    .bottom-links {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 0;
+      background: var(--container-bg);
+      box-shadow: 0 -2px 12px rgba(0,0,0,0.07);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding: 12px 36px;
+      z-index: 200;
+      border-radius: 12px 12px 0 0;
+      gap: 12px;
+      max-width: 1000px;
+      width: 100%;
+    }
+    @media (max-width: 1000px) {
+      .bottom-links {
+        max-width: 95vw;
+        padding: 8px 8px;
+      }
+    }
+    @media (max-width: 800px) {
+      .bottom-links {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
+    }
+    .logo-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 1000;
+    }
+    .logo-bar a {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border-radius: 0;
+      box-shadow: none;
+      padding: 0;
+      text-align: center;
+      transition: none;
+      width: 320px;
+      height: 320px;
+    }
+    .logo-bar a.logo-left {
+      left: 30px;
+    }
+    .logo-bar a.logo-right {
+      right: 30px;
+    }
+    .logo-bar img {
+      width: 320px;
+      height: 320px;
+      object-fit: contain;
+      background: none;
+      border-radius: 0;
+      display: block;
+    }
+    @media (max-width: 1400px) {
+      .container {
+        margin-left: calc(180px + 40px);
+        margin-right: calc(180px + 40px);
+      }
+      .logo-bar a,
+      .logo-bar img {
+        width: 180px;
+        height: 180px;
+        max-width: 180px;
+        max-height: 180px;
+      }
+    }
+    @media (max-width: 900px) {
+      .container {
+        margin-left: 16px;
+        margin-right: 16px;
+        max-width: 95vw;
+      }
+      .logo-bar a,
+      .logo-bar img {
+        width: 64px;
+        height: 64px;
+        max-width: 64px;
+        max-height: 64px;
+      }
+      .logo-bar a.logo-left {
+        left: 8px;
+      }
+      .logo-bar a.logo-right {
+        right: 8px;
+      }
+    }
     </style>
 </head>
 <body>
-    <div class="floating-logo">
-      <a href="Ausbildungsthemen.html" title="Zur Übersicht">
-        <img id="teccle-logo" src="TeccleLogo.png" alt="Teccle Logo" title="Teccle Group Logo">
-      </a>
-    </div>
+  <div class="logo-bar">
+    <a href="https://www.teccle-group.de" target="_blank" class="logo-left">
+      <img src="TeccleGroup.png" alt="Tecle Group Logo">
+    </a>
+    <a href="https://www.netzplan.de" target="_blank" class="logo-right">
+      <img src="NetzplanLogo.png" alt="NetzplanLogo">
+    </a>
+  </div>
+  <div class="floating-logo">
+    <a href="Ausbildungsthemen.html" title="Zur Übersicht">
+      <img id="teccle-logo" src="TeccleLogo.png" alt="Teccle Logo" title="Teccle Group Logo">
+    </a>
+  </div>
     <button class="mode-toggle" onclick="toggleMode()">🌙 Dunkelmodus</button>
     <div class="container">
         <main>
@@ -403,7 +516,7 @@
         
         <section>
         <div class="section-title">11. Was ist ein Trunk / Link-Aggregation (LACP)?</div>
-        <p>Man muss zwei Konzepte trennen: ein <b>802.1Q VLAN-Trunk</b> transportiert mehrere VLANs über einen Link durch Tagging; <b>Link-Aggregation / LAG</b> hingegen bündelt mehrere physische Links zu einer logischen Verbindung, um Bandbreite und Redundanz zu erhöhen. Der Standard für Link-Aggregation ist in der IEEE-Familie als 802.1AX (früher 802.3ad) definiert, und <b>LACP (Link Link Aggregation Control Protocol)</b> ist das Protokoll, das die dynamische Aushandlung und Überwachung eines LAG ermöglicht. Voraussetzung ist unter anderem, dass die Mitglieds-Links ähnliche Kapazität/Duplex besitzen und die VLAN-Konfiguration auf beiden Seiten identisch ist. Ein wichtiges Verhalten:<b> ein einzelner Fluss (z. B. eine TCP-Session) wird in der Regel hash-basiert auf genau einen physischen Link verteilt, </b>eine einzelne Verbindung nicht die Summe aller Links einer LAG erreichen kann; die Aggregate verbessern aber den Gesamtdurchsatz und sorgen für Redundanz.</p>
+        <p>Man muss zwei Konzepte trennen: ein <b>802.1Q VLAN-Trunk</b> transportiert mehrere VLANs über einen Link durch Tagging; <b>Link-Aggregation / LAG</b> hingegen bündelt mehrere physische Links zu einer logischen Verbindung, um Bandbreite und Redundanz zu erhöhen. Der Standard für Link-Aggregation ist in der IEEE-Familie als 802.1AX (früher 802.3ad) definiert, und <b>LACP (Link Link Aggregation Control Protocol)</b> ist das Protokoll, das die dynamische Aushandlung und Überwachung eines LAG ermöglicht. Voraussetzung ist unter anderem, dass die Mitglieds-Links ähnliche Kapazität/Duplex besitzen und die VLAN-Konfiguration auf beiden Seiten identisch ist. Ein wichtiges Verhalten:<b> ein einzelner Fluss (z. B. eine TCP-Session) wird in der Regel hash-basiert auf genau einen physikalischen Link verteilt, </b>eine einzelne Verbindung nicht die Summe aller Links einer LAG erreichen kann; die Aggregate verbessern aber den Gesamtdurchsatz und sorgen für Redundanz.</p>
         </section>
         
         <hr class="trennlinie">
@@ -472,17 +585,19 @@
             <br>
             <li><b>PoE-Gefahren?</b> &rarr; Passive PoE, schlechte Verkabelung (CCA), PoE-Budget und thermische Limits beachten.</li>
             <br>
-            <li><b>Bringt LACP einer Verbindung 2x Bandbreite?</b> &rarr; Nein: ein einzelner Flow belegt maximal einen physischen Link; LACP erhöht jedoch den aggregate Durchsatz über viele Flows und bietet Redundanz.</li>
+            <li><b>Bringt LACP einer Verbindung 2x Bandbreite?</b> &rarr; Nein: ein einzelner Flow belegt maximal einen physikalischen Link; LACP erhöht jedoch den aggregate Durchsatz über viele Flows und bietet Redundanz.</li>
         </ul>
         </section>
         
-        <hr class="trennlinie">
-        
-        <section>
-        <a href="01 - TCP IP Routing NAT.html" target="blank" class="back-link">&larr; Zurück zu 01 - TCP IP Routing NAT</a>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="03 - Raid.html" target="blank" class="back-link">03 - RAID &#8594;</a>
         <br>
-        <a href="Ausbildungsthemen.html" class="back-link">&lArr; Zurück zum Inhaltsverzeichnis</a>
-        </section>
+        <br>
+        <br>
+
+        <div class="bottom-links">
+          <a href="Ausbildungsthemen.html" class="back-link">&lArr; Zurück zum Inhaltsverzeichnis</a>
+          <a href="01 - TCP IP Routing NAT.html" target="blank" class="back-link">&larr; Zurück zu 01 - TCP IP Routing NAT</a>
+          <a href="03 - Raid.html" target="blank" class="back-link">03 - RAID &#8594;</a>
+        </div>
         </main>
     </div>
     <script>
