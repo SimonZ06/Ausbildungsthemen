@@ -291,8 +291,9 @@
       padding: 0;
       text-align: center;
       transition: none;
-      width: 320px;
-      height: 320px;
+      width: 20vw;              /* 20% der Bildschirmbreite */
+      max-width: 320px;
+      height: auto;
     }
     .logo-bar a.logo-left {
       left: 30px;
@@ -301,46 +302,67 @@
       right: 30px;
     }
     .logo-bar img {
-      width: 320px;
-      height: 320px;
+      width: 20vw;               /* 20% der Bildschirmbreite */
+      max-width: 320px;          /* nie größer als 320px */
+      height: auto;
       object-fit: contain;
       background: none;
       border-radius: 0;
       display: block;
     }
-    @media (max-width: 1400px) {
-      .container {
-        margin-left: calc(180px + 40px);
-        margin-right: calc(180px + 40px);
-      }
-      .logo-bar a,
-      .logo-bar img {
-        width: 180px;
-        height: 180px;
-        max-width: 180px;
-        max-height: 180px;
-      }
-    }
-    @media (max-width: 900px) {
-      .container {
-        margin-left: 16px;
-        margin-right: 16px;
-        max-width: 95vw;
-      }
-      .logo-bar a,
-      .logo-bar img {
-        width: 64px;
-        height: 64px;
-        max-width: 64px;
-        max-height: 64px;
-      }
-      .logo-bar a.logo-left {
-        left: 8px;
-      }
-      .logo-bar a.logo-right {
-        right: 8px;
-      }
-    }
+    /* Für sehr breite Bildschirme: Außenabstand für große Logos reservieren */
+/* --- BASIS --- */
+.logo-bar a,
+.logo-bar img {
+  width: 20vw;
+  max-width: 320px;
+  height: auto;
+}
+
+/* --- Große Bildschirme --- */
+@media (min-width: 1400px) {
+  .container {
+    margin-left: calc(12vw + 60px);
+    margin-right: calc(12vw + 60px);
+  }
+  .logo-bar a,
+  .logo-bar img {
+    width: 14vw;
+    max-width: 220px;
+  }
+}
+
+/* --- Mittlere Bildschirme --- */
+@media (max-width: 1200px) and (min-width: 901px) {
+  .container {
+    margin: 40px auto;
+    max-width: 90vw;
+  }
+  .logo-bar a,
+  .logo-bar img {
+    width: 16vw;
+    max-width: 160px;
+  }
+}
+
+/* --- Kleine Bildschirme (Smartphones & Tablets) --- */
+@media (max-width: 900px) {
+  .container {
+    margin: 20px auto;
+    max-width: 95vw;
+  }
+  .logo-bar a,
+  .logo-bar img {
+    width: 12vw;
+    max-width: 90px;
+  }
+  .logo-bar a.logo-left {
+    left: 8px;
+  }
+  .logo-bar a.logo-right {
+    right: 8px;
+  }
+}
     </style>
 </head>
 <body>
