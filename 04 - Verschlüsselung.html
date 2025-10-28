@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="de">
-<head>
-  <meta charset="UTF-8">
-  <title>04 - Verschlüsselung</title>
-  <link rel="icon" type="image/x-icon" href="Icon.ico">
+ <head>
+  <meta charset="utf-8"/>
+  <title>
+   04 - Verschlüsselung
+  </title>
+  <link href="Icon.ico" rel="icon" type="image/x-icon"/>
   <style>
-    :root {
-      --bg: #8d8d8db9;
+   :root {
+      --bg: #b5b5b5b9;
       --text: #2d2d2d;
       --container-bg: #ffffff;
       --header-bg: linear-gradient(90deg, #b46900f6, #d87e00);
@@ -61,13 +63,41 @@
     }
     .container {
       max-width: 1000px;
-      margin: 40px auto;
+      margin: 20px auto;
       background: var(--container-bg);
       border-radius: 16px;
       box-shadow: var(--container-shadow);
-      padding: 36px;
       transition: background 0.3s;
+      position: relative;
+      z-index: 10;
     }
+    .outer-container {
+      max-width: 1100px; /* etwas größer als dein eigentlicher Container */
+      margin: 40px auto; /* etwas mehr Abstand */
+      background: rgba(255, 255, 255, 0.3); /* leicht transparent, wirkt „hinter“ dem Container */
+      border-radius: 20px;
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+      padding: 20px;
+      position: relative;
+      z-index: 5; /* liegt hinter deinem echten Container */
+    }
+    body.dark .outer-container {
+      background: rgba(50, 50, 50, 0.4);
+    }
+    .outer-container {
+      max-width: 1100px; /* etwas größer als dein eigentlicher Container */
+      margin: 20px auto; /* etwas mehr Abstand */
+      background: rgba(255, 255, 255, 0.3); /* leicht transparent, wirkt „hinter“ dem Container */
+      border-radius: 20px;
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+      padding:20px;
+      position: relative;
+      z-index: 5; /* liegt hinter deinem echten Container */
+    }
+    body.dark .outer-container {
+      background: rgba(50, 50, 50, 0.4);
+    }
+
     header {
       background: var(--header-bg);
       color: var(--header-text);
@@ -76,62 +106,6 @@
       text-align: center;
       box-shadow: 0 2px 8px var(--aside-shadow);
       transition: background 0.3s, color 0.3s;
-    }
-    .logo-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: fixed;
-      top: 400px;
-      left: 55px;
-      right: 55px;
-      z-index: 1000;
-    }
-    .logo-bar a {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 350px;
-      height: 220px;
-      /* Hintergrund entfernt */
-      background: none;
-      border-radius: 0;
-      box-shadow: none;
-      padding: 0;
-      text-align: center;
-      transition: none;
-    }
-    .logo-bar img {
-      max-width: 320px;
-      max-height: 200px;
-      border-radius: 0;
-      display: block;
-      /* Optional: gleiche Größe erzwingen */
-      width: 320px;
-      height: 200px;
-      object-fit: contain;
-      background: none;
-    }
-    .logo-bar a:hover {
-      background: none;
-      box-shadow: none;
-    }
-    @media (max-width: 800px) {
-      .logo-bar {
-        top: 8px;
-        left: 8px;
-        right: 8px;
-      }
-      .logo-bar a {
-        width: 90px;
-        height: 48px;
-      }
-      .logo-bar img {
-        max-width: 80px;
-        max-height: 40px;
-        width: 80px;
-        height: 40px;
-      }
     }
     h1 {
       margin: 0;
@@ -162,6 +136,10 @@
     p {
       margin-bottom: 16px;
       line-height: 1.9;
+    }
+    b {
+        color: #df8d00ef;
+        background: rgba(152, 152, 152, 0.084)
     }
     ul {
       margin-bottom: 24px;
@@ -239,36 +217,6 @@
       background: var(--back-link-hover-bg);
       color: var(--back-link-hover);
     }
-    .bottom-links {
-      position: fixed;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: 0;
-      background: var(--container-bg);
-      box-shadow: 0 -2px 12px rgba(0,0,0,0.07);
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      padding: 12px 36px;
-      z-index: 200;
-      border-radius: 12px 12px 0 0;
-      gap: 12px;
-      max-width: 1000px;
-      width: 100%;
-    }
-    @media (max-width: 1000px) {
-      .bottom-links {
-        max-width: 95vw;
-        padding: 8px 8px;
-      }
-    }
-    @media (max-width: 800px) {
-      .bottom-links {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 8px;
-      }
-    }
     @media (max-width: 800px) {
       .container {
         max-width: 95%;
@@ -283,7 +231,7 @@
         right: 8px;
         padding: 8px 12px;
       }
-    .floating-logo {
+      .floating-logo {
         top: 8px;
         left: 8px;
         width: 48px;
@@ -316,27 +264,217 @@
       border-radius: 8px;
     }
     body.dark .floating-logo {
-      background: rgba(40, 40, 40, 0.85); 
+      background: rgba(40, 40, 40, 0.85);
     }
+    .bottom-links {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 0;
+      background: var(--container-bg);
+      box-shadow: 0 -2px 12px rgba(0,0,0,0.07);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding: 12px 6px;
+      z-index: 200;
+      border-radius: 12px 12px 0 0;
+      gap: 12px;
+      max-width: 1000px;
+      width: 65%;
+    }
+    @media (max-width: 1000px) {
+      .bottom-links {
+        max-width: 95vw;
+        padding: 8px 8px;
+      }
+    }
+    @media (max-width: 800px) {
+      .bottom-links {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
+    }
+    
+    
+/* --- Logo areas: left/right gutters that match the centered content width --- */
+.logo-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1000;
+  display: block;
+}
+
+.logo-area-left,
+.logo-area-right {
+  position: fixed;
+  width: calc((100vw - min(1000px, 95vw)) / 2);
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 1000;
+  padding: 4px;
+}
+
+/* wir setzen sie jetzt mit calc() vertikal passend */
+.logo-area-left { 
+  left: 0;
+  top: calc(50% + 100px); /* nach Bedarf anpassen */
+  transform: translateY(-50%);
+}
+
+.logo-area-right { 
+  right: 0;
+  top: calc(50% + 100px); /* nach Bedarf anpassen */
+  transform: translateY(-50%);
+}
+
+/* position the two areas */
+.logo-area-left { left: 0; }
+.logo-area-right { right: 0; }
+
+/* the link is clickable, allow pointer events on it and center the image */
+.logo-area-left a,
+.logo-area-right a {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: auto;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+  background: none;
+}
+
+/* image sizing: scale with viewport but never exceed the gutter area minus padding */
+.logo-area-left img,
+.logo-area-right img {
+  width: clamp(60px, 18vw, 500px);
+  max-width: calc(100% - 20px); /* ensure equal inner spacing of 10px left/right */
+  height: auto;
+  object-fit: contain;
+  display: block;
+  transition: width 0.18s ease;
+}
+
+.logo-card {
+  background: rgb(251, 64, 26);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 20px;
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+  padding: 16px 22px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+/* Dark Mode-Variante */
+body.dark .logo-card {
+  background: rgb(251, 64, 26);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* optionaler Hover-Effekt, um den modernen Touch zu betonen */
+.logo-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+}
+
+.logo-card:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25),
+              0 0 12px rgb(237, 131, 1);
+  transform: translateY(-4px);
+}
+
+/* Linke Box – Teccle Group Orange */
+.logo-left-card {
+  background: rgba(251, 64, 26, 0.999); /* leicht transparentes Orange */
+  border: 1px solid rgba(251, 65, 26, 0.4);
+  box-shadow: 0 4px 20px rgba(251, 65, 26, 0.3);
+}
+
+body.dark .logo-left-card {
+  background: rgba(251, 65, 26, 0.25);
+  border: 1px solid rgba(251, 65, 26, 0.5);
+  box-shadow: 0 4px 25px rgba(251, 65, 26, 0.35);
+}
+
+/* Rechte Box – klassisch transparent-weiß */
+.logo-right-card {
+  background: rgb(255, 255, 255);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+body.dark .logo-right-card {
+  background: rgb(255, 255, 255);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* When the gutter becomes too small to host the minimum logo size, hide the logos */
+@media (max-width: 1842px) {
+  /* Empirical breakpoint chosen so logos don't overlap main content on moderate screens */
+  .logo-area-left img,
+  .logo-area-right img {
+    display: none;
+  }
+}
+
+/* Extra fallback for very small screens */
+@media (max-width: 420px) {
+  .logo-area-left,
+  .logo-area-right {
+    display: none;
+  }
+}
   </style>
-</head>
-<body>
+ </head>
+ <body>
   <div class="logo-bar">
-    <a href="https://www.teccle-group.de" target="_blank">
-      <img src="TeccleGroup.png" alt="Tecle Group Logo" class="logo-left">
+   
+    <div class="logo-area-left">
+  <div class="logo-card logo-left-cart">
+    <a class="logo-left" href="https://www.teccle-group.de" target="_blank">
+      <img alt="Tecle Group Logo" src="TeccleGroup.png"/>
     </a>
-    <a href="https://www.netzplan.de" target="_blank">
-      <img src="NetzplanLogo.png" alt="NetzplanLogo" class="logo-right">
+  </div>
+</div>
+
+<div class="logo-area-right">
+  <div class="logo-card logo-right-card">
+    <a class="logo-right" href="https://www.netzplan.de" target="_blank">
+      <img alt="NetzplanLogo" src="NetzplanLogo.png"/>
     </a>
+  </div>
+</div>
+
   </div>
   <div class="floating-logo">
-    <a href="Ausbildungsthemen.html" title="Zur Übersicht">
-      <img id="teccle-logo" src="TeccleLogo.png" alt="Teccle Logo" title="Teccle Group Logo">
-    </a>
+   <a href="Ausbildungsthemen.html" title="Zur Übersicht">
+    <img alt="Teccle Logo" id="teccle-logo" src="TeccleLogo.png" title="Teccle Group Logo"/>
+   </a>
   </div>
-  <button class="mode-toggle" onclick="toggleMode()">🌙 Dunkelmodus</button>
+  <button class="mode-toggle" onclick="toggleMode()">
+   🌙 Dunkelmodus
+  </button>
   <div class="container">
-    <main>
+    <div class="outer-container">
+      <div class="container">
+        <div class="outer-container">
+        <div class="container">
+   <main>
       <header>
         <h1>04 – Verschlüsselung</h1>
       </header>

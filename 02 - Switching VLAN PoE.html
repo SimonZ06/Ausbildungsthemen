@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <title>02 - Switching / VLAN / PoE</title>
-    <link rel="icon" type="image/x-icon" href="Icon.ico">
-    <style>
-        :root {
-      --bg: #8d8d8db9;
+ <head>
+  <meta charset="utf-8"/>
+  <title>
+   02 - Switching / VLAN / PoE
+  </title>
+  <link href="Icon.ico" rel="icon" type="image/x-icon"/>
+  <style>
+   :root {
+      --bg: #b5b5b5b9;
       --text: #2d2d2d;
       --container-bg: #ffffff;
       --header-bg: linear-gradient(90deg, #b46900f6, #d87e00);
@@ -61,15 +63,41 @@
     }
     .container {
       max-width: 1000px;
-      margin: 40px auto;
+      margin: 20px auto;
       background: var(--container-bg);
       border-radius: 16px;
       box-shadow: var(--container-shadow);
-      padding: 36px;
       transition: background 0.3s;
       position: relative;
       z-index: 10;
     }
+    .outer-container {
+      max-width: 1100px; /* etwas größer als dein eigentlicher Container */
+      margin: 40px auto; /* etwas mehr Abstand */
+      background: rgba(255, 255, 255, 0.3); /* leicht transparent, wirkt „hinter“ dem Container */
+      border-radius: 20px;
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+      padding: 20px;
+      position: relative;
+      z-index: 5; /* liegt hinter deinem echten Container */
+    }
+    body.dark .outer-container {
+      background: rgba(50, 50, 50, 0.4);
+    }
+    .outer-container {
+      max-width: 1100px; /* etwas größer als dein eigentlicher Container */
+      margin: 20px auto; /* etwas mehr Abstand */
+      background: rgba(255, 255, 255, 0.3); /* leicht transparent, wirkt „hinter“ dem Container */
+      border-radius: 20px;
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+      padding:20px;
+      position: relative;
+      z-index: 5; /* liegt hinter deinem echten Container */
+    }
+    body.dark .outer-container {
+      background: rgba(50, 50, 50, 0.4);
+    }
+
     header {
       background: var(--header-bg);
       color: var(--header-text);
@@ -248,12 +276,12 @@
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
-      padding: 12px 36px;
+      padding: 12px 6px;
       z-index: 200;
       border-radius: 12px 12px 0 0;
       gap: 12px;
       max-width: 1000px;
-      width: 100%;
+      width: 65%;
     }
     @media (max-width: 1000px) {
       .bottom-links {
@@ -268,125 +296,191 @@
         gap: 8px;
       }
     }
-    .logo-bar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-      z-index: 1000;
-    }
-    .logo-bar a {
-      position: fixed;
-      top: 50%;
-      transform: translateY(-50%);
-      pointer-events: auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: none;
-      border-radius: 0;
-      box-shadow: none;
-      padding: 0;
-      text-align: center;
-      transition: none;
-      width: 20vw;              /* 20% der Bildschirmbreite */
-      max-width: 320px;
-      height: auto;
-    }
-    .logo-bar a.logo-left {
-      left: 30px;
-    }
-    .logo-bar a.logo-right {
-      right: 30px;
-    }
-    .logo-bar img {
-      width: 20vw;               /* 20% der Bildschirmbreite */
-      max-width: 320px;          /* nie größer als 320px */
-      height: auto;
-      object-fit: contain;
-      background: none;
-      border-radius: 0;
-      display: block;
-    }
-    /* Für sehr breite Bildschirme: Außenabstand für große Logos reservieren */
-/* --- BASIS --- */
-.logo-bar a,
-.logo-bar img {
-  width: 20vw;
-  max-width: 320px;
+    
+    
+/* --- Logo areas: left/right gutters that match the centered content width --- */
+.logo-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1000;
+  display: block;
+}
+
+.logo-area-left,
+.logo-area-right {
+  position: fixed;
+  width: calc((100vw - min(1000px, 95vw)) / 2);
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 1000;
+  padding: 4px;
+}
+
+/* wir setzen sie jetzt mit calc() vertikal passend */
+.logo-area-left { 
+  left: 0;
+  top: calc(50% + 100px); /* nach Bedarf anpassen */
+  transform: translateY(-50%);
+}
+
+.logo-area-right { 
+  right: 0;
+  top: calc(50% + 100px); /* nach Bedarf anpassen */
+  transform: translateY(-50%);
+}
+
+/* position the two areas */
+.logo-area-left { left: 0; }
+.logo-area-right { right: 0; }
+
+/* the link is clickable, allow pointer events on it and center the image */
+.logo-area-left a,
+.logo-area-right a {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
   height: auto;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+  background: none;
 }
 
-/* --- Große Bildschirme --- */
-@media (min-width: 1400px) {
-  .container {
-    margin-left: calc(12vw + 60px);
-    margin-right: calc(12vw + 60px);
-  }
-  .logo-bar a,
-  .logo-bar img {
-    width: 14vw;
-    max-width: 220px;
+/* image sizing: scale with viewport but never exceed the gutter area minus padding */
+.logo-area-left img,
+.logo-area-right img {
+  width: clamp(60px, 18vw, 500px);
+  max-width: calc(100% - 20px); /* ensure equal inner spacing of 10px left/right */
+  height: auto;
+  object-fit: contain;
+  display: block;
+  transition: width 0.18s ease;
+}
+
+.logo-card {
+  background: rgb(251, 64, 26); /* leicht transparentes Weiß */
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 20px;
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+  padding: 16px 22px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+/* Dark Mode-Variante */
+body.dark .logo-card {
+  background: rgb(251, 64, 26);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* optionaler Hover-Effekt, um den modernen Touch zu betonen */
+.logo-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+}
+
+.logo-card:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25),
+              0 0 12px rgb(237, 131, 1);
+  transform: translateY(-4px);
+}
+
+/* Linke Box – Teccle Group Orange */
+.logo-left-card {
+  background: rgba(251, 64, 26, 0.999); /* leicht transparentes Orange */
+  border: 1px solid rgba(251, 65, 26, 0.4);
+  box-shadow: 0 4px 20px rgba(251, 65, 26, 0.3);
+}
+
+body.dark .logo-left-card {
+  background: rgba(251, 65, 26, 0.25);
+  border: 1px solid rgba(251, 65, 26, 0.5);
+  box-shadow: 0 4px 25px rgba(251, 65, 26, 0.35);
+}
+
+/* Rechte Box – klassisch transparent-weiß */
+.logo-right-card {
+  background: rgb(255, 255, 255);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+body.dark .logo-right-card {
+  background: rgb(255, 255, 255);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* When the gutter becomes too small to host the minimum logo size, hide the logos */
+@media (max-width: 1842px) {
+  /* Empirical breakpoint chosen so logos don't overlap main content on moderate screens */
+  .logo-area-left img,
+  .logo-area-right img {
+    display: none;
   }
 }
 
-/* --- Mittlere Bildschirme --- */
-@media (max-width: 1200px) and (min-width: 901px) {
-  .container {
-    margin: 40px auto;
-    max-width: 90vw;
-  }
-  .logo-bar a,
-  .logo-bar img {
-    width: 16vw;
-    max-width: 160px;
+/* Extra fallback for very small screens */
+@media (max-width: 420px) {
+  .logo-area-left,
+  .logo-area-right {
+    display: none;
   }
 }
-
-/* --- Kleine Bildschirme (Smartphones & Tablets) --- */
-@media (max-width: 900px) {
-  .container {
-    margin: 20px auto;
-    max-width: 95vw;
-  }
-  .logo-bar a,
-  .logo-bar img {
-    width: 12vw;
-    max-width: 90px;
-  }
-  .logo-bar a.logo-left {
-    left: 8px;
-  }
-  .logo-bar a.logo-right {
-    right: 8px;
-  }
-}
-    </style>
-</head>
-<body>
+  </style>
+ </head>
+ <body>
   <div class="logo-bar">
-    <a href="https://www.teccle-group.de" target="_blank" class="logo-left">
-      <img src="TeccleGroup.png" alt="Tecle Group Logo">
+   
+    <div class="logo-area-left">
+  <div class="logo-card logo-left-cart">
+    <a class="logo-left" href="https://www.teccle-group.de" target="_blank">
+      <img alt="Tecle Group Logo" src="TeccleGroup.png"/>
     </a>
-    <a href="https://www.netzplan.de" target="_blank" class="logo-right">
-      <img src="NetzplanLogo.png" alt="NetzplanLogo">
+  </div>
+</div>
+
+<div class="logo-area-right">
+  <div class="logo-card logo-right-card">
+    <a class="logo-right" href="https://www.netzplan.de" target="_blank">
+      <img alt="NetzplanLogo" src="NetzplanLogo.png"/>
     </a>
+  </div>
+</div>
+
   </div>
   <div class="floating-logo">
-    <a href="Ausbildungsthemen.html" title="Zur Übersicht">
-      <img id="teccle-logo" src="TeccleLogo.png" alt="Teccle Logo" title="Teccle Group Logo">
-    </a>
+   <a href="Ausbildungsthemen.html" title="Zur Übersicht">
+    <img alt="Teccle Logo" id="teccle-logo" src="TeccleLogo.png" title="Teccle Group Logo"/>
+   </a>
   </div>
-    <button class="mode-toggle" onclick="toggleMode()">🌙 Dunkelmodus</button>
-    <div class="container">
-        <main>
-        <header>
-            <h1>02 - Switching / VLAN / PoE</h1>
-        </header>
-
-        <section>
+  <button class="mode-toggle" onclick="toggleMode()">
+   🌙 Dunkelmodus
+  </button>
+  <div class="container">
+    <div class="outer-container">
+      <div class="container">
+        <div class="outer-container">
+        <div class="container">
+   <main>
+    <header>
+     <h1>
+      02 - Switching / VLAN / PoE
+     </h1>
+    </header>
+    <section>
         <div class="section-title">1. Wie funktioniert ein Switch?</div>
         <p>Ein Switch arbeitet auf <b>OSI-Layer 2 (Sicherungsschicht)</b> und nimmt Ethernet-Frames entgegen, liest die Layer-2-Informationen (vor allem MAC-Adressen) und entscheidet daraufhin zielgerichtet, an welchem Port ein Frame weitergeleitet werden muss. Anders als ein alter Hub, der empfangene Signale an alle Ports verteilt, versucht ein Switch, den Verkehr nur an jene Ports zu schicken, an denen das Zielgerät angeschlossen ist - dadurch wird das Netz effizienter und die Kollisionen werden drastisch reduziert.</p>
         <p>Die Arbeitsweise des Switches basiert im Kern auf einer <b>MAC-Adress-Tabelle</b> (auch CAM-Table genannt). Immer wenn ein Frame ankommt, merkt sich der Switch die <b>Quell-MAC</b> und den Port, an dem das Frame eingetroffen ist - also eine Zuordnung "Quell-MAC &#8594; Port". Beim Senden sucht er die <b>Ziel-MAC</b> in dieser Tabelle: findet er einen Eintrag, schickt er das Frame nur an den entsprechenden Port; findet er die Ziel-MAC nicht, spricht man von unknown unicast und der Switch flutet das Frame an alle Ports innerhalb der gleichen VLAN-Domäne (außer dem Eingangsport).</p>
