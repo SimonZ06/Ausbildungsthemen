@@ -3,7 +3,7 @@
  <head>
   <meta charset="utf-8"/>
   <title>
-   04 - Verschlüsselung
+   06 - USV
   </title>
   <link href="Icon.ico" rel="icon" type="image/x-icon"/>
   <style>
@@ -149,6 +149,19 @@
       margin-top: 20px;
       color: var(--h3);
     }
+
+    .note-box {
+      border-left: 4px solid #c85d00;
+      background: rgba(183, 89, 0, 0.04);
+      padding: 10px 18px;
+      margin: 16px 0;
+      border-radius: 6px;
+      line-height: 1.7;
+    }
+    body.dark .note-box {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
     .trennlinie {
       border: none;
       border-top: 1px solid var(--trennlinie);
@@ -434,9 +447,8 @@ body.dark .logo-right-card {
   </style>
  </head>
  <body>
-  <div class="logo-bar">
-   
-    <div class="logo-area-left">
+    <div class="logo-bar">
+    <div class="logo-area-left"> 
   <div class="logo-card logo-left-cart">
     <a class="logo-left" href="https://www.teccle-group.de" target="_blank">
       <img alt="Tecle Group Logo" src="TeccleGroup.png"/>
@@ -450,7 +462,7 @@ body.dark .logo-right-card {
       <img alt="NetzplanLogo" src="NetzplanLogo.png"/>
     </a>
   </div>
-</div>
+</div> 
 
   </div>
   <div class="floating-logo">
@@ -467,156 +479,105 @@ body.dark .logo-right-card {
         <div class="outer-container">
         <div class="container">
    <main>
-      <header>
-        <h1>04 – Verschlüsselung</h1>
-      </header>
-  <section>
-    <h2 class="section-title">Einleitung</h2>
-    <p>Verschlüsselung ist ein zentraler Baustein in der IT-Sicherheit. Sie schützt Daten während der Übertragung und Speicherung vor unbefugtem Zugriff, Abhören oder Manipulation. Bei Netzplan und unseren Kunden findet Verschlüsselung in vielen Bereichen Anwendung - von der Kommunikation bis hin zur Datenspeicherung.</p>
-  </section>
-      
-  <hr class="trennlinie">
+    <header>
+        <h1>06 - USV</h1>
+    </header>
+    <section>
+        <h2 class="section-title">Einleitung</h2>
+        <p>Eine <b>USV (Unterbrechungsfreie Stromversorgung)</b> schützt IT-Systeme vor Stromausfällen, Spannungsschwankungen und Überspannungen.</p>
+        <p>Sie überbrückt kurze Ausfälle mit Batteriestrom und sorgt dafür, dass Systeme geordnet heruntergefahren oder weiterbetrieben werden können, bis die Stromversorgung wieder stabil ist.</p>
+        <p>In Unternehmensnetzwerken (wie bei Netzplan oder in Rechenzentren) ist die USV ein zentraler Bestandteil der <b>Datensicherheit</b> und <b>Systemverfügbarkeit</b>.</p>
+    </section>
 
-  <section>
-    <h2 class="section-title">1. Typische Einsatzorte</h2>
-    <ul>
-      <li><b>VPN-Verbindungen (z. B. SSL-VPN oder IPsec-VPN)</b></li>
-      <ul>
-        <li>Verbindung zwischen Außendienst/Homeoffice und Firmenstandort wird verschlüsselt.</li>
-        <li>Schutz vor Abhören durch Dritte im Internet.</li>
-      </ul>
-      <li><b>E-Mails (z. B. S/MIME oder PGP)</b></li>
-      <ul>
-        <li>Vertrauliche Kommunikation mit Kunden und Partnern.</li>
-        <li>Schutz vor unbefugtem Mitlesen und Manipulation.</li>
-      </ul>
-      <li><b>Festplatten-/Datenträgerverschlüsselung (z. B. BitLocker, VeraCrypt)</b></li>
-      <ul>
-        <li>Verschlüsselte Notebooks und PCs bei Mitarbeitern.</li>
-        <li>Schutz bei Verlust oder Diebstahl von Geräten.</li>
-      </ul>
-      <li><b>Webseiten / interne Portale (HTTPS mit TLS-Zertifikat)</b></li>
-      <ul>
-        <li>Zugriff auf Firmenportale, OWA oder Kundensysteme.</li>
-        <li>Verhindert, dass Passwörter oder Daten im Klartext übertragen werden.</li>
-      </ul>
-    </ul>
-</section>
-      
-        <hr class="trennlinie">
+    <hr class="trennlinie">
 
-        <section>
-          <h2 class="section-title">2. Praktische Umsetzung</h2>
-          <article>
-            <h3>VPN-Verschlüsselung</h3>
-            <p>VPNs sind Standard für Remote-Work und Standortkopplungen. Typischerweise werden sie auf Firewalls (z. B. WatchGuard) oder QNAP-Systemen eingerichtet. Dabei kommen starke Algorithmen wie AES-256 sowie sichere Schlüsselverfahren wie IKEv2 zum Einsatz.</p>
-          </article>
-          <article>
-            <h3>E-Mail-Verschlüsselung</h3>
-            <p>Mitarbeiter erhalten Zertifikate (z. B. von einer internen oder öffentlichen CA.) Zusätzlich wird die Übertragung über TLS abgesichert. Für echte Ende-zu-Ende-Verschlüsselung kommen S/MIME oder PGP zum Einsatz. (TLS = „auf Transportebene“, S/MIME/PGP = „Ende-zu-Ende“)</p>
-          </article>
-          <article>
-            <h3>Festplattenverschlüsselung</h3>
-            <p>Notebooks und PCs werden mit BitLocker (Microsoft) oder Tools wie VeraCrypt geschützt. Schlüssel werden im TPM-Chip gespeichert oder zentral über Gruppenrichtlinien verwaltet.</p>
-          </article>
-          <article>
-            <h3>Web-Verschlüsselung (HTTPS)</h3>
-            <p>Alle internen und externen Webseiten laufen über TLS-Zertifikate. Diese stammen entweder von öffentlichen CAs (z.B. Let's Encrypt, DigiCert) oder von einer internen CA. HTTPS schützt vor Man-in-the-Middle-Angriffen und stellt sicher, dass keine Daten im Klartext übertragen werden.</p>
-          </article>
-        </section>
-      
-        <hr class="trennlinie">
-
-        <section>
-          <h2 class="section-title">3. Grundprinzipien</h2>
-          <article>
-            <h3>Symmetrische Verschlüsselung</h3>
+    <section>
+        <h2 class="section-title">1. Bedeutung der Zahlenangaben in USV-Beschreibungen (z. B. 700 / 1000/ 2200)</h2>
+        <p>Die Zahlen geben die <b>Leistungskapazität der USV</b> an.</p>
+        <p>Diese Werte beziehen sich auf die<b> Scheinleistung</b>, gemessen in <b>VA (Voltampere)</b>.</p>
+        <p>Manchmal wird zusätzlich die <b>Wirkleistung</b> in <b>Watt (W) </b>angegeben.</p>
+        <ul>
+            <li>Beispiel:</li>
             <ul>
-              <li>Ein Schlüssel wird sowohl zum Ver- als auch zum Entschlüsseln benutzt.</li>
-              <li>Vorteil: sehr schnell, geeignet für große Datenmengen.</li>
-              <li>Nachteil: Schlüssel muss sicher verteilt werden.</li>
-              <li>Beispiele: AES (Standard für VPNs, Festplatten), DES/3DES (veraltet).</li>
+                <li><b>APC Back-UPS 700</b> &#8594; 700 VA ≈ 400 W</li>
+                <li><b>APC Smart-UPS 1000</b> &#8594; 1000 VA ≈ 600 W</li>
+                <li><b>APC Smart-UPS 2200</b> &#8594; 2200 VA ≈ 1980 W</li>
             </ul>
-          </article>
-          <article>
-            <h3>Asymmetrische Verschlüsselung</h3>
-            <ul>
-              <li>Es gibt zwei Schlüssel: einen öffentlichen (Public Key) und einen privaten (Private Key).</li>
-              <li>Public Key verschlüsselt, Private Key entschlüsselt.</li>
-              <li>Asymmetrische Verfahren werden oft nur für den Schlüsselaustausch genutzt und danach symmetrisch verschlüsselt (weil schneller).</li>
-              <li>Vorteil: sicherer Schlüsseltausch und digitale Signaturen.</li>
-              <li>Nachteil: langsamer als symmetrische Verfahren.</li>
-              <li>Beispiele: RSA (in TLS, S/MIME), ECC (moderner, effizienter).</li>
-            </ul>
-          </article>
-          <article>
-            <h3>Öffentliche und private Schlüssel</h3>
-            <ul>
-              <li>Öffentlicher Schlüssel: frei verteilt, dient zum Verschlüsseln oder zur Signaturprüfung.</li>
-              <li>Privater Schlüssel: bleibt geheim, dient zum Entschlüsseln oder zum Signieren.</li>
-              <li>Merksatz: Public Key = Vorhängeschloss, das jeder benutzen darf. Private Key = Schlüssel, den nur der Besitzer hat.</li>
-            </ul>
-          </article>
-        </section>
-      
-        <hr class="trennlinie">
-
-        <section>
-          <h2 class="section-title">4. E-Mail-Verschlüsselung mit S/MIME</h2>
-          <article>
-            <h3>Funktionsweise</h3>
-            <ul>
-              <li>Jeder Benutzer erhält ein Zertifikat mit Public/Private Key.</li>
-              <li>Absender verschlüsselt mit dem Public Key des Empfängers.</li>
-              <li>Empfänger entschlüsselt mit seinem Private Key.</li>
-              <li>Zum Signieren nutzt der Absender seinen Private Key.</li>
-            </ul>
-            <h3>Vorteile</h3>
-            <ul>
-              <li>Vertraulichkeit (nur der richtige Empfänger kann lesen).</li>
-              <li>Integrität (Schutz vor Manipulation).</li>
-              <li>Authentizität (Absender ist wirklich der Absender)</li>
-            </ul>
-            <h3>S/MIME in Outlook (Client-basiert)</h3>
-            <ul>
-              <li>Vorteile: einfache Integration, keine zusätzliche Hardware nötig.</li>
-              <li>Nachteile: Verwaltung pro Benutzer aufwendig, Schlüssel liegen auf Endgeräten.</li>
-            </ul>
-            <h3>S/MIME mit Serverlösung (z. B. NoSpamProxy)</h3>
-            <ul>
-              <li>Vorteile: zentrale Verwaltung, automatische Ver- und Entschlüsselung auf dem Mailserver.</li>
-              <li>Nachteile: höhere Kosten, Abhängigkeit vom Mail-Gateway.</li>
-            </ul>
-          </article>
-        </section>
-      
-        <hr class="trennlinie">
-
-        <aside>
-          <h2 class="section-title">Merksätze für die Prüfung</h2>
-          <ul>
-            <li>VPN → Schutz der Verbindung</li>
-            <li>E-Mail → Schutz der Kommunikation</li>
-            <li>Festplatte → Schutz gespeicherter Daten</li>
-            <li>HTTPS → Schutz beim Zugriff auf Webdienste</li>
-            <li>Symmetrisch = ein Schlüssel, schnell (AES)</li>
-            <li>Asymmetrisch = zwei Schlüssel, sicherer Schlüsseltausch (RSA/ECC)</li>
-            <li>S/MIME = Zertifikate für E-Mail-Verschlüsselung & Signatur</li>
-            <li>Outlook = dezentral, NoSpamProxy = zentral</li>
-          </ul>
-        </aside>
-
+        </ul>
+        <div class="note-box">
+            <p><b>Faustregel:</b><br>
+            Die tatsächliche nutzbare Leistung (in Watt) liegt meist bei 60-90 % des VA-Werts.<br>
+            Das hängt vom sogenannten <b>Leistungsfaktor (Power Factor)</b> ab, der angibt,
+            wie viel der Scheinleistung tatsächlich in nutzbare elektronische Arbeit umgesetzt wird.</p>
+        </div>
         <br>
-        
+        <b>Beispielhafte Berechnung:</b>
+        <p>Eine USV mit <b>1000 VA</b> und einem <b>Leistungsfaktor von 0,8</b>:</p>
+        <p>&#8594; 1000 VA x 0,8 = <b>800 W</b> nutzbare Leistung.</p>
+    </section>
+
+    <hr class="trennlinie">
+
+    <section>
+        <h2 class="section-title">Typische Leistungsaufnahme von Geräten</h2>
+        <p>Bei der Dimensionierung einer USV muss man wissen, wie viel Stromverbrauch (Last) die angeschlossenen Geräte erzeugen.</p>
+        <p>Typische Werte sind:</p>
+        <table style="width:100%; border-collapse:collapse;">
+            <thead>
+                <tr>
+                    <th style="text-align:left;">Gerätetyp</th>
+                    <th style="text-align:left;">Durchschnittliche Leistungsaufnahme</th>
+                    <th style="text-align:left;">Bemerkung</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>HP Server (z. B. Tower oder Rack)</td>
+                    <td>200-250 W</td>
+                    <td>Abhängig von CPU, RAM, Laufwerken</td>
+                </tr>
+            </tbody>
+            <tbody>
+                <tr>
+                    <td>Firewall (z. B. WatchGuard, Sophos)</td>
+                    <td>75-100 W</td>
+                    <td>Modelle mit redundanten Netzteilen evtl. mehr</td>
+                </tr>
+            </tbody>
+            <tbody>
+                <tr>
+                    <td>Switch (z. B. 24-Port, ohne PoE)</td>
+                    <td>30-50 W</td>
+                    <td>Bei PoE bis zu 200 W möglich</td>
+                </tr>
+            </tbody>
+            <tbody>
+                <tr>
+                    <td>NAS-System (z. B. QNAP, Synology)</td>
+                    <td>50-100 W</td>
+                    <td>Je nach Anzahl der Festplatten</td>
+                </tr>
+            </tbody>
+            <tbody>
+                <tr>
+                    <td>Monitor / Arbeitsplatzrechner</td>
+                    <td>60-150 W</td>
+                    <td>Nur relevant, wenn ebenfalls abgesichert werden soll</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <br>
         <div class="bottom-links">
           <a href="Ausbildungsthemen.html" class="back-link">&lArr; Zurück zum Inhaltsverzeichnis</a>
-          <a href="03 - Raid.html" target="blank" class="back-link">&larr; Zurück zu 03 - RAID</a>
+          <a href="04 - Verschlüsselung.html" target="blank" class="back-link">&larr; Zurück zu 04 - Verschlüsselung</a>
           <a href="05 - Datensicherungskonzepte.html" target="blank" class="back-link">05 - Datensicherungskonzepte &#8594;</a>
         </div>
-        </main>
+      </main>
     </div>
     <script>
-       function setLogoByMode() {
+    function setLogoByMode() {
       const logo = document.getElementById('teccle-logo');
       if(document.body.classList.contains('dark')) {
         logo.src = 'TeccleLogoBlack.png';

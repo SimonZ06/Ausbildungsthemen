@@ -17,7 +17,7 @@
       --section-title: #000000;
       --section-title-bg: #cfcfcf54;
       --section-title-border: #F18E00;
-      --h3: #cb6201cd;
+      --h3: #c76000;
       --trennlinie: #e0e7ef;
       --link: #d87e00;
       --link-hover: #ae6600;
@@ -70,19 +70,7 @@
       transition: background 0.3s;
       position: relative;
       z-index: 10;
-    }
-    .outer-container {
-      max-width: 1100px; /* etwas größer als dein eigentlicher Container */
-      margin: 40px auto; /* etwas mehr Abstand */
-      background: rgba(255, 255, 255, 0.3); /* leicht transparent, wirkt „hinter“ dem Container */
-      border-radius: 20px;
-      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
-      padding: 20px;
-      position: relative;
-      z-index: 5; /* liegt hinter deinem echten Container */
-    }
-    body.dark .outer-container {
-      background: rgba(50, 50, 50, 0.4);
+      padding-bottom: 10px;
     }
     .outer-container {
       max-width: 1100px; /* etwas größer als dein eigentlicher Container */
@@ -90,7 +78,9 @@
       background: rgba(255, 255, 255, 0.3); /* leicht transparent, wirkt „hinter“ dem Container */
       border-radius: 20px;
       box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
-      padding:20px;
+      padding-left: 8px;
+      padding-right: 8px;
+      padding-top: 0.005%;
       position: relative;
       z-index: 5; /* liegt hinter deinem echten Container */
     }
@@ -138,7 +128,7 @@
       line-height: 1.9;
     }
     b {
-        color: #df8d00ef;
+        color: #dc7900;
         background: rgba(152, 152, 152, 0.084)
     }
     ul {
@@ -270,16 +260,16 @@
       position: fixed;
       left: 50%;
       transform: translateX(-50%);
-      bottom: 0;
+      bottom: 0px;
       background: var(--container-bg);
       box-shadow: 0 -2px 12px rgba(0,0,0,0.07);
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: flex-end;
-      padding: 12px 6px;
+      padding: 12px 0;
       z-index: 200;
       border-radius: 12px 12px 0 0;
-      gap: 12px;
+      gap: 8px;
       max-width: 1000px;
       width: 65%;
     }
@@ -319,6 +309,8 @@
   pointer-events: none;
   z-index: 1000;
   padding: 4px;
+  align-items: flex-start;
+  margin-top: -60px;
 }
 
 /* wir setzen sie jetzt mit calc() vertikal passend */
@@ -418,7 +410,7 @@ body.dark .logo-left-card {
 }
 
 body.dark .logo-right-card {
-  background: rgb(255, 255, 255);
+  background: rgb(251, 251, 251);
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
 }
@@ -694,8 +686,6 @@ body.dark .logo-right-card {
         <p>Das <b>Default Gateway</b> ist die Schnittstelle zwischen lokalem Netz und Internet. NAT mit PAT auf der FritzBox sorgt dafür, dass mehrere Geräte gleichzeitig über eine öffentliche IP-Adresse online sein können. Anpassungen an NAT machst du vor allem über Portfreigaben. Unter Windows kannst du IPs statisch oder per DHCP konfigurieren, die Routingtabelle einsehen und mit zahlreichen Tools Verbindungsprobleme untersuchen.</p>
         </aside>
         
-        <br>
-        <br>
         <br>
 
         <div class="bottom-links">

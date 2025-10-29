@@ -17,7 +17,7 @@
       --section-title: #000000;
       --section-title-bg: #cfcfcf54;
       --section-title-border: #F18E00;
-      --h3: #cb6201cd;
+      --h3: #c76000;
       --trennlinie: #e0e7ef;
       --link: #d87e00;
       --link-hover: #ae6600;
@@ -70,19 +70,7 @@
       transition: background 0.3s;
       position: relative;
       z-index: 10;
-    }
-    .outer-container {
-      max-width: 1100px; /* etwas größer als dein eigentlicher Container */
-      margin: 40px auto; /* etwas mehr Abstand */
-      background: rgba(255, 255, 255, 0.3); /* leicht transparent, wirkt „hinter“ dem Container */
-      border-radius: 20px;
-      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
-      padding: 20px;
-      position: relative;
-      z-index: 5; /* liegt hinter deinem echten Container */
-    }
-    body.dark .outer-container {
-      background: rgba(50, 50, 50, 0.4);
+      padding-bottom: 10px;
     }
     .outer-container {
       max-width: 1100px; /* etwas größer als dein eigentlicher Container */
@@ -90,7 +78,9 @@
       background: rgba(255, 255, 255, 0.3); /* leicht transparent, wirkt „hinter“ dem Container */
       border-radius: 20px;
       box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
-      padding:20px;
+      padding-left: 8px;
+      padding-right: 8px;
+      padding-top: 0.005%;
       position: relative;
       z-index: 5; /* liegt hinter deinem echten Container */
     }
@@ -138,7 +128,7 @@
       line-height: 1.9;
     }
     b {
-        color: #df8d00ef;
+        color: #dc7900;
         background: rgba(152, 152, 152, 0.084)
     }
     ul {
@@ -270,16 +260,16 @@
       position: fixed;
       left: 50%;
       transform: translateX(-50%);
-      bottom: 0;
+      bottom: 0px;
       background: var(--container-bg);
       box-shadow: 0 -2px 12px rgba(0,0,0,0.07);
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: flex-end;
-      padding: 12px 6px;
+      padding: 12px 0;
       z-index: 200;
       border-radius: 12px 12px 0 0;
-      gap: 12px;
+      gap: 8px;
       max-width: 1000px;
       width: 65%;
     }
@@ -319,6 +309,8 @@
   pointer-events: none;
   z-index: 1000;
   padding: 4px;
+  align-items: flex-start;
+  margin-top: -60px;
 }
 
 /* wir setzen sie jetzt mit calc() vertikal passend */
@@ -492,18 +484,21 @@ body.dark .logo-right-card {
         <h3>Wie funktioniert das?</h3>
         <p>Bei einer Vollsicherung werden alle ausgewählten Daten vollständig kopiert - unabhängig davon, ob sie sich seit der letzten Sicherung verändert haben oder nicht.</p>
         <p>Beispiel: Wenn eine virtuelle Maschine (VM) 100 GB groß ist, werden bei jeder Vollsicherung erneut 100 GB gesichert.</p>
-        <b>Vorteile:</b>
+        <br>
+        <h3>Vorteile:</h3>
         <ul>
             <li>Einfache Wiederherstellung: Es wird nur diese eine Sicherungsdatei benötigt.</li>
             <li>Robust: Fehler in anderen Backups wirken sich nicht aus.</li>
             <li>Übersichtliche Struktur.</li>
         </ul>
-        <b>Nachteile:</b>
+        <br>
+        <h3>Nachteile:</h3>
         <ul>
             <li>Lange dauer, da jedes Mal alle Daten kopiert werden.</li>
             <li>Sehr hoher Speicherbedarf.</li>
         </ul>
-        <b>Einsatz:</b>
+        <br>
+        <h3>Einsatz:</h3>
         <ul>
           <li>Sinnvoll bei kleineren Datenmengen.</li>
           <li>Oft als regelmäßige Basis für andere Backup-Typen (z. B. einmal pro Woche)</li>
@@ -514,7 +509,143 @@ body.dark .logo-right-card {
 
         <section>
           <h2 class="section-title">2. Inkrementelle Sicherung</h2>
+          <h3>Wie funktioniert das?</h3>
+          <p>Bei einer inkrementellen Sicherung werden nur die Daten gesichert, die sich seit der letzten Sicherung (egal ob voll oder inkrementell) verändert haben.</p>
+          <br>
+          <h3>Beispiel:</h3>
+          <ul>
+            <li>Tag 1: Vollbackup (100 GB)</li>
+            <li>Tag 2: nur Änderungen seit Tag 1 (z. B. 5 GB)</li>
+            <li>Tag 3: nur Änerungen seit Tag 2 (z. B. 3 GB)</li>
+          </ul>
+          <p>&#8594; Das Backup ist sehr klein und schnell erstellt.</p>
+          <br>
+          <h3>Vorteile:</h3>
+          <ul>
+            <li>Sehr platzsparend.</li>
+            <li>Schnelle tägliche Sicherungen möglich.</li>
+            <li>Geringe Netzwerklast bei Remote-Backups.</li>
+          </ul>
+          <br>
+          <h3>Nachteile:</h3>
+          <ul>
+            <li>Wiederherstellung aufwendig: Man benötigt das Vollbackup und alle Inkremente der Sicherungskette.</li>
+            <li>Wenn ein Inkrement beschädigt ist, sind alle folgenden Sicherungen unbrauchbar.</li>
+          </ul>
+          <br>
+        <h3>Einsatz:</h3>
+        <ul>
+          <li>Ideal für häufige Sicherungen (z. B. täglich odr mehrmals pro Tag).</li>
+          <li>Oft in Kombination mit wöchentlichen Vollsicherungen.</li>
+        </ul>
         </section>
+        <hr class="trennlinie">
+        <section>
+          <h2 class="section-title">3. Differenzielle Sicherung</h2>
+          <h3>Wie funktioniert das?</h3>
+          <p>Bei einer differenziellen Sicherung werden alle Daten gesichert, die sich seit der letzten Vollsicherung verändert haben.</p>
+          <br>
+          <h3>Beispiel:</h3>
+          <ul>
+            <li>Tag 1: Vollbackup (100 GB)</li>
+            <li>Tag 2: Änderungen seit Tag 1 (5 GB)</li>
+            <li>Tag 3: erneut Änderungen seit Tag 1 (8 GB gesamt)</li>
+          </ul>
+          <br>
+          <h3>Vorteile:</h3>
+          <ul>
+            <li>Für die Wiederherstellung benötigt man nur das Vollbackup und das letzte Differenzial.</li>
+            <li>Weniger fehleranfällig als inkrementelle Sicherungen.</li>
+            <li>Bessere Wiederherstellungszeit als bei Inkrementen.</li>
+          </ul>
+          <br>
+          <h3>Nachteile:</h3>
+          <ul>
+            <li>Backups werden mit der Zeit größer (die Differenz zum Vollbackup wächst täglich).</li>
+            <li>Höherer Speicherbedarf als Inkrementelle Sicherung.</li>
+          </ul>
+          <br>
+          <h3>Einsatz:</h3>
+          <ul>
+            <li>Typischerweise: tägliche differenzielle Sicherungen + wöchentliche Vollsicherung.</li>
+            <li>Gut geeignet, wenn die schnelle Wiederherstellung wichtiger ist als Speicherplatz.</li>
+          </ul>
+        </section>
+        <hr class="trennlinie">
+        <section>
+          <h2 class="section-title">4. GVS-Prinzip (Großvater-Vater-Sohn)</h2>
+          <h3>Idee:</h3>
+          <p>Das GVS-Prinzip ist ein klassisches Rotationsschema, um Backups über verschiedene Zeiträume hinweg aufzubewahren. Es sorgt für eine Kombination aus kurzfristigem Zugriff, mittelfristiger Sicherheit und langfristiger Archivierung.</p>
+          <br>
+          <h3>Ebenen:</h3>
+          <ul>
+            <li><b>Sohn (täglich):</b> kurzfristige Sicherungen - oft inkrementell.</li>
+            <li><b>Vater (wöchentlich):</b> mittelfristige Sicherungen - oft differenziell oder voll.</li>
+            <li><b>Großvater (monatlich):</b> langfristige Sicherungen - immer Vollsicherung.</li>
+          </ul>
+          <br>
+          <h3>Nutzen:</h3>
+          <ul>
+            <li>Man hat Sicherungen aus unterschiedlichen Zeiträumen verfügbar.</li>
+            <li>Spart Speicherplatz, da nicht jeden Tag eine Vollsicherung erfolgt.</li>
+            <li>Bietet Schutz vor Datenverlust, der erst spät bemerkt wird (z. B. versehentlich gelöschte Dateien).</li>
+            <li>Ein bewährtes Standardprinzip in vielen Backup-Strategien.</li>
+          </ul>
+        </section>
+        <hr class="trennlinie">
+        <section>
+          <h2 class="section-title">5. Prüfungsaufgabe mit Veeam</h2>
+          <br>
+          <h3>Aufgabe:</h3>
+          <p>Erstelle drei Backup-Jobs (z. B. für dieselbe VM):</p>
+          <ul>
+            <li><b>Job 1:</b> Vollbackup</li>
+            <li><b>Job 2:</b> Inkrementell</li>
+            <li><b>Job 3:</b> Differenziell</li>
+            &#8594; Jeden Job jeweils dreimal ausführen.
+          </ul>
+          <br>
+          <h3>Erwartetes Ergebnis:</h3>
+          <ul>
+            <li><b>Vollbackup:</b></li>
+            <ul>
+              <li>Drei große Dateien - jede enthält eine vollständige Kopie der VM.</li>
+            </ul>
+            <li><b>Inkrementell:</b></li>
+            <ul>
+              <li>Eine Vollsicherung (Basis)</li>
+              <li>Zwei kleine Inkremente mit nur den Änderungen</li>
+              <li>Wiederherstellung = Basis + alle Inkremente</li>
+            </ul>
+            <li><b>Differenziell:</b></li>
+            <ul>
+              <li>Eine Vollsicherung (Basis)</li>
+              <li>Zwei differenzielle Dateien, die jeweils größer werden (weil sie alles seit dem Vollbackup enthalten)</li>
+              <li>Wiederherstellung = Basis + letztes Differenzial</li>
+            </ul>
+          </ul>
+          <br>
+          <h3>Wichtige Erklärung im Gespräch:</h3>
+          <ul>
+            <li>Warum manche Dateien klein oder groß sind.</li>
+            <li>Welche Daten für den Restore benötigt werden.</li>
+            <li>Vor- und Nachteile der Methoden anhand der Ergebnisse erläutern.</li>
+          </ul>
+        </section>
+
+        <hr class="trennlinie">
+
+        <aside>
+          <h3 class="section-title">Merksätze für die Prüfung</h3>
+          <ul>
+            <li><b>Vollsicherung:</b> komplett, einfach, braucht viel Speicher</li>
+            <li><b>Inkrementell:</b> nur Änderungen seit letzter Sicherung, platzsparend, aber Restore aufwendig</li>
+            <li><b>Differenziell:</b> Änderungen seit letzter Vollsicherung, Kompromiss zwischen Speicher und Geschwindigkeit</li>
+            <li><b>GVS-Prinzip:</b> Rotation &#8594; Sohn = täglich, Vater = wöchentlich, Großvater = monatlich</li>
+            <li><b>Ziel:</b> Kombination aus schneller Wiederherstellung, langfristiger Aufbewahrung und effizienter Speichernutzung</li>
+          </ul>
+        </aside>
+        <br>
         <div class="bottom-links">
           <a href="Ausbildungsthemen.html" class="back-link">&lArr; Zurück zum Inhaltsverzeichnis</a>
           <a href="04 - Verschlüsselung.html" target="blank" class="back-link">&larr; Zurück zu 04 - Verschlüsselung</a>
