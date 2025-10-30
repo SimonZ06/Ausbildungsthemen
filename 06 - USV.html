@@ -1,580 +1,572 @@
 <!DOCTYPE html>
-<html lang="de">
- <head>
+<html lang="de"><head>
   <meta charset="utf-8"/>
-  <title>
-   06 - USV
-  </title>
+  <title>06 - USV</title>
   <link href="Icon.ico" rel="icon" type="image/x-icon"/>
   <style>
    :root {
-      --bg: #b5b5b5b9;
-      --text: #2d2d2d;
-      --container-bg: #ffffff;
-      --header-bg: linear-gradient(90deg, #b46900f6, #d87e00);
-      --header-text: #ffffff;
-      --section-bg: #e2e2e2a0;
-      --section-title: #000000;
-      --section-title-bg: #cfcfcf54;
-      --section-title-border: #F18E00;
-      --h3: #c76000;
-      --trennlinie: #e0e7ef;
-      --link: #d87e00;
-      --link-hover: #ae6600;
-      --back-link-bg: #9b948e40;
-      --back-link: #e87000;
-      --back-link-hover-bg: #ffffff;
-      --back-link-hover: #e38101;
-      --aside-bg: #e3e3e3;
-      --aside-shadow: rgba(50, 58, 78, 0.556);
-      --container-shadow: 0 2px 16px rgba(180,200,255,0.10);
-      --sublist-color: #717171;
+      --accent: #ff5500;
+      --accent-soft: rgba(255, 85, 0, 0.85);
+      --bg-gradient-start: #f6f6f6;
+      --bg-gradient-end: #ebebeb;
+      --text-base: #333333;
+      --text-muted: #555555;
+      --card-bg: rgba(255, 255, 255, 0.92);
+      --surface: #ffffff;
+      --border-subtle: #e1e1e1;
+      --shadow-soft: 0 12px 32px rgba(15, 23, 42, 0.08);
+      --section-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+      --link: #ff7033;
+      --link-hover: #d9520c;
     }
     body.dark {
-      --bg: #424242e7;
-      --text: #f3f3f3;
-      --container-bg: #353535fc;
-      --header-bg: linear-gradient(90deg, #b46900, #d87e00);
-      --header-text: #ffffff;
-      --section-bg: #414040b9;
-      --section-title: #ffffff;
-      --section-title-bg: #d05a004c;
-      --section-title-border: #d87e00;
-      --h3: #d87e00;
-      --trennlinie: #44495a;
-      --link: #d87e00;
-      --link-hover: #ae6600;
-      --back-link-bg: #9b948e40;
-      --back-link: #e87000;
-      --back-link-hover-bg: #c8c6c651;
-      --back-link-hover: #e38101;
-      --aside-bg: #453f3c53;
-      --aside-shadow: rgba(60,60,80,0.12);
-      --container-shadow: 0 2px 16px rgba(60,60,80,0.18);
-      --sublist-color: #cccccc;
+      --accent: #ff7b33;
+      --accent-soft: rgba(255, 110, 45, 0.88);
+      --bg-gradient-start: #1f2933;
+      --bg-gradient-end: #111827;
+      --text-base: #f5f7fa;
+      --text-muted: #cbd5f5;
+      --card-bg: rgba(17, 24, 39, 0.82);
+      --surface: rgba(17, 24, 39, 0.82);
+      --border-subtle: rgba(148, 163, 184, 0.28);
+      --shadow-soft: 0 20px 40px rgba(2, 6, 23, 0.55);
+      --section-shadow: 0 18px 38px rgba(15, 23, 42, 0.55);
+      --link: #ff955a;
+      --link-hover: #ffbf8f;
+    }
+    * {
+      box-sizing: border-box;
     }
     body {
-      background-color: var(--bg);
-      color: var(--text);
-      font-family: "Segoe UI", Arial, sans-serif;
+      font-family: "Inter", "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(180deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+      color: var(--text-base);
       margin: 0;
-      padding: 0;
-      transition: background 0.3s, color 0.3s;
-    }
-    .container {
-      max-width: 1000px;
-      margin: 20px auto;
-      background: var(--container-bg);
-      border-radius: 16px;
-      box-shadow: var(--container-shadow);
-      transition: background 0.3s;
-      position: relative;
-      z-index: 10;
-      padding-bottom: 10px;
-    }
-    .outer-container {
-      max-width: 1100px; /* etwas größer als dein eigentlicher Container */
-      margin: 20px auto; /* etwas mehr Abstand */
-      background: rgba(255, 255, 255, 0.3); /* leicht transparent, wirkt „hinter“ dem Container */
-      border-radius: 20px;
-      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
-      padding-left: 8px;
-      padding-right: 8px;
-      padding-top: 0.005%;
-      position: relative;
-      z-index: 5; /* liegt hinter deinem echten Container */
-    }
-    body.dark .outer-container {
-      background: rgba(50, 50, 50, 0.4);
-    }
-
-    header {
-      background: var(--header-bg);
-      color: var(--header-text);
-      padding: 24px 0 16px 0;
-      border-radius: 16px 16px 0 0;
-      text-align: center;
-      box-shadow: 0 2px 8px var(--aside-shadow);
-      transition: background 0.3s, color 0.3s;
-    }
-    h1 {
-      margin: 0;
-      font-size: 2em;
-      letter-spacing: 1px;
-      color: #ffffff;
-    }
-    section {
-      padding: 20px 24px;
-      border-radius: 12px;
-      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
-      margin-bottom: 28px;
-      transition: background 0.3s;
-      background: var(--section-bg);
-    }
-    .section-title {
-      font-size: 1.4em;
-      font-weight: 600;
-      margin-top: 32px;
-      margin-bottom: 12px;
-      color: var(--section-title);
-      border-left: 4px solid var(--section-title-border);
-      padding-left: 8px;
-      background: var(--section-title-bg);
-      border-radius: 4px;
-      transition: background 0.3s, color 0.3s;
-    }
-    p {
-      margin-bottom: 16px;
-      line-height: 1.9;
-    }
-    b {
-        color: #dc7900;
-        background: rgba(152, 152, 152, 0.084)
-    }
-    ul {
-      margin-bottom: 24px;
-      padding-left: 20px;
-    }
-    li {
-      margin-bottom: 12px;
-      line-height: 1.6;
-    }
-    ul ul {
-      margin-top: 6px;
-      margin-bottom: 12px;
-      list-style-type: circle;
-      color: var(--sublist-color);
-    }
-    h3 {
-      margin-top: 20px;
-      color: var(--h3);
-    }
-
-    .note-box {
-      border-left: 4px solid #c85d00;
-      background: rgba(183, 89, 0, 0.04);
-      padding: 10px 18px;
-      margin: 16px 0;
-      border-radius: 6px;
-      line-height: 1.7;
-    }
-    body.dark .note-box {
-      background: rgba(255, 255, 255, 0.08);
-    }
-
-    .trennlinie {
-      border: none;
-      border-top: 1px solid var(--trennlinie);
-      margin: 32px 0;
-      transition: border-color 0.3s;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      transition: background 0.3s ease, color 0.3s ease;
     }
     a {
       color: var(--link);
       text-decoration: none;
-      font-weight: 600;
-      transition: color 0.2s;
+      transition: color 0.2s ease, opacity 0.2s ease;
     }
-    a:hover {
+    a:hover,
+    a:focus {
       color: var(--link-hover);
-    }
-    .back-link {
-      display: inline-block;
-      margin-top: 16px;
-      background: var(--back-link-bg);
-      color: var(--back-link);
-      padding: 10px 18px;
-      border-radius: 8px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: background 0.2s, color 0.2s;
-      border: 1px solid var(--trennlinie);
-    }
-    .back-link:hover {
-      background: var(--back-link-hover-bg);
-      color: var(--back-link-hover);
-    }
-    aside {
-      background: var(--aside-bg);
-      border-radius: 8px;
-      padding: 18px 24px;
-      margin-top: 24px;
-      box-shadow: 0 1px 4px var(--aside-shadow);
-      transition: background 0.3s;
     }
     .mode-toggle {
       position: fixed;
       top: 24px;
       right: 24px;
       z-index: 100;
-      background: #423c46af;
-      color: var(--back-link);
-      border: 1px solid var(--trennlinie);
-      border-radius: 8px;
+      background: rgba(17, 24, 39, 0.75);
+      color: #ffffff;
+      border: none;
+      border-radius: 999px;
       padding: 10px 18px;
-      font-size: 1em;
+      font-size: 0.95rem;
       font-weight: 600;
       cursor: pointer;
-      transition: background 0.2s, color 0.2s;
+      backdrop-filter: blur(12px);
+      transition: background 0.3s ease, transform 0.2s ease;
     }
     .mode-toggle:hover {
-      background: var(--back-link-hover-bg);
-      color: var(--back-link-hover);
+      transform: translateY(-2px);
     }
-    @media (max-width: 800px) {
-      .container {
-        max-width: 95%;
-        padding: 16px;
-      }
-      h1 {
-        font-size: 1.5em;
-      }
-      .mode-toggle {
-        background: var(--back-link-bg);
-        top: 8px;
-        right: 8px;
-        padding: 8px 12px;
-      }
-      .floating-logo {
-        top: 8px;
-        left: 8px;
-        width: 48px;
-        height: 48px;
-      }
-      .floating-logo img {
-        max-width: 38px;
-        max-height: 38px;
-      }
+    body.dark .mode-toggle {
+      background: rgba(255, 255, 255, 0.18);
+      color: #ffffff;
     }
-    .floating-logo {
-      position: fixed;
-      top: 24px;
-      left: 24px;
-      width: 80px;
-      height: 80px;
-      z-index: 101;
-      background: rgba(255, 255, 255, 0.782);
-      border-radius: 16px;
-      box-shadow: 0 2px 8px var(--aside-shadow);
+    .page-wrapper {
+      display: grid;
+      grid-template-columns: minmax(260px, 340px) minmax(0, 14fr) minmax(170px, 200px);
+      grid-template-areas: "sidebar main right";
+      gap: clamp(1.5rem, 4vw, 2.5rem);
+      width: min(1820px, 100%);
+      padding: clamp(2rem, 5vw, 3.5rem) clamp(1.5rem, 4vw, 3rem);
+    }
+    .sidebar {
+      grid-area: sidebar;
+      background: var(--accent-soft);
+      color: #ffffff;
+      border-radius: 1rem;
+      padding: 1.75rem;
+      box-shadow: 0 18px 36px rgba(255, 85, 0, 0.18);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      position: sticky;
+      top: clamp(1.5rem, 3vw, 3rem);
+      height: fit-content;
+    }
+    .sidebar h2 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin: 0;
+    }
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .sidebar-nav a {
       display: flex;
       align-items: center;
-      justify-content: center;
-      transition: background 0.3s, box-shadow 0.3s;
+      gap: 0.5rem;
+      padding: 0.55rem 0.85rem;
+      border-radius: 0.65rem;
+      background: rgba(255, 255, 255, 0.12);
+      color: inherit;
+      opacity: 0.95;
+      transition: transform 0.2s ease, opacity 0.2s ease, background 0.2s ease;
     }
-    .floating-logo img {
-      max-width: 65px;
-      max-height: 65px;
-      display: block;
-      border-radius: 8px;
+    .sidebar-nav a::before {
+      content: "›";
+      font-size: 1.1rem;
+      opacity: 0.75;
+      transition: transform 0.2s ease;
     }
-    body.dark .floating-logo {
-      background: rgba(40, 40, 40, 0.85);
+    .sidebar-nav a:hover,
+    .sidebar-nav a:focus {
+      opacity: 1;
+      transform: translateX(4px);
+      background: rgba(255, 255, 255, 0.2);
+    }
+    .sidebar-nav a:hover::before,
+    .sidebar-nav a:focus::before {
+      transform: translateX(3px);
+    }
+    .main-column {
+      grid-area: main;
+      background: var(--card-bg);
+      border-radius: 1.2rem;
+      box-shadow: var(--shadow-soft);
+      padding: clamp(2rem, 4vw, 3rem);
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    .page-header {
+      text-align: center;
+    }
+    .page-header h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 2.6rem);
+      font-weight: 700;
+      color: var(--text-base);
+    }
+    .content-section {
+      background: var(--surface);
+      border-radius: 1rem;
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--section-shadow);
+      padding: clamp(1.5rem, 3vw, 2rem);
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+    .content-section h2 {
+      margin: 0;
+      font-size: 1.4rem;
+      color: var(--text-base);
+      border-left: 4px solid var(--accent);
+      padding-left: 0.75rem;
+      line-height: 1.3;
+    }
+    .content-section p {
+      margin: 0;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+    .content-section b {
+      color: var(--accent);
+    }
+    .note-box {
+      border-left: 4px solid var(--accent);
+      background: rgba(255, 137, 85, 0.12);
+      padding: 1rem 1.25rem;
+      border-radius: 0.75rem;
+      color: var(--text-muted);
+    }
+    body.dark .note-box {
+      background: rgba(255, 137, 85, 0.18);
+      color: #f8f9ff;
+    }
+    .content-section ul {
+      margin: 0.4rem 0;
+      padding-left: 1.2rem;
+      color: var(--text-muted);
+    }
+    .content-section ul ul {
+      margin: 0.3rem 0;
+      padding-left: 1.4rem;
+      color: rgba(0, 0, 0, 0.55);
+    }
+    .content-section ul li {
+      margin-bottom: 0.25cm;
+    }
+    body.dark .content-section ul ul {
+      color: rgba(255, 255, 255, 0.7);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid var(--border-subtle);
+      border-radius: 0.75rem;
+      overflow: hidden;
+      font-size: 0.95rem;
+    }
+    table thead {
+      background: rgba(0, 0, 0, 0.04);
+    }
+    table th,
+    table td {
+      padding: 0.75rem 1rem;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    table th:nth-child(2),
+    table td:nth-child(2) {
+      text-align: center;
+    }
+    table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    body.dark table thead {
+      background: rgba(148, 163, 184, 0.15);
     }
     .bottom-links {
-      position: fixed;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: 0px;
-      background: var(--container-bg);
-      box-shadow: 0 -2px 12px rgba(0,0,0,0.07);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      text-align: center;
+    }
+    .bottom-links .back-link {
+      background: rgba(255, 112, 51, 0.1);
+      color: var(--link);
+      padding: 0.75rem 1.2rem;
+      border-radius: 0.75rem;
+      border: 1px solid rgba(255, 112, 51, 0.2);
+      transition: transform 0.2s ease, background 0.2s ease;
+      font-weight: 600;
+    }
+    .bottom-links .back-link:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 112, 51, 0.18);
+    }
+    .right-column {
+      grid-area: right;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      border-left: 1px solid var(--border-subtle);
+      padding-left: clamp(1rem, 3vw, 1.5rem);
+    }
+    .logo-stack {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.6rem;
+      width: 100%;
+    }
+    .logo-card {
+      width: 100%;
+      background: var(--surface);
+      border-radius: 0.9rem;
+      padding: 1.4rem 1.2rem;
+      box-shadow: var(--section-shadow);
       display: flex;
       justify-content: center;
-      align-items: flex-end;
-      padding: 12px 0;
-      z-index: 200;
-      border-radius: 12px 12px 0 0;
-      gap: 8px;
-      max-width: 1000px;
-      width: 65%;
+      align-items: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
-    @media (max-width: 1000px) {
-      .bottom-links {
-        max-width: 95vw;
-        padding: 8px 8px;
+    .logo-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 28px rgba(15, 23, 42, 0.12);
+    }
+    .logo-card img {
+      max-width: 140px;
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+    .logo-divider {
+      width: 60%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border-subtle), transparent);
+    }
+    .info-box {
+      background: var(--surface);
+      border-radius: 0.9rem;
+      padding: 1.4rem;
+      box-shadow: var(--section-shadow);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+    .info-box strong {
+      display: block;
+      font-size: 1.05rem;
+      color: var(--text-base);
+    }
+    .info-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .info-links a {
+      color: var(--link);
+      font-weight: 600;
+    }
+    .info-links a:hover {
+      opacity: 0.85;
+    }
+    body.dark .sidebar {
+      background: linear-gradient(160deg, rgba(188, 72, 0, 0.904), rgba(180, 70, 5, 0.78));
+      box-shadow: 0 22px 44px rgba(10, 10, 18, 0.6);
+    }
+    body.dark .sidebar-nav a {
+      background: rgba(255, 170, 120, 0.16);
+    }
+    body.dark .sidebar-nav a:hover,
+    body.dark .sidebar-nav a:focus {
+      background: rgba(255, 184, 140, 0.26);
+    }
+    body.dark .content-section {
+      background: var(--surface);
+    }
+    body.dark .logo-card,
+    body.dark .info-box {
+      background: var(--surface);
+    }
+    body.dark .logo-divider {
+      background: linear-gradient(90deg, transparent, rgba(148, 163, 184, 0.4), transparent);
+    }
+    @media (max-width: 1100px) {
+      .page-wrapper {
+        grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+        grid-template-areas:
+          "sidebar main"
+          "sidebar right";
+      }
+      .right-column {
+        border-left: none;
+        border-top: 1px solid var(--border-subtle);
+        padding-left: 0;
+        padding-top: clamp(1.5rem, 4vw, 2rem);
       }
     }
-    @media (max-width: 800px) {
-      .bottom-links {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 8px;
+    @media (max-width: 860px) {
+      .page-wrapper {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "sidebar"
+          "main"
+          "right";
+      }
+      .sidebar {
+        position: relative;
+        top: 0;
+      }
+      .right-column {
+        border-top: none;
+        padding-top: 0;
       }
     }
-    
-    
-/* --- Logo areas: left/right gutters that match the centered content width --- */
-.logo-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 1000;
-  display: block;
-}
-
-.logo-area-left,
-.logo-area-right {
-  position: fixed;
-  width: calc((100vw - min(1000px, 95vw)) / 2);
-  display: flex;
-  justify-content: center;
-  pointer-events: none;
-  z-index: 1000;
-  padding: 4px;
-  align-items: flex-start;
-  margin-top: -60px;
-}
-
-/* wir setzen sie jetzt mit calc() vertikal passend */
-.logo-area-left { 
-  left: 0;
-  top: calc(50% + 100px); /* nach Bedarf anpassen */
-  transform: translateY(-50%);
-}
-
-.logo-area-right { 
-  right: 0;
-  top: calc(50% + 100px); /* nach Bedarf anpassen */
-  transform: translateY(-50%);
-}
-
-/* position the two areas */
-.logo-area-left { left: 0; }
-.logo-area-right { right: 0; }
-
-/* the link is clickable, allow pointer events on it and center the image */
-.logo-area-left a,
-.logo-area-right a {
-  pointer-events: auto;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: auto;
-  text-align: center;
-  padding: 0;
-  margin: 0;
-  background: none;
-}
-
-/* image sizing: scale with viewport but never exceed the gutter area minus padding */
-.logo-area-left img,
-.logo-area-right img {
-  width: clamp(60px, 18vw, 500px);
-  max-width: calc(100% - 20px); /* ensure equal inner spacing of 10px left/right */
-  height: auto;
-  object-fit: contain;
-  display: block;
-  transition: width 0.18s ease;
-}
-
-.logo-card {
-  background: rgb(251, 64, 26); /* leicht transparentes Weiß */
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 20px;
-  backdrop-filter: blur(10px) saturate(150%);
-  -webkit-backdrop-filter: blur(10px) saturate(150%);
-  padding: 16px 22px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-
-/* Dark Mode-Variante */
-body.dark .logo-card {
-  background: rgb(251, 64, 26);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
-}
-
-/* optionaler Hover-Effekt, um den modernen Touch zu betonen */
-.logo-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
-}
-
-.logo-card:hover {
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25),
-              0 0 12px rgb(237, 131, 1);
-  transform: translateY(-4px);
-}
-
-/* Linke Box – Teccle Group Orange */
-.logo-left-card {
-  background: rgba(251, 64, 26, 0.999); /* leicht transparentes Orange */
-  border: 1px solid rgba(251, 65, 26, 0.4);
-  box-shadow: 0 4px 20px rgba(251, 65, 26, 0.3);
-}
-
-body.dark .logo-left-card {
-  background: rgba(251, 65, 26, 0.25);
-  border: 1px solid rgba(251, 65, 26, 0.5);
-  box-shadow: 0 4px 25px rgba(251, 65, 26, 0.35);
-}
-
-/* Rechte Box – klassisch transparent-weiß */
-.logo-right-card {
-  background: rgb(255, 255, 255);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-}
-
-body.dark .logo-right-card {
-  background: rgb(251, 251, 251);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
-}
-
-/* When the gutter becomes too small to host the minimum logo size, hide the logos */
-@media (max-width: 1842px) {
-  /* Empirical breakpoint chosen so logos don't overlap main content on moderate screens */
-  .logo-area-left img,
-  .logo-area-right img {
-    display: none;
-  }
-}
-
-/* Extra fallback for very small screens */
-@media (max-width: 420px) {
-  .logo-area-left,
-  .logo-area-right {
-    display: none;
-  }
-}
+    @media (max-width: 600px) {
+      .mode-toggle {
+        top: 16px;
+        right: 16px;
+        padding: 8px 14px;
+      }
+      .main-column {
+        padding: 1.75rem;
+      }
+      .content-section {
+        padding: 1.35rem 1.25rem;
+      }
+      .logo-card img {
+        max-width: 120px;
+      }
+    }
   </style>
- </head>
- <body>
-    <div class="logo-bar">
-    <div class="logo-area-left"> 
-  <div class="logo-card logo-left-cart">
-    <a class="logo-left" href="https://www.teccle-group.de" target="_blank">
-      <img alt="Tecle Group Logo" src="TeccleGroup.png"/>
-    </a>
-  </div>
-</div>
-
-<div class="logo-area-right">
-  <div class="logo-card logo-right-card">
-    <a class="logo-right" href="https://www.netzplan.de" target="_blank">
-      <img alt="NetzplanLogo" src="NetzplanLogo.png"/>
-    </a>
-  </div>
-</div> 
-
-  </div>
-  <div class="floating-logo">
-   <a href="Ausbildungsthemen.html" title="Zur Übersicht">
-    <img alt="Teccle Logo" id="teccle-logo" src="TeccleLogo.png" title="Teccle Group Logo"/>
-   </a>
-  </div>
-  <button class="mode-toggle" onclick="toggleMode()">
-   🌙 Dunkelmodus
-  </button>
-  <div class="container">
-    <div class="outer-container">
-      <div class="container">
-        <div class="outer-container">
-        <div class="container">
-   <main>
-    <header>
+</head>
+<body>
+  <button class="mode-toggle" onclick="toggleMode()">🌙 Dunkelmodus</button>
+  <div class="page-wrapper">
+    <aside class="sidebar" aria-label="Inhaltsverzeichnis">
+      <h2>Inhaltsverzeichnis</h2>
+      <nav class="sidebar-nav">
+        <a href="#einleitung">Einleitung</a>
+        <a href="#zahlenangaben">Zahlenangaben verstehen</a>
+        <a href="#leistungsaufnahme">Typische Leistungsaufnahme</a>
+        <a href="#Große USVs">Große USVs</a>
+      </nav>
+    </aside>
+    <main class="main-column">
+      <header class="page-header">
         <h1>06 - USV</h1>
-    </header>
-    <section>
-        <h2 class="section-title">Einleitung</h2>
+      </header>
+      <section class="content-section" id="einleitung">
+        <h2>Einleitung</h2>
         <p>Eine <b>USV (Unterbrechungsfreie Stromversorgung)</b> schützt IT-Systeme vor Stromausfällen, Spannungsschwankungen und Überspannungen.</p>
         <p>Sie überbrückt kurze Ausfälle mit Batteriestrom und sorgt dafür, dass Systeme geordnet heruntergefahren oder weiterbetrieben werden können, bis die Stromversorgung wieder stabil ist.</p>
         <p>In Unternehmensnetzwerken (wie bei Netzplan oder in Rechenzentren) ist die USV ein zentraler Bestandteil der <b>Datensicherheit</b> und <b>Systemverfügbarkeit</b>.</p>
-    </section>
-
-    <hr class="trennlinie">
-
-    <section>
-        <h2 class="section-title">1. Bedeutung der Zahlenangaben in USV-Beschreibungen (z. B. 700 / 1000/ 2200)</h2>
+      </section>
+      <section class="content-section" id="zahlenangaben">
+        <h2>1. Bedeutung der Zahlenangaben in USV-Beschreibungen (z. B. 700 / 1000 / 2200)</h2>
         <p>Die Zahlen geben die <b>Leistungskapazität der USV</b> an.</p>
-        <p>Diese Werte beziehen sich auf die<b> Scheinleistung</b>, gemessen in <b>VA (Voltampere)</b>.</p>
-        <p>Manchmal wird zusätzlich die <b>Wirkleistung</b> in <b>Watt (W) </b>angegeben.</p>
+        <p>Diese Werte beziehen sich auf die <b>Scheinleistung</b>, gemessen in <b>VA (Voltampere)</b>.</p>
+        <p>Manchmal wird zusätzlich die <b>Wirkleistung</b> in <b>Watt (W)</b> angegeben.</p>
         <ul>
-            <li>Beispiel:</li>
+          <li>
+            Beispiel:
             <ul>
-                <li><b>APC Back-UPS 700</b> &#8594; 700 VA ≈ 400 W</li>
-                <li><b>APC Smart-UPS 1000</b> &#8594; 1000 VA ≈ 600 W</li>
-                <li><b>APC Smart-UPS 2200</b> &#8594; 2200 VA ≈ 1980 W</li>
+              <li><b>APC Back-UPS 700</b> → 700 VA ~ 400 W</li>
+              <li><b>APC Smart-UPS 1000</b> → 1000 VA ~ 600 W</li>
+              <li><b>APC Smart-UPS 2200</b> → 2200 VA ~ 1980 W</li>
             </ul>
+          </li>
         </ul>
         <div class="note-box">
-            <p><b>Faustregel:</b><br>
-            Die tatsächliche nutzbare Leistung (in Watt) liegt meist bei 60-90 % des VA-Werts.<br>
-            Das hängt vom sogenannten <b>Leistungsfaktor (Power Factor)</b> ab, der angibt,
-            wie viel der Scheinleistung tatsächlich in nutzbare elektronische Arbeit umgesetzt wird.</p>
+          <p><b>Faustregel:</b><br/>
+          Die tatsächliche nutzbare Leistung (in Watt) liegt meist bei 60–90 % des VA-Werts.<br/>
+          Das hängt vom sogenannten <b>Leistungsfaktor (Power Factor)</b> ab, der angibt, wie viel der Scheinleistung tatsächlich in nutzbare elektronische Arbeit umgesetzt wird.</p>
         </div>
-        <br>
-        <b>Beispielhafte Berechnung:</b>
+        <p><b>Beispielhafte Berechnung:</b></p>
         <p>Eine USV mit <b>1000 VA</b> und einem <b>Leistungsfaktor von 0,8</b>:</p>
-        <p>&#8594; 1000 VA x 0,8 = <b>800 W</b> nutzbare Leistung.</p>
-    </section>
-
-    <hr class="trennlinie">
-
-    <section>
-        <h2 class="section-title">Typische Leistungsaufnahme von Geräten</h2>
+        <p>→ 1000 VA × 0,8 = <b>800 W</b> nutzbare Leistung.</p>
+      </section>
+      <section class="content-section" id="leistungsaufnahme">
+        <h2>2. Typische Leistungsaufnahme von Geräten</h2>
         <p>Bei der Dimensionierung einer USV muss man wissen, wie viel Stromverbrauch (Last) die angeschlossenen Geräte erzeugen.</p>
         <p>Typische Werte sind:</p>
-        <table style="width:100%; border-collapse:collapse;">
-            <thead>
-                <tr>
-                    <th style="text-align:left;">Gerätetyp</th>
-                    <th style="text-align:left;">Durchschnittliche Leistungsaufnahme</th>
-                    <th style="text-align:left;">Bemerkung</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>HP Server (z. B. Tower oder Rack)</td>
-                    <td>200-250 W</td>
-                    <td>Abhängig von CPU, RAM, Laufwerken</td>
-                </tr>
-            </tbody>
-            <tbody>
-                <tr>
-                    <td>Firewall (z. B. WatchGuard, Sophos)</td>
-                    <td>75-100 W</td>
-                    <td>Modelle mit redundanten Netzteilen evtl. mehr</td>
-                </tr>
-            </tbody>
-            <tbody>
-                <tr>
-                    <td>Switch (z. B. 24-Port, ohne PoE)</td>
-                    <td>30-50 W</td>
-                    <td>Bei PoE bis zu 200 W möglich</td>
-                </tr>
-            </tbody>
-            <tbody>
-                <tr>
-                    <td>NAS-System (z. B. QNAP, Synology)</td>
-                    <td>50-100 W</td>
-                    <td>Je nach Anzahl der Festplatten</td>
-                </tr>
-            </tbody>
-            <tbody>
-                <tr>
-                    <td>Monitor / Arbeitsplatzrechner</td>
-                    <td>60-150 W</td>
-                    <td>Nur relevant, wenn ebenfalls abgesichert werden soll</td>
-                </tr>
-            </tbody>
+        <table>
+          <thead>
+            <tr>
+              <th>Gerätetyp</th>
+              <th>Durchschnittliche Leistungsaufnahme</th>
+              <th>Bemerkung</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>HP Server (z. B. Tower oder Rack)</td>
+              <td>200–250 W</td>
+              <td>Abhängig von CPU, RAM, Laufwerken</td>
+            </tr>
+            <tr>
+              <td>Firewall (z. B. WatchGuard, Sophos)</td>
+              <td>75–100 W</td>
+              <td>Modelle mit redundanten Netzteilen ggf. mehr</td>
+            </tr>
+            <tr>
+              <td>Switch (z. B. 24-Port, ohne PoE)</td>
+              <td>30–50 W</td>
+              <td>Bei PoE bis zu 200 W möglich</td>
+            </tr>
+            <tr>
+              <td>NAS-System (z. B. QNAP, Synology)</td>
+              <td>50–100 W</td>
+              <td>Je nach Anzahl der Festplatten</td>
+            </tr>
+            <tr>
+              <td>Monitor / Arbeitsplatzrechner</td>
+              <td>60–150 W</td>
+              <td>Nur relevant, wenn ebenfalls abgesichert werden soll</td>
+            </tr>
+          </tbody>
         </table>
-    </section>
-
-    <br>
-        <div class="bottom-links">
-          <a href="Ausbildungsthemen.html" class="back-link">&lArr; Zurück zum Inhaltsverzeichnis</a>
-          <a href="04 - Verschlüsselung.html" target="blank" class="back-link">&larr; Zurück zu 04 - Verschlüsselung</a>
-          <a href="05 - Datensicherungskonzepte.html" target="blank" class="back-link">05 - Datensicherungskonzepte &#8594;</a>
+        <b>Beispiel:</b>
+        <p>Wenn du einen Server (250 W) und eine Firewall (100) W absichern willst:<br/>
+        250 W + 100 W = 350 W Gesamtlast ⟶<br/>
+        Dafür reicht eine <b>700 VA (≈400 W)</b> USV noch aus, aber mit wenig Reserve.</p>
+        <div class="note-box">
+          <p><b>Tipp:</b><br/>
+          Plane immer <b>20-30 % Reserve</b> ein, damit die USV nicht dauerhaft am Limit läuft.</p>
         </div>
-      </main>
+      </section>
+      <section class="content-section" id="Große USVs">
+        <h2>3. Große USVs (>3000 VA)</h2>
+        <p>Ab einer Leistung von etwa <b>3000 VA (≈2,7 kW)</b> muss man auf die <b>Netzanschlussart</b> achten:</p>
+        <ul>
+          <li>Solche Systeme benötigen <b>Drehstrom (3-phasig)</b>.</li>
+          <li>Einfache Steckdosen (230 V / 16 A) reichen nicht mehr aus.</li>
+          <li>Diese USVs werden oft <b>fest installiert</b> und in <b>Serverräumen</b> betrieben.</li>
+        </ul>
+        <p><b>Beachten:</b>
+        <ul>
+          <li><b>Fachgerechter Anschluss durch Elektriker erforderlich!</b></li>
+          <li><b>Separate Absicherung</b> im Stromkreis.</li>
+          <li><b>Batteriemodule</b> sind oft extern und sehr schwer ⟶ Transport und Aufstellung planen.</li>
+        </ul>
+      </section>
+      <section class="content-section">
+        <h2>4. Anschaltstrom & Sicherungsauslösung</h2>
+        <p>Beim <b>Einschalten großer USVs oder Lasten</b> (z. B. Server, Netzteile, Staubsauger) fliest ein kurzzeitig <b>hoher Einschaltstrom</b>.<br/>
+          Dieser sogenannte <b>Anschaltstrom (Inrush Current)</b> kann <b>kurzzeitig das Mehrfache des Nennstroms</b> betragen.</p>
+        <div class="note-box">
+          <p><b>Folge:</b><br/>
+            Die <b>Sicherung</b> kann auslösen, obwohl die normale Betriebsleistung unter der Absicherungsgrenze liegt.</p>
+        </div>
+        <p><b>Beispiel:</b><br/>
+        Eine USV mit 1000 W kann beim Einschalten kurzfristig 20-30 A ziehen, obwohl sie später nur 4-5 A benötigt.</p>
+      </section>
+      <div class="bottom-links">
+        <a href="Ausbildungsthemen.html" class="back-link">⟵ Zurück zum Inhaltsverzeichnis</a>
+        <a href="04 - Verschlüsselung.html" target="_blank" class="back-link">⟵ Zurück zu 04 - Verschlüsselung</a>
+        <a href="05 - Datensicherungskonzepte.html" target="_blank" class="back-link">05 - Datensicherungskonzepte ⟶</a>
+      </div>
+    </main>
+    <aside class="right-column">
+      <div class="logo-stack">
+        <a class="logo-card" href="https://www.teccle-group.de" target="_blank" rel="noopener">
+          <img id="teccle-logo" src="TeccleLogo.png" alt="Teccle Group Logo"/>
+        </a>
+        <span class="logo-divider" aria-hidden="true"></span>
+        <a class="logo-card" href="https://www.netzplan.de" target="_blank" rel="noopener">
+          <img src="NetzplanLogo.png" alt="Netzplan Logo"/>
+        </a>
+      </div>
+      <div class="info-box">
+        <strong>Mehr entdecken</strong>
+        Direkt zu Support, Dokumentation oder zurück zur Übersicht.
+        <div class="info-links">
+          <a href="mailto:support@teccle-group.de">Support kontaktieren</a>
+          <br>
+          <a href="https://www.netzplan.de" target="_blank" rel="noopener">Dokumentation</a>
+          <br>
+          <a href="Ausbildungsthemen.html">Zur Übersicht</a>
+        </div>
+      </div>
+    </aside>
+  </div>
+  <script>
+    function setLogoByMode() {
+      const logo = document.getElementById('teccle-logo');
+      if (!logo) return;
+      logo.src = document.body.classList.contains('dark') ? 'TeccleLogoBlack.png' : 'TeccleLogo.png';
+    }
+    function toggleMode() {
+      document.body.classList.toggle('dark');
+      const btn = document.querySelector('.mode-toggle');
+      if (btn) {
+        btn.textContent = document.body.classList.contains('dark') ? '☀️ Hellmodus' : '🌙 Dunkelmodus';
+      }
+      setLogoByMode();
+    }
+    window.addEventListener('DOMContentLoaded', () => {
+      setLogoByMode();
+    });
+  </script>
+</main>
     </div>
     <script>
     function setLogoByMode() {
