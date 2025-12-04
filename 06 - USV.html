@@ -1,403 +1,13 @@
 <!DOCTYPE html>
-<html lang="de"><head>
-  <meta charset="utf-8"/>
+<html lang="de">
+
+<head>
+  <meta charset="utf-8" />
   <title>06 - USV</title>
-  <link href="Icon.ico" rel="icon" type="image/x-icon"/>
-  <style>
-   :root {
-      --accent: #ff5500;
-      --accent-soft: rgba(255, 85, 0, 0.85);
-      --bg-gradient-start: #f6f6f6;
-      --bg-gradient-end: #ebebeb;
-      --text-base: #333333;
-      --text-muted: #555555;
-      --card-bg: rgba(255, 255, 255, 0.92);
-      --surface: #ffffff;
-      --border-subtle: #e1e1e1;
-      --shadow-soft: 0 12px 32px rgba(15, 23, 42, 0.08);
-      --section-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
-      --link: #ff7033;
-      --link-hover: #d9520c;
-    }
-    body.dark {
-      --accent: #ff7b33;
-      --accent-soft: rgba(255, 110, 45, 0.88);
-      --bg-gradient-start: #1f2933;
-      --bg-gradient-end: #111827;
-      --text-base: #f5f7fa;
-      --text-muted: #cbd5f5;
-      --card-bg: rgba(17, 24, 39, 0.82);
-      --surface: rgba(17, 24, 39, 0.82);
-      --border-subtle: rgba(148, 163, 184, 0.28);
-      --shadow-soft: 0 20px 40px rgba(2, 6, 23, 0.55);
-      --section-shadow: 0 18px 38px rgba(15, 23, 42, 0.55);
-      --link: #ff955a;
-      --link-hover: #ffbf8f;
-    }
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      font-family: "Inter", "Segoe UI", Arial, sans-serif;
-      background: linear-gradient(180deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
-      color: var(--text-base);
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      transition: background 0.3s ease, color 0.3s ease;
-    }
-    a {
-      color: var(--link);
-      text-decoration: none;
-      transition: color 0.2s ease, opacity 0.2s ease;
-    }
-    a:hover,
-    a:focus {
-      color: var(--link-hover);
-    }
-    .mode-toggle {
-      position: fixed;
-      top: 24px;
-      right: 24px;
-      z-index: 100;
-      background: rgba(17, 24, 39, 0.75);
-      color: #ffffff;
-      border: none;
-      border-radius: 999px;
-      padding: 10px 18px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      backdrop-filter: blur(12px);
-      transition: background 0.3s ease, transform 0.2s ease;
-    }
-    .mode-toggle:hover {
-      transform: translateY(-2px);
-    }
-    body.dark .mode-toggle {
-      background: rgba(255, 255, 255, 0.18);
-      color: #ffffff;
-    }
-    .page-wrapper {
-      display: grid;
-      grid-template-columns: minmax(260px, 340px) minmax(0, 14fr) minmax(170px, 200px);
-      grid-template-areas: "sidebar main right";
-      gap: clamp(1.5rem, 4vw, 2.5rem);
-      width: min(1820px, 100%);
-      padding: clamp(2rem, 5vw, 3.5rem) clamp(1.5rem, 4vw, 3rem);
-    }
-    .sidebar {
-      grid-area: sidebar;
-      background: var(--accent-soft);
-      color: #ffffff;
-      border-radius: 1rem;
-      padding: 1.75rem;
-      box-shadow: 0 18px 36px rgba(255, 85, 0, 0.18);
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-      position: sticky;
-      top: clamp(1.5rem, 3vw, 3rem);
-      height: fit-content;
-    }
-    .sidebar h2 {
-      font-size: 1.4rem;
-      font-weight: 700;
-      margin: 0;
-    }
-    .sidebar-nav {
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-    }
-    .sidebar-nav a {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.55rem 0.85rem;
-      border-radius: 0.65rem;
-      background: rgba(255, 255, 255, 0.12);
-      color: inherit;
-      opacity: 0.95;
-      transition: transform 0.2s ease, opacity 0.2s ease, background 0.2s ease;
-    }
-    .sidebar-nav a::before {
-      content: "›";
-      font-size: 1.1rem;
-      opacity: 0.75;
-      transition: transform 0.2s ease;
-    }
-    .sidebar-nav a:hover,
-    .sidebar-nav a:focus {
-      opacity: 1;
-      transform: translateX(4px);
-      background: rgba(255, 255, 255, 0.2);
-    }
-    .sidebar-nav a:hover::before,
-    .sidebar-nav a:focus::before {
-      transform: translateX(3px);
-    }
-    .main-column {
-      grid-area: main;
-      background: var(--card-bg);
-      border-radius: 1.2rem;
-      box-shadow: var(--shadow-soft);
-      padding: clamp(2rem, 4vw, 3rem);
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-    }
-    .page-header {
-      text-align: center;
-    }
-    .page-header h1 {
-      margin: 0;
-      font-size: clamp(2rem, 4vw, 2.6rem);
-      font-weight: 700;
-      color: var(--text-base);
-    }
-    .content-section {
-      background: var(--surface);
-      border-radius: 1rem;
-      border: 1px solid var(--border-subtle);
-      box-shadow: var(--section-shadow);
-      padding: clamp(1.5rem, 3vw, 2rem);
-      display: flex;
-      flex-direction: column;
-      gap: 0.9rem;
-    }
-    .content-section h2 {
-      margin: 0;
-      font-size: 1.4rem;
-      color: var(--text-base);
-      border-left: 4px solid var(--accent);
-      padding-left: 0.75rem;
-      line-height: 1.3;
-    }
-    .content-section p {
-      margin: 0;
-      color: var(--text-muted);
-      line-height: 1.7;
-    }
-    .content-section b {
-      color: var(--accent);
-    }
-    .note-box {
-      border-left: 4px solid var(--accent);
-      background: rgba(255, 137, 85, 0.12);
-      padding: 1rem 1.25rem;
-      border-radius: 0.75rem;
-      color: var(--text-muted);
-    }
-    body.dark .note-box {
-      background: rgba(255, 137, 85, 0.18);
-      color: #f8f9ff;
-    }
-    .content-section ul {
-      margin: 0.4rem 0;
-      padding-left: 1.2rem;
-      color: var(--text-muted);
-    }
-    .content-section ul ul {
-      margin: 0.3rem 0;
-      padding-left: 1.4rem;
-      color: rgba(0, 0, 0, 0.55);
-    }
-    .content-section ul li {
-      margin-bottom: 0.25cm;
-    }
-    body.dark .content-section ul ul {
-      color: rgba(255, 255, 255, 0.7);
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      border: 1px solid var(--border-subtle);
-      border-radius: 0.75rem;
-      overflow: hidden;
-      font-size: 0.95rem;
-    }
-    table thead {
-      background: rgba(0, 0, 0, 0.04);
-    }
-    table th,
-    table td {
-      padding: 0.75rem 1rem;
-      color: var(--text-muted);
-      border-bottom: 1px solid var(--border-subtle);
-    }
-    table th:nth-child(2),
-    table td:nth-child(2) {
-      text-align: center;
-    }
-    table tbody tr:last-child td {
-      border-bottom: none;
-    }
-    body.dark table thead {
-      background: rgba(148, 163, 184, 0.15);
-    }
-    .bottom-links {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.75rem;
-      text-align: center;
-    }
-    .bottom-links .back-link {
-      background: rgba(255, 112, 51, 0.1);
-      color: var(--link);
-      padding: 0.75rem 1.2rem;
-      border-radius: 0.75rem;
-      border: 1px solid rgba(255, 112, 51, 0.2);
-      transition: transform 0.2s ease, background 0.2s ease;
-      font-weight: 600;
-    }
-    .bottom-links .back-link:hover {
-      transform: translateY(-2px);
-      background: rgba(255, 112, 51, 0.18);
-    }
-    .right-column {
-      grid-area: right;
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-      border-left: 1px solid var(--border-subtle);
-      padding-left: clamp(1rem, 3vw, 1.5rem);
-    }
-    .logo-stack {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1.6rem;
-      width: 100%;
-    }
-    .logo-card {
-      width: 100%;
-      background: var(--surface);
-      border-radius: 0.9rem;
-      padding: 1.4rem 1.2rem;
-      box-shadow: var(--section-shadow);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .logo-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 16px 28px rgba(15, 23, 42, 0.12);
-    }
-    .logo-card img {
-      max-width: 140px;
-      width: 100%;
-      height: auto;
-      object-fit: contain;
-    }
-    .logo-divider {
-      width: 60%;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--border-subtle), transparent);
-    }
-    .info-box {
-      background: var(--surface);
-      border-radius: 0.9rem;
-      padding: 1.4rem;
-      box-shadow: var(--section-shadow);
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      font-size: 0.95rem;
-      color: var(--text-muted);
-    }
-    .info-box strong {
-      display: block;
-      font-size: 1.05rem;
-      color: var(--text-base);
-    }
-    .info-links {
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-    }
-    .info-links a {
-      color: var(--link);
-      font-weight: 600;
-    }
-    .info-links a:hover {
-      opacity: 0.85;
-    }
-    body.dark .sidebar {
-      background: linear-gradient(160deg, rgba(188, 72, 0, 0.904), rgba(180, 70, 5, 0.78));
-      box-shadow: 0 22px 44px rgba(10, 10, 18, 0.6);
-    }
-    body.dark .sidebar-nav a {
-      background: rgba(255, 170, 120, 0.16);
-    }
-    body.dark .sidebar-nav a:hover,
-    body.dark .sidebar-nav a:focus {
-      background: rgba(255, 184, 140, 0.26);
-    }
-    body.dark .content-section {
-      background: var(--surface);
-    }
-    body.dark .logo-card,
-    body.dark .info-box {
-      background: var(--surface);
-    }
-    body.dark .logo-divider {
-      background: linear-gradient(90deg, transparent, rgba(148, 163, 184, 0.4), transparent);
-    }
-    @media (max-width: 1100px) {
-      .page-wrapper {
-        grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
-        grid-template-areas:
-          "sidebar main"
-          "sidebar right";
-      }
-      .right-column {
-        border-left: none;
-        border-top: 1px solid var(--border-subtle);
-        padding-left: 0;
-        padding-top: clamp(1.5rem, 4vw, 2rem);
-      }
-    }
-    @media (max-width: 860px) {
-      .page-wrapper {
-        grid-template-columns: 1fr;
-        grid-template-areas:
-          "sidebar"
-          "main"
-          "right";
-      }
-      .sidebar {
-        position: relative;
-        top: 0;
-      }
-      .right-column {
-        border-top: none;
-        padding-top: 0;
-      }
-    }
-    @media (max-width: 600px) {
-      .mode-toggle {
-        top: 16px;
-        right: 16px;
-        padding: 8px 14px;
-      }
-      .main-column {
-        padding: 1.75rem;
-      }
-      .content-section {
-        padding: 1.35rem 1.25rem;
-      }
-      .logo-card img {
-        max-width: 120px;
-      }
-    }
-  </style>
+  <link href="Icon.ico" rel="icon" type="image/x-icon" />
+  <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
   <button class="mode-toggle" onclick="toggleMode()">🌙 Dunkelmodus</button>
   <div class="page-wrapper">
@@ -407,7 +17,13 @@
         <a href="#einleitung">Einleitung</a>
         <a href="#zahlenangaben">Zahlenangaben verstehen</a>
         <a href="#leistungsaufnahme">Typische Leistungsaufnahme</a>
-        <a href="#Große USVs">Große USVs</a>
+        <a href="#große_usvs">Große USVs</a>
+        <a href="#anschaltstrom_sicherungsauslösung">Anschaltstrom & Sicherungsauslösung</a>
+        <a href="#risiko_usv_tests">Risiko bei USV-Tests</a>
+        <a href="#kalibrierung_belastungstest">Kalibrierung & Belastungstest</a>
+        <a href="#unterschied_online_offline_usv">Unterschied zwischen Online- und Offline-USV</a>
+        <a href="#automatisches_herunterfahren_system">Automatisches Herunterfahren von Systemen</a>
+        <a href="#zusammenfassung">Zusammenfassung - Merksätze für die Prüfung</a>
       </nav>
     </aside>
     <main class="main-column">
@@ -416,9 +32,12 @@
       </header>
       <section class="content-section" id="einleitung">
         <h2>Einleitung</h2>
-        <p>Eine <b>USV (Unterbrechungsfreie Stromversorgung)</b> schützt IT-Systeme vor Stromausfällen, Spannungsschwankungen und Überspannungen.</p>
-        <p>Sie überbrückt kurze Ausfälle mit Batteriestrom und sorgt dafür, dass Systeme geordnet heruntergefahren oder weiterbetrieben werden können, bis die Stromversorgung wieder stabil ist.</p>
-        <p>In Unternehmensnetzwerken (wie bei Netzplan oder in Rechenzentren) ist die USV ein zentraler Bestandteil der <b>Datensicherheit</b> und <b>Systemverfügbarkeit</b>.</p>
+        <p>Eine <b>USV (Unterbrechungsfreie Stromversorgung)</b> schützt IT-Systeme vor Stromausfällen,
+          Spannungsschwankungen und Überspannungen.</p>
+        <p>Sie überbrückt kurze Ausfälle mit Batteriestrom und sorgt dafür, dass Systeme geordnet heruntergefahren oder
+          weiterbetrieben werden können, bis die Stromversorgung wieder stabil ist.</p>
+        <p>In Unternehmensnetzwerken (wie bei Netzplan oder in Rechenzentren) ist die USV ein zentraler Bestandteil der
+          <b>Datensicherheit</b> und <b>Systemverfügbarkeit</b>.</p>
       </section>
       <section class="content-section" id="zahlenangaben">
         <h2>1. Bedeutung der Zahlenangaben in USV-Beschreibungen (z. B. 700 / 1000 / 2200)</h2>
@@ -431,22 +50,24 @@
             <ul>
               <li><b>APC Back-UPS 700</b> → 700 VA ~ 400 W</li>
               <li><b>APC Smart-UPS 1000</b> → 1000 VA ~ 600 W</li>
-              <li><b>APC Smart-UPS 2200</b> → 2200 VA ~ 1980 W</li>
+              <li><b>APC Smart-UPS 2200</b> → 2200 VA ~ je nach Modelltyp zwischen 1600-1980 W</li>
             </ul>
           </li>
         </ul>
         <div class="note-box">
-          <p><b>Faustregel:</b><br/>
-          Die tatsächliche nutzbare Leistung (in Watt) liegt meist bei 60–90 % des VA-Werts.<br/>
-          Das hängt vom sogenannten <b>Leistungsfaktor (Power Factor)</b> ab, der angibt, wie viel der Scheinleistung tatsächlich in nutzbare elektronische Arbeit umgesetzt wird.</p>
+          <p><strong>Faustregel:</strong><br />
+            Die tatsächliche nutzbare Leistung (in Watt) liegt meist bei 60–90 % des VA-Werts.<br />
+            Das hängt vom sogenannten <b>Leistungsfaktor (Power Factor)</b> ab, der angibt, wie viel der Scheinleistung
+            tatsächlich in nutzbare elektronische Arbeit umgesetzt wird.</p>
         </div>
-        <p><b>Beispielhafte Berechnung:</b></p>
+        <p><strong>Beispielhafte Berechnung:</strong></p>
         <p>Eine USV mit <b>1000 VA</b> und einem <b>Leistungsfaktor von 0,8</b>:</p>
         <p>→ 1000 VA × 0,8 = <b>800 W</b> nutzbare Leistung.</p>
       </section>
       <section class="content-section" id="leistungsaufnahme">
         <h2>2. Typische Leistungsaufnahme von Geräten</h2>
-        <p>Bei der Dimensionierung einer USV muss man wissen, wie viel Stromverbrauch (Last) die angeschlossenen Geräte erzeugen.</p>
+        <p>Bei der Dimensionierung einer USV muss man wissen, wie viel Stromverbrauch (Last) die angeschlossenen Geräte
+          erzeugen.</p>
         <p>Typische Werte sind:</p>
         <table>
           <thead>
@@ -484,16 +105,16 @@
             </tr>
           </tbody>
         </table>
-        <b>Beispiel:</b>
-        <p>Wenn du einen Server (250 W) und eine Firewall (100) W absichern willst:<br/>
-        250 W + 100 W = 350 W Gesamtlast ⟶<br/>
-        Dafür reicht eine <b>700 VA (≈400 W)</b> USV noch aus, aber mit wenig Reserve.</p>
+        <strong>Beispiel:</strong>
+        <p>Wenn du einen Server (250 W) und eine Firewall (100 W) absichern willst:<br />
+          250 W + 100 W = 350 W Gesamtlast ⟶<br />
+          Dafür reicht eine <b>700 VA (≈400 W)</b> USV noch aus, aber mit wenig Reserve.</p>
         <div class="note-box">
-          <p><b>Tipp:</b><br/>
-          Plane immer <b>20-30 % Reserve</b> ein, damit die USV nicht dauerhaft am Limit läuft.</p>
+          <p><strong>Tipp:</strong><br />
+            Plane immer <b>20-30 % Reserve</b> ein, damit die USV nicht dauerhaft am Limit läuft.</p>
         </div>
       </section>
-      <section class="content-section" id="Große USVs">
+      <section class="content-section" id="große_usvs">
         <h2>3. Große USVs (>3000 VA)</h2>
         <p>Ab einer Leistung von etwa <b>3000 VA (≈2,7 kW)</b> muss man auf die <b>Netzanschlussart</b> achten:</p>
         <ul>
@@ -501,38 +122,255 @@
           <li>Einfache Steckdosen (230 V / 16 A) reichen nicht mehr aus.</li>
           <li>Diese USVs werden oft <b>fest installiert</b> und in <b>Serverräumen</b> betrieben.</li>
         </ul>
-        <p><b>Beachten:</b>
+        <p><strong>Beachten:</strong>
         <ul>
           <li><b>Fachgerechter Anschluss durch Elektriker erforderlich!</b></li>
           <li><b>Separate Absicherung</b> im Stromkreis.</li>
           <li><b>Batteriemodule</b> sind oft extern und sehr schwer ⟶ Transport und Aufstellung planen.</li>
         </ul>
       </section>
-      <section class="content-section">
+      <section class="content-section" id="anschaltstrom_sicherungsauslösung">
         <h2>4. Anschaltstrom & Sicherungsauslösung</h2>
-        <p>Beim <b>Einschalten großer USVs oder Lasten</b> (z. B. Server, Netzteile, Staubsauger) fliest ein kurzzeitig <b>hoher Einschaltstrom</b>.<br/>
-          Dieser sogenannte <b>Anschaltstrom (Inrush Current)</b> kann <b>kurzzeitig das Mehrfache des Nennstroms</b> betragen.</p>
+        <p>Beim <b>Einschalten großer USVs oder Lasten</b> (z. B. Server, Netzteile, Staubsauger) fliest ein kurzzeitig
+          <b>hoher Einschaltstrom</b>.<br />
+          Dieser sogenannte <b>Anschaltstrom (Inrush Current)</b> kann <b>kurzzeitig das Mehrfache des Nennstroms</b>
+          betragen.</p>
         <div class="note-box">
-          <p><b>Folge:</b><br/>
-            Die <b>Sicherung</b> kann auslösen, obwohl die normale Betriebsleistung unter der Absicherungsgrenze liegt.</p>
+          <p><strong>Folge:</strong><br />
+            Die <b>Sicherung</b> kann auslösen, obwohl die normale Betriebsleistung unter der Absicherungsgrenze liegt.
+          </p>
         </div>
-        <p><b>Beispiel:</b><br/>
-        Eine USV mit 1000 W kann beim Einschalten kurzfristig 20-30 A ziehen, obwohl sie später nur 4-5 A benötigt.</p>
+        <p><strong>Beispiel:</strong><br />
+          Eine USV mit 1000 W kann beim Einschalten kurzfristig 20-30 A ziehen, obwohl sie später nur 4-5 A benötigt.
+        </p>
+        <p><strong>Praxis-Tipp</strong><br />
+          ⟶ Beim Testen großer USVs <b>keine empfindlichen Stromkreise</b> (z. B. Büroräume mit PCs) verwenden.</p>
+      </section>
+      <section class="content-section" id="risiko_usv_tests">
+        <h2>5. Risiko bei USV-Tests</h2>
+        <p>Ein <b>USV-Test</b> simuliert einen Stromausfall, um die Batterien zu prüfen.<br>
+        Dabei schaltet die USV auf Batteriebetrieb um.</p>
+        <div class="note-box">
+          <p><strong>Gefahr:</strong><br>
+          Wenn die Batterie <b>alt oder defekt ist</b>, kann sie <b>sofort zusammenbrechen</b> ⟶<br>
+          die USV <b>schaltet komplett ab</b> ⟶<br>
+          Server, Firewalls, NAS-Systeme verlieren Strom ⟶ Datenverlust oder Absturz!</p>
+        </div>
+        <strong>Deshalb:</strong>
+        <ul>
+          <li>Test <b>nicht im Livebetrieb</b> bei <b>unbekannten oder alten USVs</b> durchführen.</li>
+          <li>Erst <b>Wartung / Batterietest</b> in einem <b>getrennten Testumfeld</b> durchführen.</li>
+        </ul>
+      </section>
+      <section class="content-section" id="kalibrierung_belastungstest">
+        <h2>6. Kalibrierung & Belastungstest</h2>
+        <p>Um eine USV richtig zu prüfen, kann man mit der <b>APC PowerChute Software</b> (oder vergleichbaren Tools) eine <b>Kalibrierung</b> durchführen.</p>
+        <strong>Schritte:</strong>
+        <ol class="fette-zahlen">
+          <li><span>USV an den Rechner anschließen (USB oder seriell).</span></li>
+          <li><span><b>APC Tools installieren.</b></span></li>
+          <li><span>Im Tool eine <b>Batteriekalibrierung</b> starten.<br>
+            Dabei entlädt sich die USV kontrolliert und misst die tatsächliche Batteriekapazität.</span></li>
+          <li><span><b>Als Lastengenerator</b> kann man einen <b>Staubsauger</b> oder <b>Heizlüfter</b> verwenden, um eine realistische Belastung zu simulieren.</span></li>
+        </ol>
+        <div class="note-box">
+          <p>So erkennt man, ob die USV noch die volle Kapazität besitzt oder ob die Batterie getauscht werden muss.</p>
+        </div>
+      </section>
+      <section class="content-section" id="unterschied_online_offline_usv">
+        <h2>7. Unterschied zwischen Online- und Offline-USV</h2>
+        <p>USVs unterscheiden sich in ihrer <b>Arbeitsweise</b>.<br>
+        Man unterscheidet vor allem:</p>
+        <h3>7.1 Offline-USV (VFD - Voltage and Frequency Dependent)</h3>
+        <ul>
+          <li>Normalbetrieb: Geräte werden direkt aus dem Stromnetz versorgt.</li>
+          <li>Bei Stromausfall: USV schaltet in wenigen Millisekunden auf Batterie um.</li>
+          <li>Kostengünstig, aber es gibt eine <b>kurze Umschaltzeit</b>.</li>
+          <li>Schutz vor Stromausfall und Spannungsspitzen, <b>aber keine Spannungsregulierung</b>.</li>
+        </ul>
+        <div class="note-box">
+          <p><strong>Typisch:</strong> Back-UPS-Modelle (z. B. für Büro-PCs)</p>
+        </div>
+        <strong>Vorteile:</strong>
+        <ul>
+          <li>Günstig, effizient, wartungsarm</li>
+        </ul>
+        <strong>Nachteile:</strong>
+        <ul>
+          <li>Kein Schutz vor Spannungsschwankungen</li>
+          <li>Kleine Umschaltzeit (kann empfindliche Server stören)</li>
+        </ul>
+      </section>
+      <section class="content-section">
+        <h3>7.2 Line-Interactive-USV (VI - Voltage Independent)</h3>
+        <p>Eine <b>Line-Interactive-USV</b> ist sowas wie die "intelligentere große Schwester" der Offline-USV. Sie hängt normalerweise direkt am Stromnetz, überwacht aber aktiv die Spannung und kann sie innerhalb gewisser Grenzen <b>anheben (Boost)</b> oder <b>absenken (Buck)</b>, ohne direkt auf die Batterie umzuschalten. Erst wenn die Netzspannung wirklich ausfällt oder außerhalb eines definierten Bereiches liegt, übernimmt der Wechselrichter und speist die Verbraucher aus der Batterie.</p>
+        <p>Die Norm bezeichnet diesen Typ als <b>VI - Voltage Independent:</b><br>
+        Die Ausgangsspannung wird in einem weiten Bereich <b>von der Eingangsspannung entkoppelt</b>, die Frequenz folgt aber weiterhin dem Netz (im Gegensatz zur Online-USV, die beides entkoppelt).</p>
+        <hr class="trennlinie">
+        <strong>Funktionsprinzip (vereinfachtes Modell)</strong>
+        Im Inneren passiert im Normalbetrieb etwa Folgendes:
+        <ul>
+          <li><b>Netz ⟶ AVR/Autotransformator ⟶ Ausgang</b><br>
+          Die Verbraucher werden direkt aus dem Netz versorgt. Dazwischen hängt meist ein <b>Autotransformator mit Stufenumschaltung</b> (AVR - Automatic Voltage Regulation), der kleine Spannungsschwankungen ausgleicht.</li>
+          <li><b>Batterie & Wechselrichter sind "bereit"</b><br>
+          Die Batterie wird im Hintergrund geladen, der Wechselrichter ist betriebsbereit, speist aber im Normalfall <b>nicht</b> dauerhaft den Ausgang.</li>
+          <li><b>Spannungskorrektur ohne Batteriebetrieb</b><br>
+          Wenn die Eingangsspannung z. B. auf 200 V absackt oder auf 250 V steigt, kann der AVR:</li>
+          <ul>
+            <li>Im <b>Boost-Modus</b> die Spannung anheben</li>
+            <li>im <b>Buck-Modus</b> die Spannung absenken<br>
+            - und das alles ohne dass auf Batterie umgeschaltet werden muss.</li>
+          </ul>
+          <li><b>Netzausfall / schwere Störung</b><br>
+          Fällt das Netz aus oder liegt die Spannung völlig außerhalb des korrigierbaren Bereichs, wird in sehr kurzer Zeit<br>
+        ⟶ vom Netzpfad auf den <b>Wechselrichter + Batterie</b> umgeschaltet.</li>
+        </ul>
+        <p>Typische <b>Umschaltzeiten</b> liegen etwa bei <b>2-4 ms</b>, bei manchen Geräten bis ~10 ms. Das reicht für die meisten IT-Geräte (Netzteile puffern kurz), ist aber nicht ganz so unterbrechungsfrei wie eine Online-USV.</p>
+        <hr class="trennlinie">
+        <strong>Verhalten bei verschiedenen Störungen</strong>
+        <p>Damit du es dir gut merken kannst, hier das Verhalten im Vergleich:</p>
+        <ul>
+          <li><b>Leichte Unterspannung/Überspannung</b></li>
+          <ul>
+            <li>AVR regelt hoch oder runter (Boost/Buck)</li>
+            <li>Keine Batterienutzung ⟶ Batterie wird geschont</li>
+            <li>Ausgangsspannung bleibt relativ stabil</li>
+          </ul>
+          <li><b>Netzausfall / sehr starke Spannungsschwankungen</b></li>
+          <ul>
+            <li>Kurzes Umschalten auf Wechselrichterbetrieb</li>
+            <li>Verbraucher hängen dann an Batterie + Wechselrichter</li>
+            <li>Nach Rückkehr des Netzes: Rückschalten auf Netz mit AVR, Batterie wird wieder geladen</li>
+            </ul>
+          <li><b>Frequenzschwankungen</b></li>
+          <ul>
+            <li>Frequenz folgt in der Regel dem Netz (im Gegensatz zur Online-USV, die eine eigene, sehr stabile Frequenz erzeugt)</li>
+          </ul>
+        </ul>
+        <hr class="trennlinie">
+        <strong>Vor- und Nachteile der Line-Interactive-USV</strong>
+        <strong>Vorteile:</strong>
+        <ul>
+          <li><b>Besserer Schutz als Offline-USV</b><br>
+          Spannungsschwankungen werden aktiv korrigiert, ohne direkt auf die Batterie zu gehen.</li>
+          <li><b>Schonung der Batterie</b><br>
+          Durch den AVR muss die USV nicht bei jeder kleinen Schwankung auf Batterie laufen ⟶ längere Batterielebensdauer.</li>
+          <li><b>Schnelle Umschaltzeiten</b><br>
+          Deutlich schneller als einfache Offline-USVs, für typische IT-Lasten völlig ausreichend.</li>
+          <li><b>Gutes Preis-/Leistungsverhältnis</b><br>
+          Deutlich günstiger als Online-Doppelwandler-USVs, aber mit spürbar besserem Schutz als die ganz einfachen Modelle.</li>
+        </ul>
+        <strong>Nachteile:</strong>
+        <ul>
+          <li><b>Keine echte Doppelwandlung</b><br>
+          Der Ausgang hängt im Normalbetrieb immer noch "irgendwie" am Netz - starke Oberschwindungen oder Frequenzprobleme werden nicht so sauber gefiltert wie bei einer Online-USV.</li>
+          <li><b>Kurze, aber vorhandene Umschaltzeit</b><br>
+          Es gibt trotzdem einen sehr kurzen Moment beim Umschalten. Für Server/Netzwerkgeräte normalerweise umproblematisch, für ganz empfindliche Spezialgeräte kann eine Online-USV sinnvoller sein.</li>
+          <li><b>Qualität stark modellabhängig</b><br>
+          Günstige Geräte haben manchmal nur "Pseudo-Sinus" am Ausgang im Batteriebetrieb, höherwertige liefern eine <b>reine Sinuswelle.</b> Für Server/Netzteile ist sinusförmiger Output klar zu bevorzugen.</li>
+        </ul>
+        <hr class="trennlinie">
+        <strong>Typische Einsatzszenarien</strong>
+        <p>Line-Interactive-USVs sind der Standard in vielen kleinen und mittleren IT-Umgebungen, z. B.:</p>
+        <ul>
+          <li><b>Kleine Serverräume</b><br>
+          1-3 physische Server, ein paar Switches und eine Firewall - typisches KMU-Setup.</li>
+          <li><b>Netzwerk-Infrastruktur</b><br>
+          Switches, Firewalls, Router, WLAN-Controller, NAS-Systeme.</li>
+          <li><b>Einzelne wichtige Workstations</b><br>
+          z. B. Buchhaltung, Entwicklung, Leitstand-PCs, auf denen niemand plötzliche Abstürze mag.</li>
+          <li><b>Kleinere Racks in Außenstandorten</b><br>
+          z. B. Filialen, kleinere Büros, wo eine Online-USV "Overkill" wäre.</li>
+        </ul>
+        <p><strong>Kurz gesagt:</strong><br>
+        Wenn der Strom halbwegs stabil ist, aber du deine Geräte vor Spannungsschwankungen und kurzen Ausfällen schützen willst, ist eine Line-Interactive-USV meist die vernünftige Mittelklasse-Lösung.</p>
+        <hr class="trennlinie">
+        <strong>Merksätze zur Line-Interactive-USV</strong>
+        <p>Zum Einprägen kannst du dir folgendes merken:</p>
+        <ul>
+          <li><b>Offline ⟶ "Billig & Basic"</b><br>
+          Nur Notstrom, keine aktive Spannungsregelung.</li>
+          <li><b>Line-Interactive ⟶ "Mittelklasse mit Spannungskorrektur"</b><br>
+          AVR für Hoch/Runterregeln, kurzer Umschaltmoment, Batterie wird geschont.</li>
+          <li><b>Online ⟶ "Luxus & Vollschutz"</b><br>
+          Doppelwandlung, immer über Wechselrichter, keine Umschaltzeit.</li>
+        </ul>
+        <p>Oder noch kürzer:</p>
+        <div class="note-box">
+          <em>Offline = AUS ⟶ AN<br>
+          Line-Interactive = NETZ + AVR ⟶ bei Bedarf BATTERIE<br>
+          Online = immer BATTERIE/WECHSELRICHTER dazwischen</em>
+        </div>
+      </section>
+      <section class="content-section">
+        <h3>7.3 Online-USV (VFI - Voltage and Frequency Independent)</h3>
+        <ul>
+          <li>Strom aus dem Netz wird <b>ständig in Gleichstrom (DC)</b> und wieder in <b>Wechselstrom (AC)</b> umgewandelt.</li>
+          <li>Geräte laufen <b>immer über den Wechselrichter - kein Umschalten nötig!</b></li>
+          <li>Perfekte Spannungsqualität und keine Unterbrechung beim Ausfall.</li>
+        </ul>
+        <div class="note-box">
+          <p><strong>Typisch:</strong> Smart-UPS Online / USV für Serverräume</p>
+        </div>
+        <strong>Vorteile:</strong>
+        <ul>
+          <li>Keine Umschaltzeit</li>
+          <li>Schutz vor allen Netzproblemen (Ausfall, Spannungseinbruch, Frequenzfehler)</li>
+        </ul>
+        <strong>Nachteile:</strong>
+        <ul>
+          <li>Teuer</li>
+          <li>Höherer Energieverbrauch</li>
+          <li>Erzeugt mehr Wärme</li>
+        </ul>
+      </section>
+      <section class="content-section" id="automatisches_herunterfahren_system">
+        <h2>8. Automatisches Herunterfahren von Systemen</h2>
+        <p>Eine USV kann bei Stromausfall dafür sorgen, dass der Rechner oder Server <b>automatisch herunterfährt,</b> bevor die Batterie leer ist.</p>
+        <strong>Vorgehen:</strong>
+        <ol class="fette-zahlen">
+          <li><span><b>USV per USB oder Netzwerk</b> an den PC/Server anschließen.</span></li>
+          <li><span><b>APC PowerChute (oder ähnlich)</b> installieren.</span></li>
+          <li><span>In der Software einstellen:</span></li>
+          <ul>
+            <li>"Bei Stromausfall: System nach 3 Minuten geordnet herunterfahren."</li>
+          </ul>
+          <li><span>Test durchführen (z. B. Netzstecker kurz ziehen).</span></li>
+          <li><span>Prüfen, ob der Rechner wirklich herunterfährt.</span></li>
+        </ol>
+        <div class="note-box">
+          <p>So werden <b>Datenverlust und Dateisystemfehler</b> vermieden.</p>
+        </div>
+      </section>
+      <section class="content-section" id="zusammenfassung">
+        <h2>Zusammenfassung - Merksätze für die Prüfung</h2>
+        <ul>
+          <li><b>VA-Zahl</b> = Scheinleistung der USV</li>
+          <li><b>700 / 1000 / 2200VA</b> ⟶ je nach benötigter Watt-Leistung auswählen</li>
+          <li><b>Server ~250 W, Firewall ~100 W</b></li>
+          <li><b>Große USVs (>3000 VA)</b> ⟶ <b>3-phasiger Anschluss notwendig</b></li>
+          <li><b>Anschaltstrom</b> kann Sicherung auslösen</li>
+          <li><b>USV-Test</b> kann Systemabschaltung verursachen (bei schwacher Batterie)</li>
+          <li><b>Kalibrierung mit APC-Tool</b> regelmäßig durchführen</li>
+          <li><b>Offline-USV</b> ⟶ einfache Umschaltung</li>
+          <li><b>Online-USV</b> ⟶ dauerhafte Doppelwandlung, kein Umschalten</li>
+          <li><b>APC PowerChute</b> ⟶ automatisches Herunterfahren bei Stromausfall</li>
+        </ul>
       </section>
       <div class="bottom-links">
         <a href="Ausbildungsthemen.html" class="back-link">⟵ Zurück zum Inhaltsverzeichnis</a>
-        <a href="04 - Verschlüsselung.html" target="_blank" class="back-link">⟵ Zurück zu 04 - Verschlüsselung</a>
-        <a href="05 - Datensicherungskonzepte.html" target="_blank" class="back-link">05 - Datensicherungskonzepte ⟶</a>
+        <a href="04 - Verschlüsselung.html" target="_blank" class="back-link">⟵ Zurück zu 05 - Datensicherungskonzepte</a>
+        <a href="05 - Datensicherungskonzepte.html" target="_blank" class="back-link">07 - VPN Techniken ⟶</a>
       </div>
     </main>
     <aside class="right-column">
       <div class="logo-stack">
         <a class="logo-card" href="https://www.teccle-group.de" target="_blank" rel="noopener">
-          <img id="teccle-logo" src="TeccleLogo.png" alt="Teccle Group Logo"/>
+          <img id="teccle-logo" src="TeccleLogo.png" alt="Teccle Group Logo" />
         </a>
         <span class="logo-divider" aria-hidden="true"></span>
         <a class="logo-card" href="https://www.netzplan.de" target="_blank" rel="noopener">
-          <img src="NetzplanLogo.png" alt="Netzplan Logo"/>
+          <img src="NetzplanLogo.png" alt="Netzplan Logo" />
         </a>
       </div>
       <div class="info-box">
@@ -566,12 +404,11 @@
       setLogoByMode();
     });
   </script>
-</main>
-    </div>
-    <script>
+  </div>
+  <script>
     function setLogoByMode() {
       const logo = document.getElementById('teccle-logo');
-      if(document.body.classList.contains('dark')) {
+      if (document.body.classList.contains('dark')) {
         logo.src = 'TeccleLogoBlack.png';
       } else {
         logo.src = 'TeccleLogo.png';
@@ -580,7 +417,7 @@
     function toggleMode() {
       document.body.classList.toggle('dark');
       const btn = document.querySelector('.mode-toggle');
-      if(document.body.classList.contains('dark')) {
+      if (document.body.classList.contains('dark')) {
         btn.textContent = '☀️ Hellmodus';
       } else {
         btn.textContent = '🌙 Dunkelmodus';
@@ -588,6 +425,7 @@
       setLogoByMode();
     }
     window.addEventListener('DOMContentLoaded', setLogoByMode);
-    </script>
+  </script>
 </body>
+
 </html>

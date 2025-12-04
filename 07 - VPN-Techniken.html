@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="utf-8" />
+  <title>07 - VPN Techniken</title>
+  <link href="Icon.ico" rel="icon" type="image/x-icon" />
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <button class="mode-toggle" onclick="toggleMode()">🌙 Dunkelmodus</button>
+  <div class="page-wrapper">
+    <aside class="sidebar" aria-label="Inhaltsverzeichnis">
+      <h2>Inhaltsverzeichnis</h2>
+      <nav class="sidebar-nav">
+        <a href="#warum-vpn-wichtig">Warum VPN wichtig ist</a>
+        <a href="#ssl-vpn">SSL-VPN</a>
+      </nav>
+    </aside>
+    <main class="main-column">
+      <header class="page-header">
+        <h1>07 - VPN Techniken (Mobile User und Site-to-Site)</h1>
+      </header>
+    <section class="content-section" id="warum-vpn-wichtig">
+        <h2>1. Warum VPN überhaupt wichtig ist</h2>
+        <p>Ein VPN ("Virtual Private Network") wird immer dann gebraucht, wenn Daten über unsichere Netzwerke wie das Internet übertragen werden müssen. Ohne VPN wäre ein Zugriff aus dem Homeoffice so, als würdest du mit einem Megafon sensible Informationen über die Straße rufen: Jeder könnte mithören.</p>
+        <p>Ein VPN löst dieses Problem, indem es einen <b>verschlüsselten Tunnel</b> baut. Innerhalb dieses Tunnels können Daten sicher übertragen werden, so als würde man durch eine abgeschirmte Glasröhre quer durchs Internet reisen - und niemand kann seitlich hineinsehen.</p>
+        <p>Man unterscheidet dabei grundsätzlich zwei große Arten von VPN-Verbindungen:</p>
+        <ul>
+            <li><b>Mobile-User-VPNs</b><br>
+            Ein eintzelner Benutzer verbindet sich von außen (z. B. von Zuhause) in das Firmennetz.</li>
+            <li><b>Site-to-Site-VPNs</b><br>
+            Zwei Standorte - zum Beispiel die Haubptstelle und ein Außenlager - werden dauerhaft miteinander verbunden, sodass sie sich verhalten, als wären sie lokal im selben Netzwerk.</li>
+        </ul>
+        <p>Beide Varianten folgen denselben Zielen:<br>
+        Vertrauenswürdigkeit, Integrität, Authentizität und ein möglichst störungsfreier Zugriff.</p>
+    </section>
+    <section class="content-section" id="ssl-vpn">
+      <h2>2. SSL-VPN (Mobile User)</h2>
+      <h3>2.1 Wie ein SSL-VPN grundsätzlich funktioniert</h3>
+      <p>Ein SSL-VPN nutzt dieselben Mechanismen wie HTTPS.<br>
+      Statt einen speziellen VPN-Port zu verwenden, läuft der Tunnel über Port <strong>443</strong>, also genau dort, wo auch Webbrowser kommunizieren. Dadurch sind SSL-VPNs extrem Kompatibel, selbst in streng abgesicherten WLANs oder Firmennetzen.</p>
+      <p>Technisch läuft ein SSL-VPN auf einer höheren Netzwerkebene (Layer 5-7). Der Tunnel wird oft über eine Art Webportal oder Client initalisiert, der dann die Daten in sichere, TLS-verschlüsselte Pakete verpackt.</p>
+      <p>Man kann sich das wie eine Art "VPN im Browser-Kostüm" vorstellen:<br>
+      Die Verbindung fühlt sich an wie ein normaler HTTPS-Dialog, ist aber in Wahrheit ein sicherer Netzwerkzugang.</p>
+    </section>
+    <section class="content-section">
+      <h3>2.2 Unterschied zum IPsec-VPN für Mobile User</h3>
+      <p>Auch wenn beide das gleiche ziel haben, unterscheiden sie sich im Kern:</p>
+      <b>SSL-VPN</b>
+      <ul>
+        <li>Ideal für Homeoffice</li>
+        <li>Funktioniert fast immer, selbst hinter NAT, Hotel-WLANs und Firmen-Proxys</li>
+        <li>Einfach einzurichten</li>
+        <li>Gut bei wenigen Applikationen oder gezielten Freigaben</li>
+      </ul>
+      <b>IPsec-VPN (Clientbasiert)</b>
+      <ul>
+        <li>Greift tief in das Netzwerkmodell ein (Layer 3)</li>
+        <li>Bietet echte Routen und vollständige Netzwerkverbindung</li>
+        <li>Schnell, stabil, aber schwieriger einzurichten</li>
+        <li>NAT-Empfindlichkeit kann Probleme machen</li>
+      </ul>
+      <p>Wenn ein Kunde eine Lösung möchte, die "immer irgendwo funktioniert", sollte man SSL-VPN wählen.<br>
+      Wenn volle Standortintegration benötigt wird, ist IPsec das Mittel der Wahl.</p>
+    </section>
+    <section class="content-section">
+      <h2>2.3 SSL-VPN auf einer WatchGuard einrichten</h2>
+      <ol class="fette-zahlen">
+        <li><span><b>SSL-VPN auf der Watchguard aktivieren</b><br>
+        Dabei muss definiert werden, welche Benutzer sich anmelden dürfen.</span></li>
+        <li><span><b>Benutzer lokal anlegen</b><br>
+        Diese Prüfung nutzt selten Active Directory - meist reicht ein lokales Konto</span></li>
+        <li><span><b>Client installieren und anmelden</b><br>
+        Ziel: Die Verbindung soll "green" werden.</span></li>
+        <li><span><b>Zugriff einschränken</b><br>
+        Beispiel:<br>
+        Der Benutzer soll nur per RDP (Port 3389) auf eine einzelne interne IP zugreifen dürfen.<br>
+        Dies zwingt dich dazu, eine spezifische Firewallregeln zu bauen.</span></li>
+        <li><span><b>Analyse der Firewall-Logs</b><br>
+        <ul>
+          <li>Tunnel etabliert?</li>
+          <li>Authentifizierung erfolgreich?</li>
+          <li>Welche IP hat der Benutzer erhalten?</li>
+          <li>Welche Regeln greiften beim Zugriff?</li>
+        </ul></span></li>
+      </ol>
+    </section>
+      <div class="bottom-links">
+        <a href="Ausbildungsthemen.html" class="back-link">⟵ Zurück zum Inhaltsverzeichnis</a>
+        <a href="06 - USV.html" target="_blank" class="back-link">⟵ Zurück zu 06 - USV</a>
+        <a href="08 - Telefonie.html" target="_blank" class="back-link">08 - Telefonie ⟶</a>
+      </div>
+    </main>
+    <aside class="right-column">
+      <div class="logo-stack">
+        <a class="logo-card" href="https://www.teccle-group.de" target="_blank" rel="noopener">
+          <img id="teccle-logo" src="TeccleLogo.png" alt="Teccle Group Logo" />
+        </a>
+        <span class="logo-divider" aria-hidden="true"></span>
+        <a class="logo-card" href="https://www.netzplan.de" target="_blank" rel="noopener">
+          <img src="NetzplanLogo.png" alt="Netzplan Logo" />
+        </a>
+      </div>
+      <div class="info-box">
+        <strong>Mehr entdecken</strong>
+        Direkt zu Support, Dokumentation oder zurück zur Übersicht.
+        <div class="info-links">
+          <a href="mailto:support@teccle-group.de">Support kontaktieren</a>
+          <br>
+          <a href="https://www.netzplan.de" target="_blank" rel="noopener">Dokumentation</a>
+          <br>
+          <a href="Ausbildungsthemen.html">Zur Übersicht</a>
+        </div>
+      </div>
+    </aside>
+  </div>
+  <script>
+    function setLogoByMode() {
+      const logo = document.getElementById('teccle-logo');
+      if (!logo) return;
+      logo.src = document.body.classList.contains('dark') ? 'TeccleLogoBlack.png' : 'TeccleLogo.png';
+    }
+    function toggleMode() {
+      document.body.classList.toggle('dark');
+      const btn = document.querySelector('.mode-toggle');
+      if (btn) {
+        btn.textContent = document.body.classList.contains('dark') ? '☀️ Hellmodus' : '🌙 Dunkelmodus';
+      }
+      setLogoByMode();
+    }
+    window.addEventListener('DOMContentLoaded', () => {
+      setLogoByMode();
+    });
+  </script>
+  </div>
+  <script>
+    function setLogoByMode() {
+      const logo = document.getElementById('teccle-logo');
+      if (document.body.classList.contains('dark')) {
+        logo.src = 'TeccleLogoBlack.png';
+      } else {
+        logo.src = 'TeccleLogo.png';
+      }
+    }
+    function toggleMode() {
+      document.body.classList.toggle('dark');
+      const btn = document.querySelector('.mode-toggle');
+      if (document.body.classList.contains('dark')) {
+        btn.textContent = '☀️ Hellmodus';
+      } else {
+        btn.textContent = '🌙 Dunkelmodus';
+      }
+      setLogoByMode();
+    }
+    window.addEventListener('DOMContentLoaded', setLogoByMode);
+  </script>
+</body>
+
+</html>

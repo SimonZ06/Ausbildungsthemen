@@ -1,729 +1,216 @@
 <!DOCTYPE html>
 <html lang="de">
- <head>
-  <meta charset="utf-8"/>
-  <title>
-   02 - Switching / VLAN / PoE
-  </title>
-  <link href="Icon.ico" rel="icon" type="image/x-icon"/>
-  <style>
-   :root {
-      --bg: #b5b5b5b9;
-      --text: #2d2d2d;
-      --container-bg: #ffffff;
-      --header-bg: linear-gradient(90deg, #b46900f6, #d87e00);
-      --header-text: #ffffff;
-      --section-bg: #e2e2e2a0;
-      --section-title: #000000;
-      --section-title-bg: #cfcfcf54;
-      --section-title-border: #F18E00;
-      --h3: #c76000;
-      --trennlinie: #e0e7ef;
-      --link: #d87e00;
-      --link-hover: #ae6600;
-      --back-link-bg: #9b948e40;
-      --back-link: #e87000;
-      --back-link-hover-bg: #ffffff;
-      --back-link-hover: #e38101;
-      --aside-bg: #e3e3e3;
-      --aside-shadow: rgba(50, 58, 78, 0.556);
-      --container-shadow: 0 2px 16px rgba(180,200,255,0.10);
-      --sublist-color: #717171;
-    }
-    body.dark {
-      --bg: #424242e7;
-      --text: #f3f3f3;
-      --container-bg: #353535fc;
-      --header-bg: linear-gradient(90deg, #b46900, #d87e00);
-      --header-text: #ffffff;
-      --section-bg: #414040b9;
-      --section-title: #ffffff;
-      --section-title-bg: #d05a004c;
-      --section-title-border: #d87e00;
-      --h3: #d87e00;
-      --trennlinie: #44495a;
-      --link: #d87e00;
-      --link-hover: #ae6600;
-      --back-link-bg: #9b948e40;
-      --back-link: #e87000;
-      --back-link-hover-bg: #c8c6c651;
-      --back-link-hover: #e38101;
-      --aside-bg: #453f3c53;
-      --aside-shadow: rgba(60,60,80,0.12);
-      --container-shadow: 0 2px 16px rgba(60,60,80,0.18);
-      --sublist-color: #cccccc;
-    }
-    body {
-      background-color: var(--bg);
-      color: var(--text);
-      font-family: "Segoe UI", Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      transition: background 0.3s, color 0.3s;
-    }
-    .container {
-      max-width: 1000px;
-      margin: 20px auto;
-      background: var(--container-bg);
-      border-radius: 16px;
-      box-shadow: var(--container-shadow);
-      transition: background 0.3s;
-      position: relative;
-      z-index: 10;
-      padding-bottom: 10px;
-    }
-    .outer-container {
-      max-width: 1100px; /* etwas größer als dein eigentlicher Container */
-      margin: 20px auto; /* etwas mehr Abstand */
-      background: rgba(255, 255, 255, 0.3); /* leicht transparent, wirkt „hinter“ dem Container */
-      border-radius: 20px;
-      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
-      padding-left: 8px;
-      padding-right: 8px;
-      padding-top: 0.005%;
-      position: relative;
-      z-index: 5; /* liegt hinter deinem echten Container */
-    }
-    body.dark .outer-container {
-      background: rgba(50, 50, 50, 0.4);
-    }
 
-    header {
-      background: var(--header-bg);
-      color: var(--header-text);
-      padding: 24px 0 16px 0;
-      border-radius: 16px 16px 0 0;
-      text-align: center;
-      box-shadow: 0 2px 8px var(--aside-shadow);
-      transition: background 0.3s, color 0.3s;
-    }
-    h1 {
-      margin: 0;
-      font-size: 2em;
-      letter-spacing: 1px;
-      color: #ffffff;
-    }
-    section {
-      padding: 20px 24px;
-      border-radius: 12px;
-      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
-      margin-bottom: 28px;
-      transition: background 0.3s;
-      background: var(--section-bg);
-    }
-    .section-title {
-      font-size: 1.4em;
-      font-weight: 600;
-      margin-top: 32px;
-      margin-bottom: 12px;
-      color: var(--section-title);
-      border-left: 4px solid var(--section-title-border);
-      padding-left: 8px;
-      background: var(--section-title-bg);
-      border-radius: 4px;
-      transition: background 0.3s, color 0.3s;
-    }
-    p {
-      margin-bottom: 16px;
-      line-height: 1.9;
-    }
-    b {
-        color: #dc7900;
-        background: rgba(152, 152, 152, 0.084)
-    }
-    ul {
-      margin-bottom: 24px;
-      padding-left: 20px;
-    }
-    li {
-      margin-bottom: 12px;
-      line-height: 1.6;
-    }
-    ul ul {
-      margin-top: 6px;
-      margin-bottom: 12px;
-      list-style-type: circle;
-      color: var(--sublist-color);
-    }
-    h3 {
-      margin-top: 20px;
-      color: var(--h3);
-    }
-    .trennlinie {
-      border: none;
-      border-top: 1px solid var(--trennlinie);
-      margin: 32px 0;
-      transition: border-color 0.3s;
-    }
-    a {
-      color: var(--link);
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.2s;
-    }
-    a:hover {
-      color: var(--link-hover);
-    }
-    .back-link {
-      display: inline-block;
-      margin-top: 16px;
-      background: var(--back-link-bg);
-      color: var(--back-link);
-      padding: 10px 18px;
-      border-radius: 8px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: background 0.2s, color 0.2s;
-      border: 1px solid var(--trennlinie);
-    }
-    .back-link:hover {
-      background: var(--back-link-hover-bg);
-      color: var(--back-link-hover);
-    }
-    aside {
-      background: var(--aside-bg);
-      border-radius: 8px;
-      padding: 18px 24px;
-      margin-top: 24px;
-      box-shadow: 0 1px 4px var(--aside-shadow);
-      transition: background 0.3s;
-    }
-    .mode-toggle {
-      position: fixed;
-      top: 24px;
-      right: 24px;
-      z-index: 100;
-      background: #423c46af;
-      color: var(--back-link);
-      border: 1px solid var(--trennlinie);
-      border-radius: 8px;
-      padding: 10px 18px;
-      font-size: 1em;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s;
-    }
-    .mode-toggle:hover {
-      background: var(--back-link-hover-bg);
-      color: var(--back-link-hover);
-    }
-    @media (max-width: 800px) {
-      .container {
-        max-width: 95%;
-        padding: 16px;
-      }
-      h1 {
-        font-size: 1.5em;
-      }
-      .mode-toggle {
-        background: var(--back-link-bg);
-        top: 8px;
-        right: 8px;
-        padding: 8px 12px;
-      }
-      .floating-logo {
-        top: 8px;
-        left: 8px;
-        width: 48px;
-        height: 48px;
-      }
-      .floating-logo img {
-        max-width: 38px;
-        max-height: 38px;
-      }
-    }
-    .floating-logo {
-      position: fixed;
-      top: 24px;
-      left: 24px;
-      width: 80px;
-      height: 80px;
-      z-index: 101;
-      background: rgba(255, 255, 255, 0.782);
-      border-radius: 16px;
-      box-shadow: 0 2px 8px var(--aside-shadow);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.3s, box-shadow 0.3s;
-    }
-    .floating-logo img {
-      max-width: 65px;
-      max-height: 65px;
-      display: block;
-      border-radius: 8px;
-    }
-    body.dark .floating-logo {
-      background: rgba(40, 40, 40, 0.85);
-    }
-    .bottom-links {
-      position: fixed;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: 0px;
-      background: var(--container-bg);
-      box-shadow: 0 -2px 12px rgba(0,0,0,0.07);
-      display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      padding: 12px 0;
-      z-index: 200;
-      border-radius: 12px 12px 0 0;
-      gap: 8px;
-      max-width: 1000px;
-      width: 65%;
-    }
-    @media (max-width: 1000px) {
-      .bottom-links {
-        max-width: 95vw;
-        padding: 8px 8px;
-      }
-    }
-    @media (max-width: 800px) {
-      .bottom-links {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 8px;
-      }
-    }
-    
-    
-/* --- Logo areas: left/right gutters that match the centered content width --- */
-.logo-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 1000;
-  display: block;
-}
+<head>
+  <meta charset="utf-8" />
+  <title>02 - Switching / VLAN / PoE</title>
+  <link href="Icon.ico" rel="icon" type="image/x-icon" />
+  <link rel="stylesheet" href="css/style.css">
+</head>
 
-.logo-area-left,
-.logo-area-right {
-  position: fixed;
-  width: calc((100vw - min(1000px, 95vw)) / 2);
-  display: flex;
-  justify-content: center;
-  pointer-events: none;
-  z-index: 1000;
-  padding: 4px;
-  align-items: flex-start;
-  margin-top: -60px;
-}
+<body>
+  <button class="mode-toggle" onclick="toggleMode()">?? Dunkelmodus</button>
+  <div class="page-wrapper">
+    <aside class="sidebar" aria-label="Inhaltsverzeichnis">
+      <h2>Inhaltsverzeichnis</h2>
+      <nav class="sidebar-nav">
+        <a href="#switch-grundlagen">Switch-Grundlagen</a>
+        <a href="#mac-adressen">MAC-Adressen</a>
+        <a href="#paketsichtbarkeit">Wer sieht Pakete?</a>
+        <a href="#poe">PoE Basics</a>
+        <a href="#verkabelung">Strom &amp; Verkabelung</a>
+        <a href="#vlan-grundlagen">VLAN</a>
+        <a href="#vlan-einsatz">VLAN-Einsatz</a>
+        <a href="#lacp">Trunks &amp; LACP</a>
+        <a href="#checklisten">Checklisten &amp; FAQ</a>
+      </nav>
+    </aside>
+    <main class="main-column">
+      <header class="page-header">
+        <h1>02 - Switching / VLAN / PoE</h1>
+      </header>
 
-/* wir setzen sie jetzt mit calc() vertikal passend */
-.logo-area-left { 
-  left: 0;
-  top: calc(50% + 100px); /* nach Bedarf anpassen */
-  transform: translateY(-50%);
-}
+      <section class="content-section" id="switch-grundlagen">
+        <h2>1. Wie funktioniert ein Switch?</h2>
+        <p>Ein Switch arbeitet auf <b>OSI-Layer 2</b>. Er nimmt Ethernet-Frames entgegen, liest MAC-Adressen und entscheidet,
+          an welchem Port ein Frame weitergeleitet wird. Anders als ein Hub flutet er nicht blind, sondern arbeitet gezielt.</p>
+        <p>Herzst&uuml;ck ist die <b>MAC-/CAM-Tabelle</b>. Bei jedem eingehenden Frame merkt sich der Switch die Quell-MAC und
+          den Port. Dadurch wei&szlig; er sp&auml;ter, wohin Unicast-Verkehr geschickt werden muss.</p>
+        <p>Eintr&auml;ge altern nach einigen Minuten (<b>Aging</b>), damit Umstecken erkannt wird. Broadcasts (z. B. ARP) sendet
+          der Switch an alle Ports im VLAN, Multicasts werden mit <b>IGMP-Snooping</b> zielgerichtet verteilt.</p>
+        <p>Jeder Port bildet eine eigene Collision Domain. Mit <b>Full-Duplex</b> treten keine Kollisionen mehr auf. Loops
+          werden per <b>Spanning Tree</b> (STP/RSTP/MSTP) erkannt und blockiert, um Broadcast-St&uuml;rme zu verhindern.</p>
+      </section>
 
-.logo-area-right { 
-  right: 0;
-  top: calc(50% + 100px); /* nach Bedarf anpassen */
-  transform: translateY(-50%);
-}
-
-/* position the two areas */
-.logo-area-left { left: 0; }
-.logo-area-right { right: 0; }
-
-/* the link is clickable, allow pointer events on it and center the image */
-.logo-area-left a,
-.logo-area-right a {
-  pointer-events: auto;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: auto;
-  text-align: center;
-  padding: 0;
-  margin: 0;
-  background: none;
-}
-
-/* image sizing: scale with viewport but never exceed the gutter area minus padding */
-.logo-area-left img,
-.logo-area-right img {
-  width: clamp(60px, 18vw, 500px);
-  max-width: calc(100% - 20px); /* ensure equal inner spacing of 10px left/right */
-  height: auto;
-  object-fit: contain;
-  display: block;
-  transition: width 0.18s ease;
-}
-
-.logo-card {
-  background: rgb(251, 64, 26); /* leicht transparentes Weiß */
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 20px;
-  backdrop-filter: blur(10px) saturate(150%);
-  -webkit-backdrop-filter: blur(10px) saturate(150%);
-  padding: 16px 22px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-
-/* Dark Mode-Variante */
-body.dark .logo-card {
-  background: rgb(251, 64, 26);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
-}
-
-/* optionaler Hover-Effekt, um den modernen Touch zu betonen */
-.logo-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
-}
-
-.logo-card:hover {
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25),
-              0 0 12px rgb(237, 131, 1);
-  transform: translateY(-4px);
-}
-
-/* Linke Box – Teccle Group Orange */
-.logo-left-card {
-  background: rgba(251, 64, 26, 0.999); /* leicht transparentes Orange */
-  border: 1px solid rgba(251, 65, 26, 0.4);
-  box-shadow: 0 4px 20px rgba(251, 65, 26, 0.3);
-}
-
-body.dark .logo-left-card {
-  background: rgba(251, 65, 26, 0.25);
-  border: 1px solid rgba(251, 65, 26, 0.5);
-  box-shadow: 0 4px 25px rgba(251, 65, 26, 0.35);
-}
-
-/* Rechte Box – klassisch transparent-weiß */
-.logo-right-card {
-  background: rgb(255, 255, 255);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-}
-
-body.dark .logo-right-card {
-  background: rgb(251, 251, 251);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
-}
-
-/* When the gutter becomes too small to host the minimum logo size, hide the logos */
-@media (max-width: 1842px) {
-  /* Empirical breakpoint chosen so logos don't overlap main content on moderate screens */
-  .logo-area-left img,
-  .logo-area-right img {
-    display: none;
-  }
-}
-
-/* Extra fallback for very small screens */
-@media (max-width: 420px) {
-  .logo-area-left,
-  .logo-area-right {
-    display: none;
-  }
-}
-  </style>
- </head>
- <body>
-  <div class="logo-bar">
-   
-    <div class="logo-area-left">
-  <div class="logo-card logo-left-cart">
-    <a class="logo-left" href="https://www.teccle-group.de" target="_blank">
-      <img alt="Tecle Group Logo" src="TeccleGroup.png"/>
-    </a>
-  </div>
-</div>
-
-<div class="logo-area-right">
-  <div class="logo-card logo-right-card">
-    <a class="logo-right" href="https://www.netzplan.de" target="_blank">
-      <img alt="NetzplanLogo" src="NetzplanLogo.png"/>
-    </a>
-  </div>
-</div>
-
-  </div>
-  <div class="floating-logo">
-   <a href="Ausbildungsthemen.html" title="Zur Übersicht">
-    <img alt="Teccle Logo" id="teccle-logo" src="TeccleLogo.png" title="Teccle Group Logo"/>
-   </a>
-  </div>
-  <button class="mode-toggle" onclick="toggleMode()">
-   🌙 Dunkelmodus
-  </button>
-  <div class="container">
-    <div class="outer-container">
-      <div class="container">
-        <div class="outer-container">
-        <div class="container">
-   <main>
-    <header>
-     <h1>
-      02 - Switching / VLAN / PoE
-     </h1>
-    </header>
-    <section>
-        <div class="section-title">1. Wie funktioniert ein Switch?</div>
-        <p>Ein Switch arbeitet auf <b>OSI-Layer 2 (Sicherungsschicht)</b> und nimmt Ethernet-Frames entgegen, liest die Layer-2-Informationen (vor allem MAC-Adressen) und entscheidet daraufhin zielgerichtet, an welchem Port ein Frame weitergeleitet werden muss. Anders als ein alter Hub, der empfangene Signale an alle Ports verteilt, versucht ein Switch, den Verkehr nur an jene Ports zu schicken, an denen das Zielgerät angeschlossen ist - dadurch wird das Netz effizienter und die Kollisionen werden drastisch reduziert.</p>
-        <p>Die Arbeitsweise des Switches basiert im Kern auf einer <b>MAC-Adress-Tabelle</b> (auch CAM-Table genannt). Immer wenn ein Frame ankommt, merkt sich der Switch die <b>Quell-MAC</b> und den Port, an dem das Frame eingetroffen ist - also eine Zuordnung "Quell-MAC &#8594; Port". Beim Senden sucht er die <b>Ziel-MAC</b> in dieser Tabelle: findet er einen Eintrag, schickt er das Frame nur an den entsprechenden Port; findet er die Ziel-MAC nicht, spricht man von unknown unicast und der Switch flutet das Frame an alle Ports innerhalb der gleichen VLAN-Domäne (außer dem Eingangsport).</p>
-        <p>Einträge in der MAC-Tabelle sind nicht permanent: sie haben ein <b>Aging</b>-Intervall (typisch einige Minuten, häufig ~300 s), damit Umstecken/Neuanordnungen erkannt werden und die Tabelle aktuell bleibt. Bei Broadcast-Frames (z. B. ARP-Requests an FF:FF:FF:FF:FF:FF) sendet der Switch das Frame an alle Ports eines VLANs; bei Multicast wird das Verhalten davon bestimmt, ob IGMP-Snooping aktiv ist - ohne IGMP-Snooping wird geflutet, mit IGMP-Snooping werden Multicast-Frames nur an Ports geschickt, an denen Hosts Mitglieder der Multicast-Gruppe sind.</p>
-        <p>Jeder Switch-Port stellt eine eigene <b>Collision Domain</b> dar; in moderneren Netzwerken arbeiten Ports im Full-Duplex, deshalb treten Kollisionen praktisch nicht mehr auf. Um jedoch physikalische Schleifen (Layer 2 Loops) zu verhindern, nutzen Netzwerke Spanning-Tree-Mechanismen (STP / RSTP / MSTP), die redundante Pfade erkennen und temporär blockieren, damit es nicht zu Broadcast-Stürmen kommt.</p>
-        <p>Kurz gesagt: ein Switch leitet Unicast zielgerichtet, Broadcast an alle Geräte im VLAN und Multicast abhängig von Multicast abhängig von IGMP-Snooping.</p>
-        </section>
-
-        <hr class="trennlinie">
-
-        <section>
-        <div class="section-title">2. Wofür benutzt ein Switch MAC-Adressen?</div>
-        <p>MAC-Adressen sind für einen Switch die grundlegende Information zur Identifikation von Endgeräten. Er nutzt MAC-Adressen in mehreren Rollen:</p>
+      <section class="content-section" id="mac-adressen">
+        <h2>2. Wof&uuml;r nutzt ein Switch MAC-Adressen?</h2>
         <ul>
-            <li><b>Lernen (Source MAC):</b> Jedes ankommende Frame liefert die Quell-MAC, die der Switch in seine Tabelle schreibt, damit er künftig weiß, an welchem Port dieses Gerät erreichbar ist.</li>
-            <br>
-            <li><b>Forwarding (Destination MAC):</b> Wenn ein Frame ankommt, entscheidet die Ziel-MAC, an welchen Port das Frame weitergeleitet wird.</li>
-            <br>
-            <li><b>Sicherheit & Zusammenfunktionen:</b> MAC-Adressen werden auch bei Sicherheitsmechanismen verwendet, etwa bei port-security (maximal erlaubte Anzahl an MACs pro Port, sticky MACs), bei MAC-based Access-Control oder als Teil von 802.1X-Zugangssteuerungen; außerdem können sie für dynamische VLAN-Zuweisung (z. B. via RADIUS) herangezogen werden.</li>
+          <li><b>Lernen:</b> Quell-MAC wird der Porttabelle hinzugef&uuml;gt.</li>
+          <li><b>Forwarding:</b> Ziel-MAC bestimmt, an welchen Port ein Frame gesendet wird.</li>
+          <li><b>Sicherheit:</b> Port-Security, 802.1X oder MAC-basierte Policies setzen ebenfalls auf MACs. Sie ersetzen
+            keine echte Authentifizierung, erschweren aber unerlaubte Zugriffe.</li>
         </ul>
-        <p>Wichtig: MAC-basierte Sicherheitsmechanismen sind praktisch, ersetzen aber nicht eine ordentliche Authentifizierung (z. B. 802.1X + RADIUS), denn MAC-Adressen lassen sich fälschen.</p>
-        </section>
+        <p>Ebenfalls relevant: MAC-basierte VLAN-Zuweisung, sticky MACs oder Monitoring &uuml;ber SPAN/Port-Mirroring.</p>
+      </section>
 
-        <hr class="trennlinie">
-        
-        <section>
-        <div class="section-title">3. Wer sieht welche Pakete im Netzwerk?</div>
-        <p>Die Sicherheit von Paketen hängt von deren Typ ab:</p>
+      <section class="content-section" id="paketsichtbarkeit">
+        <h2>3. Wer sieht welche Pakete?</h2>
         <ul>
-            <li><b>Unicast:</b> In einem normalen L2-Switch-Netzwerk erreicht ein Unicast-Frame nur den Absender- und den Zielport. Andere Geräte sehen dieses Frame nicht - es sei denn, es wurde Port-Mirroring (SPAN) aktiviert oder ein Netzwerk-Tap eingesetzt.</li>
-            <br>
-            <li><b>Broadcast:</b> Broadcast-Frames werden an alle Ports innerhalb derselben VLAN-Domain gesendet; sie sind also für alle Teilnehmer dieses VLANs sichtbar.</li>
-            <br>
-            <li><b>Multicast:</b> Wenn IGMP-Snooping deaktiviert ist, werden Multicast-Frames wie Broadcasts geflutet. Mit IGMP-Snooping erkennt der Switch, welche Ports Multicast-Interest angemeldet haben, und leitet die Frames nur an diese Ports weiter; dadurch reduziert sich unnötiger Traffic. (Mehr dazu weiter unten.)</li>
-            <br>
-            <li><b>Monitoring:</b> Für Analysezwecke oder IDS kann man gezielt Ports spiegeln (Port-Mirroring / SPAN) oder ein SPAN/ERSPAN einrichten, damit ein Analysehost alles oder selektierten Verkehr sieht.</li>
+          <li><b>Unicast:</b> Nur Quell- und Zielport sehen das Frame (au&szlig;er es gibt SPAN/Taps).</li>
+          <li><b>Broadcast:</b> Geht an alle Ports innerhalb der VLAN-Dom&auml;ne.</li>
+          <li><b>Multicast:</b> Ohne IGMP-Snooping Broadcast-Verhalten, mit IGMP-Snooping nur an interessierte Ports.</li>
+          <li><b>Monitoring:</b> Port-Mirroring (SPAN/ERSPAN) spiegelt Verkehr auf einen Analyseport.</li>
         </ul>
-        <p>(IGMP-Snooping und dessen Wirkung: siehe Quelle unten.)</p>
-        </section>
-        
-        <hr class="trennlinie">
-        
-        <section>
-        <div class="section-title">4. PoE — worauf achten? (Standards, Aushandlung, Budget)</div>
-        <p><b>Power over Ethernet (PoE)</b> erlaubt es, über das Standard-Ethernet-Kabel sowohl Daten als auch Strom zu transportieren. Dafür gibt es offizielle IEEE-Standards mit verschiedenen Leistungsstufen:</p>
-        <ul>
-            <li><b>IEEE 801.3af (Type 1 /PoE):</b> Der Power-Sourcing-Equipment (PSE, z. B. Switch) liefert bis zu 15,4 W an der Schnittstelle; durch Verlust in der Leitung kommen typischerweise ~12,95 W beim Powered Device (PD) an.</li>
-            <br>
-            <li><b>IEEE 802.3at (Type 2 /PoE+):</b> erhöht die Leistung auf bis zu 30 W PSE-Seite, davon sind beim PD ~25,5 W nutzbar.</li>
-            <br>
-            <li><b>IEEE 802.3bt (Type 3 und Type 4 /PoE++ /Hi-PoE):</b> Type 3 kann bis zu 60 W an der PSE liefern und liefert typischerweise ~51 W an das PD; Type 4 geht bis zu 100 W am PSE und liefert je nach Klasse ~71 W an das PD. Diese höheren Klassen nutzen vier Adernpaare (4-pair PoE) und werden für leistungsintensive Geräte wie High-End-Access-Points oder PTZ-Kammeras genutzt.</li>
-        </ul>
-        <p>PoE arbeitet mit einer Erkennungs- und Klassifizierungsphase: der PSE detektiert per Signatur (z. B. Widerstand) zunächst, ob ein PD angeschlossen ist, und kann dann eine Leistungsklasse austauschen oder per LLDP/LLDP-MED weiter feinjustieren (z. B. Zuordnung zu einem Voice-VLAN oder Tailoring des Leistungsbedarfs). Da der Gesamtstrom eines Switches begrenzt ist, musst du beim Design das <b>PoE-Budget</b> des Switches beachten: die Summe der benötigten Watt aller PDs darf das verfügbare Budget nicht überschreiten - sonst musst du Prioritäten oder Power-Management konfigurieren.</p>
-        <p>Weitere wichtige Punkte:</p>
-        <ul>
-            <li>Für 10/100 Mbit/s wird PoE über zwei Paare (Mode A oder Mode B) realisiert; für Gigabit und schneller werden alle vier Paare benutzt (4-pair / Phantom-Speisung).</li>
-            <br>
-            <li><b>Passive PoE</b> (feste Spannung, kein IEEE-Negotiation) ist nicht standardkonform und kann Geräte beschädigen, wenn diese nicht explizit dafür ausgelegt sind.</li>
-            <br>
-            <li>Die Versorgungsspannung liegt typischerweise im Bereich von <b>~44-57 V</b> (nominal ~48 V), abhängig vom Standard bzw. der Implementierung.</li>
-            <p>(Quellen für PoE-Leistungswerte und Klassentabelle siehe unten.)</p>
-        </ul>
-        </section>
-        
-        <hr class="trennlinie">
-        
-        <section>
-        <div class="section-title">5. Wie bekommen Geräte Strom — Varianten im Überblick</div>
-        <p>Es gibt drei gängige Varianten, wie Geräte mit PoE versorgt werden:</p>
-        <ul>
-            <li><b>PoE-Switch (Endspan):</b> Der Switch selbst ist die Stromquelle und speist über die Ethernet-Kabel. Das ist die sauberste Lösung, weil Management/Monitoring/Power-Budget zentral zur Verfügung stehen.</li>
-            <br>
-            <li><b>PoE-Injector (Midspan):</b> Ein zwischengeschaltetes Gerät, das in bestehende Non-PoE-Leitungen PoE einspeist; praktisch, wenn der Switch kein PoE unterstützt.</li>
-            <br>
-            <li><b>Lokales Netzteil:</b> Wenn weder PoE noch Injector vorhanden sind, bekommt das Gerät ein eigenes Netzteil (z. B. Steckernetzteil). Das ist die einfachste, aber kabelintensivere Lösung.</li>
-        </ul>
-        </section>
-        
-        <hr class="trennlinie">
-        
-        <section>
-        <div class="section-title">6. Verkabelungs-Voraussetzungen für PoE</div>
-        <p>Gute Verkabelung ist sehr wichtig, sonst entstehen Spannungsabfälle, Hitzeentwicklung oder Leistungsverluste, vor allem bei höheren PoE-Klassen:</p>
-        <ul>
-            <li><b>Kabelkategorie:</b> Mindestens<b> Cat5e ist nötig </b>für höhere Power/geschwindigkeiten <b>Cat6 / Cat6a</b> empfohlen. <b>Vollkupfer</b> (no CCA) ist Pflicht, weil CCA (aluminium-beschichtete Leiter) einen höheren DC-Wiederstand haben und Wärme/Spannungsabfall erzeugen kann.</li>
-            <br>
-            <li><b>Längenlimit:</b> Das Ethernet-Limit beträgt <b>100 m total</b> (typisch 90 m Permanent Link + 2 x 5 m Patchkabel). Bei hohen PoE-Leistungen ist der Spannungsabfall über diese Distanz einzukalkulieren.</li>
-            <br>
-            <li><b>Bündelung & Temperatur:</b> Viele verdrillte Paare in Bündeln erhöhen die Temperatur und damit den Leistungswiderstand: das kann die verfügbare Leistung reduzieren. Beachte Installationsnormen und Temperaturbegrenzungen, insbesondere bei 802.3bt.</li>
-            <br>
-            <li><b>Steckzyklen unter Last:</b> Beim Abziehen eines Kabels unter Last können Lichtbögen entstehen; verwende Hardware mit PoE-Rating und beachte Betriebsanweisungen.</li>
-            <p>(Quelle zur Max-Länge: Standard-Angabe 100 m / 90 m Permanent Link.)</p>
-        </ul>
-        </section>
-        
-        <hr class="trennlinie">
-        
-        <section>
-        <div class="section-title">7. Was bedeutet VLAN?</div>
-        <p><b>VLAN</b> steht für <i>Virtual Local Area Network</i> (IEEE 802.1Q) und erlaubt, ein physisches Netz logisch in mehrere seperate Broadcast-Domänen zu segmentieren. VLAN-Tagging fügt Ethernet-Frames eine 12-Bit VLAN-ID hinzu, so dass mehrere VLANs über denselben physischen Uplink transportiert werden können. Im Standard sind VLAN-IDs im Bereich <b>1-4094</b> verwendbar (0 und 4095 reserviert).</p>
-        <p>Port-Typen, die du kennen solltest:</p>
-        <ul>
-            <li><b>Access-Port:</b> Gehört genau zu einem VLAN; Frames, die an Endgeräte gehen, sind normalerweise untagged.</li>
-            <br>
-            <li><b>Trunk-Port:</b> Trägt mehrere VLANS; Frames zwischen Switches oder zu Routern/Servern sind oft getagged (802.1Q).</li>
-            <br>
-            <li><b>Native (untagged) VLAN:</b> Ein VLAN, das auf einem Trunk als untagged läuft - das Verhalten ist historisch bedingt und kann Sicherheitsfallen bergen, daher vorsichtig einsetzen.</li>
-            <br>
-            <li><b>Voice-VLAN:</b> Häufig ein seperates VLAN für IP-Telefone; Geräte können via LLDP-MED oder CDP die Voice-VLAN-Zuweisung erhalten.</li>
-        </ul>
-        </section>
-        
-        <hr class="trennlinie">
-        
-        <section>
-        <div class="section-title">8. Wofür nutzt man VLANs?</div>
-        <p>VLANs sind extrem praktisch, weil sie mehrere Anforderungen erfüllen: sie trennen Benutzer, Server, VoIP und loT logisch voneinander, wodurch Sicherheit erhöht und Broadcast-Last reduziert werden. Sie sind außerdem nützlich für organisatorische Trennung (z. B. Mandanten), vereinfachen QoS-Policies (Sprachverkehr priorisieren) und erlauben Skalierung, indem viele logische Netze über dieselbe physische Infrastruktur transportiert werden (Trunks). Allerdings braucht man für die Kommunikation zwischen VLANs<b> Inter-VLAN-Routing </b>(durch Router, Layer-3-Switch oder Firewall), und dabei müssen passende ACLs/Policies geplant werden.</p>
-        </section>
-        
-        <hr class="trennlinie">
-        
-        <section>
-        <div class="section-title">9. Dinge, die man beim Einsatz beachten muss (praktische Regeln)</div>
-        <p>Wenn du VLANs/Productive-Design planst, denk an:</p>
-        <ul>
-            <li><b>Konsistenz:</b> Gleiche VLAN-IDs und Namenskonventionen über das Netzwerk. Inkonsistenzen führen schnell zu schwer zu findenden Fehlern.</li>
-            <br>
-            <li><b>Trunks:</b> Konfiguriere nur die VLANs auf einem Trunk, die du wirklich brauchst; vermeide ungenutzte native VLANs.</li>
-            <br>
-            <li><b>Inter-VLAN-Routing & DHCP:</b> Jedes VLAN braucht einen DHCP-Scope oder einen DHCP-Relay (IP-Helper), damit Clients IPs bekommen können. Inter-VLAN-Routing passiert auf Layer-3-Geräten und sollte durch Policy/ACLs gesteuert werden.</li>
-            <br>
-            <li><b>Spanning Tree:</b> Wähle eine STP-Variante / Topologie mit Bedacht (STP/RSTP/MSTP oder vendorspezifische Varianten wie PVST), aktivere Schutzmechanismen wie BPDU-Guard auf Access-Ports.</li>
-            <br>
-            <li><b>Security:</b> Schütze vor VLAN-Hopping (keine offenen trunk links, native VLAN nicht für Userverkehr), nutze Port-Security, 802.1X für Authentifizierung.</li>
-            <br>
-            <li><b>Dokumentation:</b> Netzplan, VLAN-Matrix, Subnetze und ACLs dokumentieren. Ohne Dokumentation landet man im Chaos.</li>
-        </ul>
-        <p>(Kurze Erinnerung: Per-VLAN-STP ist oft ein Vendor-Feature - z. B. Cisco PVST - die IEEE-Standards sind STP (802.1D), RSTP (802.1w) und MSTP (802.1s).)</p>
-        </section>
-        
-        <hr class="trennlinie">
-        
-        <section>
-        <div class="section-title">10. Vor- und Nachteile von VLANs</div>
-        <p><b>Vorteile:</b> klare Segmentierung, weniger Broadcast, bessere Qos/Fehlerdomänen und hohe Flexibilität/Skalierbarkeit. Nachteile: höhere Komplexität, notwendiges Routing/Policies zwischen VLANs und anspruchsvolleres Troubleshooting (Tags, Trunks, ACLs, STP).</p>
-        </section>
-        
-        <hr class="trennlinie">
-        
-        <section>
-        <div class="section-title">11. Was ist ein Trunk / Link-Aggregation (LACP)?</div>
-        <p>Man muss zwei Konzepte trennen: ein <b>802.1Q VLAN-Trunk</b> transportiert mehrere VLANs über einen Link durch Tagging; <b>Link-Aggregation / LAG</b> hingegen bündelt mehrere physische Links zu einer logischen Verbindung, um Bandbreite und Redundanz zu erhöhen. Der Standard für Link-Aggregation ist in der IEEE-Familie als 802.1AX (früher 802.3ad) definiert, und <b>LACP (Link Link Aggregation Control Protocol)</b> ist das Protokoll, das die dynamische Aushandlung und Überwachung eines LAG ermöglicht. Voraussetzung ist unter anderem, dass die Mitglieds-Links ähnliche Kapazität/Duplex besitzen und die VLAN-Konfiguration auf beiden Seiten identisch ist. Ein wichtiges Verhalten:<b> ein einzelner Fluss (z. B. eine TCP-Session) wird in der Regel hash-basiert auf genau einen physikalischen Link verteilt, </b>eine einzelne Verbindung nicht die Summe aller Links einer LAG erreichen kann; die Aggregate verbessern aber den Gesamtdurchsatz und sorgen für Redundanz.</p>
-        </section>
-        
-        <hr class="trennlinie">
-        
-        <section>
-        <div class="section-title">12. Vor- / Nachteile von LACP</div>
-        <p>Vorteile: höherer Gesamtdurchsatz (für mehrere parallele Flows), Redundanz bei Linkausfall, STP-sichtbar als ein Link &rarr; stabilere Topologie; funktioniert zusammen mir 802.1Q-Tunks. Nachteile: ein einzelner Flow bleibt auf maximaler Bandbreite eines einzelnen physikalischen Links, Hash-Algorithmus kann zu asymmetrischer Lastverteilung führen, und Multi-Chassis-LAGs (MLAG / vPC / VSX) sind oft vendor-abhängig und müssen korrekt konfiguriert werden.</p>
-        </section>
-        
-        <hr class="trennlinie">
-        
-        <section>
-        <div class="section-title">13. Sinnvolle Einsatzszenarien für LACP-Trunks</div>
-        <ul>
-            <li>Uplinks von Access- zu Distribution/Core (z. B. 2x oder 4x 1 GbE oder 2x/4x 10 GbE).</li>
-            <li>Server/Hypervisor NIC-Teaming (ESXi, Hyper-V) für höhere aggregate Bandbreite und Redundanz.</li>
-            <li>Storage/NAS-Anbindungen mit vielen parallelen Streams.</li>
-            <li>Firewalls / Load-Balancer zu Switches für breite, redundante Anbindung.</li>
-        </ul>
-        </section>
-        
-        <hr class="trennlinie">
-        
-        <section>
-        <div class="section-title">14. Praxis-Checklisten (kompakt)</div>
-        <br>
-        <ul>
-            <b>PoE-Projekt:</b>
-            <br>
-            <br>
-            <li>Liste alle PDs und deren Leistungsaufnahme auf &rarr; prüfe Switch-PoE-Budget.</li>
-            <li>Cat6/6a Vollkupfer verwenden; max. 100 m beachten; Temperatur bei Bündelung prüfen.</li>
-            <li>LLDP-MED aktivieren, wenn Voice oder Power-Management erforderlich.</li>
-            <li>Vermeide Passive PoE außer bei expliziter Kompatibilität.</li>
-            <br>
-            <br>
-            <b>VLAN-Design:</b>
-            <br>
-            <br>
-            <li>VLAN-IDs, Subnetze, DHCP-Scopes & ACLs planen und dokumentieren.</li>
-            <li>Management/Voice/Gast trennen; Native VLAN nicht produktiv nutzen.</li>
-            <li>Inter-VLAN-Routing & DHCP-Relay planen; STP-Variante festlegen.</li>
-            <li>Security: BPDU-Guard, Port-Security, 802.1X.</li>
-            <br>
-            <br>
-            <b>LACP-Trunk:</b>
-            <br>
-            <br>
-            <li>Gleiche Link-Eigenschaften (Speed/Duplex) auf allen Membern.</li>
-            <li>LACP-Mode passend (active/active oder active/passive).</li>
-            <li>VLAN-Liste auf beiden Seiten identisch.</li>
-            <li>Monitoring: Lastenverteilung, Flaps, Error-Rates beobachten.</li>
-        </ul>
-        <br>
-        </section>
-        
-        <hr class="trennlinie">
-        
-        <section>
-        <div class="section-title">Mini-FAQ — zur schnellen Widerholung</div>
-        <br>
-        <ul>
-            <li><b>Warum sieht nicht jeder alle Pakete?</b> &rarr; Weil ein Switch Unicast zielgerichtet weiterleitet; nur Broadcasts/unknown-Unicast werden geflutet.</li>
-            <br>
-            <li><b>Wozu VLANs?</b> &rarr; Segmentierung, Sicherheit, Broadcast-Kontrolle, Qos.</li>
-            <br>
-            <li><b>PoE-Gefahren?</b> &rarr; Passive PoE, schlechte Verkabelung (CCA), PoE-Budget und thermische Limits beachten.</li>
-            <br>
-            <li><b>Bringt LACP einer Verbindung 2x Bandbreite?</b> &rarr; Nein: ein einzelner Flow belegt maximal einen physikalischen Link; LACP erhöht jedoch den aggregate Durchsatz über viele Flows und bietet Redundanz.</li>
-        </ul>
-        </section>
+      </section>
 
-        <div class="bottom-links">
-          <a href="Ausbildungsthemen.html" class="back-link">&lArr; Zurück zum Inhaltsverzeichnis</a>
-          <a href="01 - TCP IP Routing NAT.html" target="blank" class="back-link">&larr; Zurück zu 01 - TCP IP Routing NAT</a>
-          <a href="03 - Raid.html" target="blank" class="back-link">03 - RAID &#8594;</a>
+      <section class="content-section" id="poe">
+        <h2>4. Power over Ethernet (PoE)</h2>
+        <p>PoE kombiniert Daten und Strom auf demselben Kupferkabel. Die IEEE-Standards definieren Leistungsklassen:</p>
+        <ul>
+          <li><b>802.3af (Type 1):</b> bis 15,4 W am Switch, ~12,95 W am Endger&auml;t.</li>
+          <li><b>802.3at (Type 2 / PoE+):</b> bis 30 W am Switch, ~25,5 W am Endger&auml;t.</li>
+          <li><b>802.3bt (Type 3/4 / PoE++):</b> bis 60 W bzw. 100 W, nutzt vier Adernpaare.</li>
+        </ul>
+        <p>Switch (PSE) und Powered Device (PD) handeln &uuml;ber Signaturen/Klassifizierung oder LLDP-MED die ben&ouml;tigte
+          Leistung aus. Wichtige Planungsgr&ouml;&szlig;e ist das <b>PoE-Budget</b> des Switches.</p>
+        <p><b>Varianten:</b></p>
+        <ul>
+          <li><b>PoE-Switch (Endspan):</b> Switch speist Strom ein.</li>
+          <li><b>PoE-Injector (Midspan):</b> Zusatzger&auml;t f&uuml;r bestehende Non-PoE-Switche.</li>
+          <li><b>Lokales Netzteil:</b> Ger&auml;t wird klassisch separat versorgt.</li>
+        </ul>
+      </section>
+
+      <section class="content-section" id="verkabelung">
+        <h2>5. Stromversorgung &amp; Verkabelung</h2>
+        <p>F&uuml;r hohe PoE-Leistungen ist saubere Verkabelung entscheidend:</p>
+        <ul>
+          <li><b>Kabelkategorie:</b> Mindestens Cat5e, empfehlenswert Cat6/6a Vollkupfer. Kein CCA!</li>
+          <li><b>L&auml;nge:</b> Maximal 100 m (90 m Permanent Link + Patchkabel). Spannungsabfall bei langen Strecken beachten.</li>
+          <li><b>B&uuml;ndelung &amp; Temperatur:</b> Viele PoE-Leitungen in Kabelb&uuml;ndeln erh&ouml;hen die W&auml;rmeentwicklung.</li>
+          <li><b>Steckzyklen:</b> Unter Last m&ouml;glichst vermeiden; Hardware mit PoE-Rating einsetzen.</li>
+        </ul>
+        <div class="note-box">
+          <p><b>Praxis:</b> PoE-Planung immer mit Leistungsaufnahme der Endger&auml;te und Kabelqualit&auml;t abgleichen.</p>
         </div>
-        </main>
-    </div>
-    <script>
+      </section>
+
+      <section class="content-section" id="vlan-grundlagen">
+        <h2>6. Was ist ein VLAN?</h2>
+        <p><b>VLAN (Virtual LAN)</b> segmentiert ein physisches Netz logisch in mehrere Broadcast-Dom&auml;nen. Basis ist 802.1Q
+          Tagging mit 12-Bit-VLAN-ID (1-4094 nutzbar).</p>
+        <p><b>Port-Typen:</b></p>
+        <ul>
+          <li><b>Access-Port:</b> Geh&ouml;rt genau zu einem VLAN, Frames sind untagged.</li>
+          <li><b>Trunk-Port:</b> Transportiert mehrere VLANs per Tagging.</li>
+          <li><b>Native VLAN:</b> Untagged VLAN auf einem Trunk; vorsichtig einsetzen (Sicherheitsrisiko).</li>
+          <li><b>Voice-VLAN:</b> Separates VLAN f&uuml;r IP-Telefone, oft per LLDP-MED signalisiert.</li>
+        </ul>
+      </section>
+
+      <section class="content-section" id="vlan-einsatz">
+        <h2>7. Wof&uuml;r nutzt man VLANs?</h2>
+        <p>VLANs trennen Benutzer, Server, VoIP, IoT oder G&auml;ste und reduzieren Broadcast-Last. Sie erm&ouml;glichen QoS,
+          Sicherheitszonen und flexible Skalierung &uuml;ber Trunks.</p>
+        <p><b>Zu beachten:</b></p>
+        <ul>
+          <li>Inter-VLAN-Routing ben&ouml;tigt Router, L3-Switch oder Firewall (inkl. ACLs/Policies).</li>
+          <li>Konsistente VLAN-IDs und Dokumentation pr&auml;ventieren Fehler.</li>
+          <li>Nur ben&ouml;tigte VLANs auf Trunks konfigurieren, Native VLAN hart definieren.</li>
+          <li>DHCP-Scopes oder Relay pro VLAN einplanen.</li>
+          <li>Security: BPDU-Guard, Port-Security, 802.1X, Schutz vor VLAN-Hopping.</li>
+        </ul>
+        <p><b>Vor- und Nachteile:</b></p>
+        <ul>
+          <li><b>+</b> Segmentierung, Sicherheit, QoS, Skalierbarkeit.</li>
+          <li><b>-</b> Mehr Komplexit&auml;t, gr&ouml;&szlig;erer Planungs- und Troubleshooting-Aufwand.</li>
+        </ul>
+      </section>
+
+      <section class="content-section" id="lacp">
+        <h2>8. Trunks, Link Aggregation &amp; LACP</h2>
+        <p><b>VLAN-Trunk:</b> Mehrere VLANs &uuml;ber eine Verbindung mittels 802.1Q-Tagging.</p>
+        <p><b>Link Aggregation (LAG):</b> Mehrere physische Links zu einem logischen Kanal b&uuml;ndeln. Standard: IEEE 802.1AX
+          (fr&uuml;her 802.3ad) mit <b>LACP</b> als Aushandlungsprotokoll.</p>
+        <ul>
+          <li>Alle Member-Links m&uuml;ssen gleiche Geschwindigkeit/Duplex besitzen.</li>
+          <li>VLAN-Liste auf beiden Seiten identisch halten.</li>
+          <li>Ein einzelner Flow nutzt i. d. R. nur einen Link (Hashing).</li>
+        </ul>
+        <p><b>Vorteile:</b> Mehr Gesamtbandbreite &uuml;ber mehrere Flows, Redundanz bei Linkausfall, weniger STP-Komplexit&auml;t.</p>
+        <p><b>Nachteile:</b> Ein einzelner Flow bleibt auf die Bandbreite eines Mitglieds beschr&auml;nkt; Hashing kann zu
+          unausgewogener Last f&uuml;hren; MC-LAG (vPC/VSX) h&auml;ngt vom Hersteller ab.</p>
+        <p><b>Einsatzszenarien:</b> Uplinks Access &rarr; Distribution, Server/Hypervisor NIC-Teams, Storage/NAS-Anbindungen,
+          Firewalls/Load-Balancer.</p>
+      </section>
+
+      <section class="content-section" id="checklisten">
+        <h2>9. Checklisten &amp; Mini-FAQ</h2>
+        <h3>Projekt-Checklisten</h3>
+        <ul>
+          <li><b>PoE:</b> Leistungsaufnahme aller PDs addieren, PoE-Budget pr&uuml;fen, Cat6/6a Vollkupfer, Temperatur im Auge
+            behalten, passive PoE vermeiden.</li>
+          <li><b>VLAN-Design:</b> VLAN-ID/Subnetz/DHCP-Plan, Dokumentation, Security-Policies, STP-Strategie.</li>
+          <li><b>LACP:</b> Gleiche Linkparameter, LACP-Mode definieren, VLAN-Zuweisung identisch, Monitoring f&uuml;r Last &amp;
+            Fehler aktivieren.</li>
+        </ul>
+        <h3>Mini-FAQ</h3>
+        <ul>
+          <li><b>Warum sieht nicht jeder alle Pakete?</b> → Switch leitet Unicast gezielt weiter.</li>
+          <li><b>Wozu VLANs?</b> → Segmentierung, Sicherheit, QoS.</li>
+          <li><b>PoE-Gefahren?</b> → Passive PoE, schlechte Kabel, zu kleines Budget.</li>
+          <li><b>Bringt LACP doppelte Bandbreite?</b> → Nein, einzelne Flows bleiben auf einem Link, aber Gesamtdurchsatz
+            steigt.</li>
+        </ul>
+      </section>
+
+      <div class="bottom-links">
+        <a href="Ausbildungsthemen.html" class="back-link">&larr; Zur&uuml;ck zum Inhaltsverzeichnis</a>
+        <a href="01 - TCP IP Routing NAT.html" class="back-link" target="_blank">&larr; Zur&uuml;ck zu 01 - TCP/IP Routing NAT</a>
+        <a href="03 - Raid.html" class="back-link" target="_blank">03 - RAID &rarr;</a>
+      </div>
+    </main>
+    <aside class="right-column">
+      <div class="logo-stack">
+        <a class="logo-card" href="https://www.teccle-group.de" target="_blank" rel="noopener">
+          <img id="teccle-logo" src="TeccleLogo.png" alt="Teccle Group Logo" />
+        </a>
+        <span class="logo-divider" aria-hidden="true"></span>
+        <a class="logo-card" href="https://www.netzplan.de" target="_blank" rel="noopener">
+          <img src="NetzplanLogo.png" alt="Netzplan Logo" />
+        </a>
+      </div>
+      <div class="info-box">
+        <strong>Mehr entdecken</strong>
+        Direkt zu Support, Dokumentation oder zur&uuml;ck zur &Uuml;bersicht.
+        <div class="info-links">
+          <a href="mailto:support@teccle-group.de">Support kontaktieren</a>
+          <br>
+          <a href="https://www.netzplan.de" target="_blank" rel="noopener">Dokumentation</a>
+          <br>
+          <a href="Ausbildungsthemen.html">Zur &Uuml;bersicht</a>
+        </div>
+      </div>
+    </aside>
+  </div>
+  <script>
     function setLogoByMode() {
       const logo = document.getElementById('teccle-logo');
-      if(document.body.classList.contains('dark')) {
-        logo.src = 'TeccleLogoBlack.png';
-      } else {
-        logo.src = 'TeccleLogo.png';
-      }
+      if (!logo) return;
+      logo.src = document.body.classList.contains('dark') ? 'TeccleLogoBlack.png' : 'TeccleLogo.png';
     }
     function toggleMode() {
       document.body.classList.toggle('dark');
       const btn = document.querySelector('.mode-toggle');
-      if(document.body.classList.contains('dark')) {
-        btn.textContent = '☀️ Hellmodus';
-      } else {
-        btn.textContent = '🌙 Dunkelmodus';
+      if (btn) {
+        btn.textContent = document.body.classList.contains('dark') ? '☀️ Hellmodus' : '🌙 Dunkelmodus';
       }
       setLogoByMode();
     }
-    window.addEventListener('DOMContentLoaded', setLogoByMode);
-    </script>
+    window.addEventListener('DOMContentLoaded', () => {
+      setLogoByMode();
+    });
+  </script>
 </body>
+
 </html>

@@ -1,678 +1,183 @@
 <!DOCTYPE html>
 <html lang="de">
- <head>
-  <meta charset="utf-8"/>
-  <title>
-   05 - Datensicherungskonzepte
-  </title>
-  <link href="Icon.ico" rel="icon" type="image/x-icon"/>
-  <style>
-   :root {
-      --bg: #b5b5b5b9;
-      --text: #2d2d2d;
-      --container-bg: #ffffff;
-      --header-bg: linear-gradient(90deg, #b46900f6, #d87e00);
-      --header-text: #ffffff;
-      --section-bg: #e2e2e2a0;
-      --section-title: #000000;
-      --section-title-bg: #cfcfcf54;
-      --section-title-border: #F18E00;
-      --h3: #c76000;
-      --trennlinie: #e0e7ef;
-      --link: #d87e00;
-      --link-hover: #ae6600;
-      --back-link-bg: #9b948e40;
-      --back-link: #e87000;
-      --back-link-hover-bg: #ffffff;
-      --back-link-hover: #e38101;
-      --aside-bg: #e3e3e3;
-      --aside-shadow: rgba(50, 58, 78, 0.556);
-      --container-shadow: 0 2px 16px rgba(180,200,255,0.10);
-      --sublist-color: #717171;
-    }
-    body.dark {
-      --bg: #424242e7;
-      --text: #f3f3f3;
-      --container-bg: #353535fc;
-      --header-bg: linear-gradient(90deg, #b46900, #d87e00);
-      --header-text: #ffffff;
-      --section-bg: #414040b9;
-      --section-title: #ffffff;
-      --section-title-bg: #d05a004c;
-      --section-title-border: #d87e00;
-      --h3: #d87e00;
-      --trennlinie: #44495a;
-      --link: #d87e00;
-      --link-hover: #ae6600;
-      --back-link-bg: #9b948e40;
-      --back-link: #e87000;
-      --back-link-hover-bg: #c8c6c651;
-      --back-link-hover: #e38101;
-      --aside-bg: #453f3c53;
-      --aside-shadow: rgba(60,60,80,0.12);
-      --container-shadow: 0 2px 16px rgba(60,60,80,0.18);
-      --sublist-color: #cccccc;
-    }
-    body {
-      background-color: var(--bg);
-      color: var(--text);
-      font-family: "Segoe UI", Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      transition: background 0.3s, color 0.3s;
-    }
-    .container {
-      max-width: 1000px;
-      margin: 20px auto;
-      background: var(--container-bg);
-      border-radius: 16px;
-      box-shadow: var(--container-shadow);
-      transition: background 0.3s;
-      position: relative;
-      z-index: 10;
-      padding-bottom: 10px;
-    }
-    .outer-container {
-      max-width: 1100px; /* etwas größer als dein eigentlicher Container */
-      margin: 20px auto; /* etwas mehr Abstand */
-      background: rgba(255, 255, 255, 0.3); /* leicht transparent, wirkt „hinter“ dem Container */
-      border-radius: 20px;
-      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
-      padding-left: 8px;
-      padding-right: 8px;
-      padding-top: 0.005%;
-      position: relative;
-      z-index: 5; /* liegt hinter deinem echten Container */
-    }
-    body.dark .outer-container {
-      background: rgba(50, 50, 50, 0.4);
-    }
 
-    header {
-      background: var(--header-bg);
-      color: var(--header-text);
-      padding: 24px 0 16px 0;
-      border-radius: 16px 16px 0 0;
-      text-align: center;
-      box-shadow: 0 2px 8px var(--aside-shadow);
-      transition: background 0.3s, color 0.3s;
-    }
-    h1 {
-      margin: 0;
-      font-size: 2em;
-      letter-spacing: 1px;
-      color: #ffffff;
-    }
-    section {
-      padding: 20px 24px;
-      border-radius: 12px;
-      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
-      margin-bottom: 28px;
-      transition: background 0.3s;
-      background: var(--section-bg);
-    }
-    .section-title {
-      font-size: 1.4em;
-      font-weight: 600;
-      margin-top: 32px;
-      margin-bottom: 12px;
-      color: var(--section-title);
-      border-left: 4px solid var(--section-title-border);
-      padding-left: 8px;
-      background: var(--section-title-bg);
-      border-radius: 4px;
-      transition: background 0.3s, color 0.3s;
-    }
-    p {
-      margin-bottom: 16px;
-      line-height: 1.9;
-    }
-    b {
-        color: #dc7900;
-        background: rgba(152, 152, 152, 0.084)
-    }
-    ul {
-      margin-bottom: 24px;
-      padding-left: 20px;
-    }
-    li {
-      margin-bottom: 12px;
-      line-height: 1.6;
-    }
-    ul ul {
-      margin-top: 6px;
-      margin-bottom: 12px;
-      list-style-type: circle;
-      color: var(--sublist-color);
-    }
-    h3 {
-      margin-top: 20px;
-      color: var(--h3);
-    }
-    .trennlinie {
-      border: none;
-      border-top: 1px solid var(--trennlinie);
-      margin: 32px 0;
-      transition: border-color 0.3s;
-    }
-    a {
-      color: var(--link);
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.2s;
-    }
-    a:hover {
-      color: var(--link-hover);
-    }
-    .back-link {
-      display: inline-block;
-      margin-top: 16px;
-      background: var(--back-link-bg);
-      color: var(--back-link);
-      padding: 10px 18px;
-      border-radius: 8px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: background 0.2s, color 0.2s;
-      border: 1px solid var(--trennlinie);
-    }
-    .back-link:hover {
-      background: var(--back-link-hover-bg);
-      color: var(--back-link-hover);
-    }
-    aside {
-      background: var(--aside-bg);
-      border-radius: 8px;
-      padding: 18px 24px;
-      margin-top: 24px;
-      box-shadow: 0 1px 4px var(--aside-shadow);
-      transition: background 0.3s;
-    }
-    .mode-toggle {
-      position: fixed;
-      top: 24px;
-      right: 24px;
-      z-index: 100;
-      background: #423c46af;
-      color: var(--back-link);
-      border: 1px solid var(--trennlinie);
-      border-radius: 8px;
-      padding: 10px 18px;
-      font-size: 1em;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s;
-    }
-    .mode-toggle:hover {
-      background: var(--back-link-hover-bg);
-      color: var(--back-link-hover);
-    }
-    @media (max-width: 800px) {
-      .container {
-        max-width: 95%;
-        padding: 16px;
-      }
-      h1 {
-        font-size: 1.5em;
-      }
-      .mode-toggle {
-        background: var(--back-link-bg);
-        top: 8px;
-        right: 8px;
-        padding: 8px 12px;
-      }
-      .floating-logo {
-        top: 8px;
-        left: 8px;
-        width: 48px;
-        height: 48px;
-      }
-      .floating-logo img {
-        max-width: 38px;
-        max-height: 38px;
-      }
-    }
-    .floating-logo {
-      position: fixed;
-      top: 24px;
-      left: 24px;
-      width: 80px;
-      height: 80px;
-      z-index: 101;
-      background: rgba(255, 255, 255, 0.782);
-      border-radius: 16px;
-      box-shadow: 0 2px 8px var(--aside-shadow);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.3s, box-shadow 0.3s;
-    }
-    .floating-logo img {
-      max-width: 65px;
-      max-height: 65px;
-      display: block;
-      border-radius: 8px;
-    }
-    body.dark .floating-logo {
-      background: rgba(40, 40, 40, 0.85);
-    }
-    .bottom-links {
-      position: fixed;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: 0px;
-      background: var(--container-bg);
-      box-shadow: 0 -2px 12px rgba(0,0,0,0.07);
-      display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      padding: 12px 0;
-      z-index: 200;
-      border-radius: 12px 12px 0 0;
-      gap: 8px;
-      max-width: 1000px;
-      width: 65%;
-    }
-    @media (max-width: 1000px) {
-      .bottom-links {
-        max-width: 95vw;
-        padding: 8px 8px;
-      }
-    }
-    @media (max-width: 800px) {
-      .bottom-links {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 8px;
-      }
-    }
-    
-    
-/* --- Logo areas: left/right gutters that match the centered content width --- */
-.logo-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 1000;
-  display: block;
-}
+<head>
+  <meta charset="utf-8" />
+  <title>05 - Datensicherungskonzepte</title>
+  <link href="Icon.ico" rel="icon" type="image/x-icon" />
+  <link rel="stylesheet" href="css/style.css">
+</head>
 
-.logo-area-left,
-.logo-area-right {
-  position: fixed;
-  width: calc((100vw - min(1000px, 95vw)) / 2);
-  display: flex;
-  justify-content: center;
-  pointer-events: none;
-  z-index: 1000;
-  padding: 4px;
-  align-items: flex-start;
-  margin-top: -60px;
-}
-
-/* wir setzen sie jetzt mit calc() vertikal passend */
-.logo-area-left { 
-  left: 0;
-  top: calc(50% + 100px); /* nach Bedarf anpassen */
-  transform: translateY(-50%);
-}
-
-.logo-area-right { 
-  right: 0;
-  top: calc(50% + 100px); /* nach Bedarf anpassen */
-  transform: translateY(-50%);
-}
-
-/* position the two areas */
-.logo-area-left { left: 0; }
-.logo-area-right { right: 0; }
-
-/* the link is clickable, allow pointer events on it and center the image */
-.logo-area-left a,
-.logo-area-right a {
-  pointer-events: auto;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: auto;
-  text-align: center;
-  padding: 0;
-  margin: 0;
-  background: none;
-}
-
-/* image sizing: scale with viewport but never exceed the gutter area minus padding */
-.logo-area-left img,
-.logo-area-right img {
-  width: clamp(60px, 18vw, 500px);
-  max-width: calc(100% - 20px); /* ensure equal inner spacing of 10px left/right */
-  height: auto;
-  object-fit: contain;
-  display: block;
-  transition: width 0.18s ease;
-}
-
-.logo-card {
-  background: rgb(251, 64, 26); /* leicht transparentes Weiß */
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 20px;
-  backdrop-filter: blur(10px) saturate(150%);
-  -webkit-backdrop-filter: blur(10px) saturate(150%);
-  padding: 16px 22px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-
-/* Dark Mode-Variante */
-body.dark .logo-card {
-  background: rgb(251, 64, 26);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
-}
-
-/* optionaler Hover-Effekt, um den modernen Touch zu betonen */
-.logo-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
-}
-
-.logo-card:hover {
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25),
-              0 0 12px rgb(237, 131, 1);
-  transform: translateY(-4px);
-}
-
-/* Linke Box – Teccle Group Orange */
-.logo-left-card {
-  background: rgba(251, 64, 26, 0.999); /* leicht transparentes Orange */
-  border: 1px solid rgba(251, 65, 26, 0.4);
-  box-shadow: 0 4px 20px rgba(251, 65, 26, 0.3);
-}
-
-body.dark .logo-left-card {
-  background: rgba(251, 65, 26, 0.25);
-  border: 1px solid rgba(251, 65, 26, 0.5);
-  box-shadow: 0 4px 25px rgba(251, 65, 26, 0.35);
-}
-
-/* Rechte Box – klassisch transparent-weiß */
-.logo-right-card {
-  background: rgb(255, 255, 255);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-}
-
-body.dark .logo-right-card {
-  background: rgb(251, 251, 251);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
-}
-
-/* When the gutter becomes too small to host the minimum logo size, hide the logos */
-@media (max-width: 1842px) {
-  /* Empirical breakpoint chosen so logos don't overlap main content on moderate screens */
-  .logo-area-left img,
-  .logo-area-right img {
-    display: none;
-  }
-}
-
-/* Extra fallback for very small screens */
-@media (max-width: 420px) {
-  .logo-area-left,
-  .logo-area-right {
-    display: none;
-  }
-}
-  </style>
- </head>
- <body>
-  <div class="logo-bar">
-   
-    <div class="logo-area-left">
-  <div class="logo-card logo-left-cart">
-    <a class="logo-left" href="https://www.teccle-group.de" target="_blank">
-      <img alt="Tecle Group Logo" src="TeccleGroup.png"/>
-    </a>
-  </div>
-</div>
-
-<div class="logo-area-right">
-  <div class="logo-card logo-right-card">
-    <a class="logo-right" href="https://www.netzplan.de" target="_blank">
-      <img alt="NetzplanLogo" src="NetzplanLogo.png"/>
-    </a>
-  </div>
-</div>
-
-  </div>
-  <div class="floating-logo">
-   <a href="Ausbildungsthemen.html" title="Zur Übersicht">
-    <img alt="Teccle Logo" id="teccle-logo" src="TeccleLogo.png" title="Teccle Group Logo"/>
-   </a>
-  </div>
-  <button class="mode-toggle" onclick="toggleMode()">
-   🌙 Dunkelmodus
-  </button>
-  <div class="container">
-    <div class="outer-container">
-      <div class="container">
-        <div class="outer-container">
-        <div class="container">
-   <main>
-      <header>
+<body>
+  <button class="mode-toggle" onclick="toggleMode()">?? Dunkelmodus</button>
+  <div class="page-wrapper">
+    <aside class="sidebar" aria-label="Inhaltsverzeichnis">
+      <h2>Inhaltsverzeichnis</h2>
+      <nav class="sidebar-nav">
+        <a href="#intro">Einleitung</a>
+        <a href="#full">Vollsicherung</a>
+        <a href="#incremental">Inkrementell</a>
+        <a href="#differential">Differenziell</a>
+        <a href="#gvs">GVS-Prinzip</a>
+        <a href="#veeam">Veeam-Übung</a>
+        <a href="#merksatz">Merksätze</a>
+      </nav>
+    </aside>
+    <main class="main-column">
+      <header class="page-header">
         <h1>05 - Datensicherungskonzepte</h1>
       </header>
-      <section>
-        <h2 class="section-title">Einleitung</h2>
-        <p>Datensicherung ist ein zentraler Bestandteil der IT-Sicherheit. Sie dient dazu, Datenverluste duchr technische Defekte, Fehlbedingungen, Schadsoftware oder menschliche Fehler zu verhindern bzw. rückgängig zu machen.</p>
-        <p>Ein gutes Sicherungskonzept sorgt dafür, dass wichtige Daten schnell und zuverlässig wiederhergestellt werden können - je nach Anforderung des Unternehmens entweder mit Fokus auf Geschwindigkeit, Speicherplatz oder Langzeitarchivierung.</p>
-        <p>In der Praxis kommen verschiedene Sicherungsmethoden zum Einsatz, die sich in Aufwand, Speicherbedarf und Wiederherstellungsdauer unterscheiden.</p>
+
+      <section class="content-section" id="intro">
+        <h2>1. Einleitung</h2>
+        <p>Datensicherung schützt vor Verlust durch Hardwaredefekte, Fehlbedienung, Malware oder menschliche Fehler. Ein gutes
+          Konzept stellt sicher, dass kritische Daten schnell und verlässlich wiederhergestellt werden können.</p>
+        <p>Je nach Anforderung steht Geschwindigkeit, Speicherplatz oder Langzeitarchivierung im Vordergrund. Die folgenden
+          Methoden bilden typische Bausteine.</p>
       </section>
 
-        <hr class="trennlinie">
-        
-      <section>
-        <h2 class="section-title">1. Vollsicherung</h2>
-        <h3>Wie funktioniert das?</h3>
-        <p>Bei einer Vollsicherung werden alle ausgewählten Daten vollständig kopiert - unabhängig davon, ob sie sich seit der letzten Sicherung verändert haben oder nicht.</p>
-        <p>Beispiel: Wenn eine virtuelle Maschine (VM) 100 GB groß ist, werden bei jeder Vollsicherung erneut 100 GB gesichert.</p>
-        <br>
-        <h3>Vorteile:</h3>
+      <section class="content-section" id="full">
+        <h2>2. Vollsicherung</h2>
+        <p>Bei einer Vollsicherung werden alle ausgewählten Daten vollständig kopiert – unabhängig von Änderungen.</p>
+        <p><b>Vorteile:</b></p>
         <ul>
-            <li>Einfache Wiederherstellung: Es wird nur diese eine Sicherungsdatei benötigt.</li>
-            <li>Robust: Fehler in anderen Backups wirken sich nicht aus.</li>
-            <li>Übersichtliche Struktur.</li>
+          <li>Einfache Wiederherstellung, nur eine Sicherung erforderlich.</li>
+          <li>Robust gegenüber Fehlern in anderen Backups.</li>
         </ul>
-        <br>
-        <h3>Nachteile:</h3>
+        <p><b>Nachteile:</b></p>
         <ul>
-            <li>Lange dauer, da jedes Mal alle Daten kopiert werden.</li>
-            <li>Sehr hoher Speicherbedarf.</li>
+          <li>Dauert lange, da immer alle Daten kopiert werden.</li>
+          <li>Sehr hoher Speicherbedarf.</li>
         </ul>
-        <br>
-        <h3>Einsatz:</h3>
+        <p><b>Einsatz:</b> Kleinere Datenmengen oder als regelmäßige Basis (z. B. wöchentlich) für andere Methoden.</p>
+      </section>
+
+      <section class="content-section" id="incremental">
+        <h2>3. Inkrementelle Sicherung</h2>
+        <p>Es werden nur Änderungen seit der <b>letzten Sicherung (Voll oder Inkrement)</b> gespeichert.</p>
+        <p><b>Beispiel:</b> Tag 1 Vollbackup 100 GB → Tag 2 nur Änderungen 5 GB → Tag 3 Änderungen seit Tag 2, z. B. 3 GB.</p>
+        <p><b>Vorteile:</b></p>
         <ul>
-          <li>Sinnvoll bei kleineren Datenmengen.</li>
-          <li>Oft als regelmäßige Basis für andere Backup-Typen (z. B. einmal pro Woche)</li>
+          <li>Sehr platzsparend, schnelle tägliche Sicherungen, geringe Netzwerklast.</li>
         </ul>
-        </section>
-
-        <hr class="trennlinie">
-
-        <section>
-          <h2 class="section-title">2. Inkrementelle Sicherung</h2>
-          <h3>Wie funktioniert das?</h3>
-          <p>Bei einer inkrementellen Sicherung werden nur die Daten gesichert, die sich seit der letzten Sicherung (egal ob voll oder inkrementell) verändert haben.</p>
-          <br>
-          <h3>Beispiel:</h3>
-          <ul>
-            <li>Tag 1: Vollbackup (100 GB)</li>
-            <li>Tag 2: nur Änderungen seit Tag 1 (z. B. 5 GB)</li>
-            <li>Tag 3: nur Änerungen seit Tag 2 (z. B. 3 GB)</li>
-          </ul>
-          <p>&#8594; Das Backup ist sehr klein und schnell erstellt.</p>
-          <br>
-          <h3>Vorteile:</h3>
-          <ul>
-            <li>Sehr platzsparend.</li>
-            <li>Schnelle tägliche Sicherungen möglich.</li>
-            <li>Geringe Netzwerklast bei Remote-Backups.</li>
-          </ul>
-          <br>
-          <h3>Nachteile:</h3>
-          <ul>
-            <li>Wiederherstellung aufwendig: Man benötigt das Vollbackup und alle Inkremente der Sicherungskette.</li>
-            <li>Wenn ein Inkrement beschädigt ist, sind alle folgenden Sicherungen unbrauchbar.</li>
-          </ul>
-          <br>
-        <h3>Einsatz:</h3>
+        <p><b>Nachteile:</b></p>
         <ul>
-          <li>Ideal für häufige Sicherungen (z. B. täglich odr mehrmals pro Tag).</li>
-          <li>Oft in Kombination mit wöchentlichen Vollsicherungen.</li>
+          <li>Restore benötigt Vollbackup + alle Inkremente der Kette.</li>
+          <li>Ist ein Inkrement beschädigt, sind alle folgenden unbrauchbar.</li>
         </ul>
-        </section>
-        <hr class="trennlinie">
-        <section>
-          <h2 class="section-title">3. Differenzielle Sicherung</h2>
-          <h3>Wie funktioniert das?</h3>
-          <p>Bei einer differenziellen Sicherung werden alle Daten gesichert, die sich seit der letzten Vollsicherung verändert haben.</p>
-          <br>
-          <h3>Beispiel:</h3>
-          <ul>
-            <li>Tag 1: Vollbackup (100 GB)</li>
-            <li>Tag 2: Änderungen seit Tag 1 (5 GB)</li>
-            <li>Tag 3: erneut Änderungen seit Tag 1 (8 GB gesamt)</li>
-          </ul>
-          <br>
-          <h3>Vorteile:</h3>
-          <ul>
-            <li>Für die Wiederherstellung benötigt man nur das Vollbackup und das letzte Differenzial.</li>
-            <li>Weniger fehleranfällig als inkrementelle Sicherungen.</li>
-            <li>Bessere Wiederherstellungszeit als bei Inkrementen.</li>
-          </ul>
-          <br>
-          <h3>Nachteile:</h3>
-          <ul>
-            <li>Backups werden mit der Zeit größer (die Differenz zum Vollbackup wächst täglich).</li>
-            <li>Höherer Speicherbedarf als Inkrementelle Sicherung.</li>
-          </ul>
-          <br>
-          <h3>Einsatz:</h3>
-          <ul>
-            <li>Typischerweise: tägliche differenzielle Sicherungen + wöchentliche Vollsicherung.</li>
-            <li>Gut geeignet, wenn die schnelle Wiederherstellung wichtiger ist als Speicherplatz.</li>
-          </ul>
-        </section>
-        <hr class="trennlinie">
-        <section>
-          <h2 class="section-title">4. GVS-Prinzip (Großvater-Vater-Sohn)</h2>
-          <h3>Idee:</h3>
-          <p>Das GVS-Prinzip ist ein klassisches Rotationsschema, um Backups über verschiedene Zeiträume hinweg aufzubewahren. Es sorgt für eine Kombination aus kurzfristigem Zugriff, mittelfristiger Sicherheit und langfristiger Archivierung.</p>
-          <br>
-          <h3>Ebenen:</h3>
-          <ul>
-            <li><b>Sohn (täglich):</b> kurzfristige Sicherungen - oft inkrementell.</li>
-            <li><b>Vater (wöchentlich):</b> mittelfristige Sicherungen - oft differenziell oder voll.</li>
-            <li><b>Großvater (monatlich):</b> langfristige Sicherungen - immer Vollsicherung.</li>
-          </ul>
-          <br>
-          <h3>Nutzen:</h3>
-          <ul>
-            <li>Man hat Sicherungen aus unterschiedlichen Zeiträumen verfügbar.</li>
-            <li>Spart Speicherplatz, da nicht jeden Tag eine Vollsicherung erfolgt.</li>
-            <li>Bietet Schutz vor Datenverlust, der erst spät bemerkt wird (z. B. versehentlich gelöschte Dateien).</li>
-            <li>Ein bewährtes Standardprinzip in vielen Backup-Strategien.</li>
-          </ul>
-        </section>
-        <hr class="trennlinie">
-        <section>
-          <h2 class="section-title">5. Prüfungsaufgabe mit Veeam</h2>
-          <br>
-          <h3>Aufgabe:</h3>
-          <p>Erstelle drei Backup-Jobs (z. B. für dieselbe VM):</p>
-          <ul>
-            <li><b>Job 1:</b> Vollbackup</li>
-            <li><b>Job 2:</b> Inkrementell</li>
-            <li><b>Job 3:</b> Differenziell</li>
-            &#8594; Jeden Job jeweils dreimal ausführen.
-          </ul>
-          <br>
-          <h3>Erwartetes Ergebnis:</h3>
-          <ul>
-            <li><b>Vollbackup:</b></li>
-            <ul>
-              <li>Drei große Dateien - jede enthält eine vollständige Kopie der VM.</li>
-            </ul>
-            <li><b>Inkrementell:</b></li>
-            <ul>
-              <li>Eine Vollsicherung (Basis)</li>
-              <li>Zwei kleine Inkremente mit nur den Änderungen</li>
-              <li>Wiederherstellung = Basis + alle Inkremente</li>
-            </ul>
-            <li><b>Differenziell:</b></li>
-            <ul>
-              <li>Eine Vollsicherung (Basis)</li>
-              <li>Zwei differenzielle Dateien, die jeweils größer werden (weil sie alles seit dem Vollbackup enthalten)</li>
-              <li>Wiederherstellung = Basis + letztes Differenzial</li>
-            </ul>
-          </ul>
-          <br>
-          <h3>Wichtige Erklärung im Gespräch:</h3>
-          <ul>
-            <li>Warum manche Dateien klein oder groß sind.</li>
-            <li>Welche Daten für den Restore benötigt werden.</li>
-            <li>Vor- und Nachteile der Methoden anhand der Ergebnisse erläutern.</li>
-          </ul>
-        </section>
+        <p><b>Einsatz:</b> Häufige Sicherungen (täglich oder öfter) in Kombination mit periodischen Vollbackups.</p>
+      </section>
 
-        <hr class="trennlinie">
+      <section class="content-section" id="differential">
+        <h2>4. Differenzielle Sicherung</h2>
+        <p>Sichert alle Daten, die sich seit der <b>letzten Vollsicherung</b> geändert haben.</p>
+        <p><b>Beispiel:</b> Tag 1 Vollbackup 100 GB → Tag 2 Änderungen seit Tag 1 (5 GB) → Tag 3 wieder Änderungen seit Tag 1
+          (8 GB gesamt).</p>
+        <p><b>Vorteile:</b></p>
+        <ul>
+          <li>Restore braucht nur Vollbackup + letztes Differenzial.</li>
+          <li>Weniger fehleranfällig als Inkremente.</li>
+        </ul>
+        <p><b>Nachteile:</b></p>
+        <ul>
+          <li>Backups werden täglich größer, da Differenz zum Vollbackup wächst.</li>
+          <li>Mehr Speicherbedarf als Inkrement-Sicherung.</li>
+        </ul>
+        <p><b>Einsatz:</b> Häufig tägliche Differenziale plus wöchentliche Vollsicherung, wenn schnelle Wiederherstellung
+          wichtiger ist als Speicherplatz.</p>
+      </section>
 
-        <aside>
-          <h3 class="section-title">Merksätze für die Prüfung</h3>
-          <ul>
-            <li><b>Vollsicherung:</b> komplett, einfach, braucht viel Speicher</li>
-            <li><b>Inkrementell:</b> nur Änderungen seit letzter Sicherung, platzsparend, aber Restore aufwendig</li>
-            <li><b>Differenziell:</b> Änderungen seit letzter Vollsicherung, Kompromiss zwischen Speicher und Geschwindigkeit</li>
-            <li><b>GVS-Prinzip:</b> Rotation &#8594; Sohn = täglich, Vater = wöchentlich, Großvater = monatlich</li>
-            <li><b>Ziel:</b> Kombination aus schneller Wiederherstellung, langfristiger Aufbewahrung und effizienter Speichernutzung</li>
-          </ul>
-        </aside>
-        <br>
-        <div class="bottom-links">
-          <a href="Ausbildungsthemen.html" class="back-link">&lArr; Zurück zum Inhaltsverzeichnis</a>
-          <a href="04 - Verschlüsselung.html" target="blank" class="back-link">&larr; Zurück zu 04 - Verschlüsselung</a>
-          <a href="05 - Datensicherungskonzepte.html" target="blank" class="back-link">05 - Datensicherungskonzepte &#8594;</a>
+      <section class="content-section" id="gvs">
+        <h2>5. GVS-Prinzip (Großvater-Vater-Sohn)</h2>
+        <p>Rotationsschema für unterschiedliche Zeiträume:</p>
+        <ul>
+          <li><b>Sohn (täglich):</b> Kurzfristige Sicherungen, oft inkrementell.</li>
+          <li><b>Vater (wöchentlich):</b> Mittelfristige Sicherungen, differenziell oder voll.</li>
+          <li><b>Großvater (monatlich):</b> Langfristige Sicherungen, voll.</li>
+        </ul>
+        <p><b>Nutzen:</b> Kombination aus schneller Wiederherstellung, langfristiger Aufbewahrung und effizienter
+          Speichernutzung. Hilft, Datenverluste zu bemerken, die erst spät auffallen.</p>
+      </section>
+
+      <section class="content-section" id="veeam">
+        <h2>6. Prüfungsaufgabe &ndash; Beispiel mit Veeam</h2>
+        <p>Aufgabe: Drei Backup-Jobs für dieselbe VM erstellen und je drei Mal ausführen:</p>
+        <ul>
+          <li><b>Job 1:</b> Vollbackup</li>
+          <li><b>Job 2:</b> Inkrementell</li>
+          <li><b>Job 3:</b> Differenziell</li>
+        </ul>
+        <p><b>Erwartete Ergebnisse:</b></p>
+        <ul>
+          <li><b>Vollbackup:</b> Drei große Dateien, jede enthält eine komplette Kopie.</li>
+          <li><b>Inkrementell:</b> Eine Vollsicherung als Basis + zwei kleine Inkremente (nur Änderungen). Restore = Basis + alle
+            Inkremente.</li>
+          <li><b>Differenziell:</b> Eine Vollsicherung + zwei differenzielle Dateien, die größer werden (alles seit dem
+            Vollbackup). Restore = Basis + letztes Differenzial.</li>
+        </ul>
+        <div class="note-box">
+          <p><b>Im Gespräch erklären:</b> Warum Dateien unterschiedlich groß sind, welche Sets für Restores nötig sind und welche
+            Vor-/Nachteile sich daraus ergeben.</p>
         </div>
-      </main>
-    </div>
-    <script>
+      </section>
+
+      <section class="content-section" id="merksatz">
+        <h2>7. Merksätze</h2>
+        <ul>
+          <li><b>Vollsicherung:</b> Komplett, einfach, braucht viel Speicher.</li>
+          <li><b>Inkrementell:</b> Nur Änderungen seit letzter Sicherung, platzsparend, Restore aufwendig.</li>
+          <li><b>Differenziell:</b> Änderungen seit letzter Vollsicherung, Kompromiss zwischen Speicher und Geschwindigkeit.</li>
+          <li><b>GVS:</b> Sohn täglich, Vater wöchentlich, Großvater monatlich.</li>
+          <li><b>Ziel:</b> Schnelle Wiederherstellung + langfristige Aufbewahrung + effiziente Speichernutzung.</li>
+        </ul>
+      </section>
+
+      <div class="bottom-links">
+        <a href="Ausbildungsthemen.html" class="back-link">&larr; Zurück zum Inhaltsverzeichnis</a>
+        <a href="04 - Verschlüsselung.html" class="back-link" target="_blank">&larr; Zurück zu 04 - Verschlüsselung</a>
+        <a href="06 - USV.html" class="back-link" target="_blank">06 - USV &rarr;</a>
+      </div>
+    </main>
+    <aside class="right-column">
+      <div class="logo-stack">
+        <a class="logo-card" href="https://www.teccle-group.de" target="_blank" rel="noopener">
+          <img id="teccle-logo" src="TeccleLogo.png" alt="Teccle Group Logo" />
+        </a>
+        <span class="logo-divider" aria-hidden="true"></span>
+        <a class="logo-card" href="https://www.netzplan.de" target="_blank" rel="noopener">
+          <img src="NetzplanLogo.png" alt="Netzplan Logo" />
+        </a>
+      </div>
+      <div class="info-box">
+        <strong>Mehr entdecken</strong>
+        Direkt zu Support, Dokumentation oder zurück zur Übersicht.
+        <div class="info-links">
+          <a href="mailto:support@teccle-group.de">Support kontaktieren</a>
+          <br>
+          <a href="https://www.netzplan.de" target="_blank" rel="noopener">Dokumentation</a>
+          <br>
+          <a href="Ausbildungsthemen.html">Zur Übersicht</a>
+        </div>
+      </div>
+    </aside>
+  </div>
+  <script>
     function setLogoByMode() {
       const logo = document.getElementById('teccle-logo');
-      if(document.body.classList.contains('dark')) {
-        logo.src = 'TeccleLogoBlack.png';
-      } else {
-        logo.src = 'TeccleLogo.png';
-      }
+      if (!logo) return;
+      logo.src = document.body.classList.contains('dark') ? 'TeccleLogoBlack.png' : 'TeccleLogo.png';
     }
     function toggleMode() {
       document.body.classList.toggle('dark');
       const btn = document.querySelector('.mode-toggle');
-      if(document.body.classList.contains('dark')) {
-        btn.textContent = '☀️ Hellmodus';
-      } else {
-        btn.textContent = '🌙 Dunkelmodus';
+      if (btn) {
+        btn.textContent = document.body.classList.contains('dark') ? '☀️ Hellmodus' : '🌙 Dunkelmodus';
       }
       setLogoByMode();
     }
-    window.addEventListener('DOMContentLoaded', setLogoByMode);
-    </script>
+    window.addEventListener('DOMContentLoaded', () => {
+      setLogoByMode();
+    });
+  </script>
 </body>
 </html>

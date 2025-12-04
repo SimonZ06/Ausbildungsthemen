@@ -1,511 +1,106 @@
 <!DOCTYPE html>
 <html lang="de">
- <head>
-  <meta charset="utf-8"/>
-  <title>
-   Ausbildungsthemen
-  </title>
-  <link href="Icon.ico" rel="icon" type="image/x-icon"/>
-  <style>
-   :root {
-      --bg: #b5b5b5b9;
-      --text: #2d2d2d;
-      --container-bg: #ffffff;
-      --header-bg: linear-gradient(90deg, #b46900f6, #d87e00);
-      --header-text: #ffffff;
-      --section-bg: #e2e2e2a0;
-      --section-title: #000000;
-      --section-title-bg: #cfcfcf54;
-      --section-title-border: #F18E00;
-      --h3: #c76000;
-      --trennlinie: #e0e7ef;
-      --link: #d87e00;
-      --link-hover: #ae6600;
-      --back-link-bg: #9b948e40;
-      --back-link: #e87000;
-      --back-link-hover-bg: #ffffff;
-      --back-link-hover: #e38101;
-      --aside-bg: #e3e3e3;
-      --aside-shadow: rgba(50, 58, 78, 0.556);
-      --container-shadow: 0 2px 16px rgba(180,200,255,0.10);
-      --sublist-color: #717171;
-    }
-    body.dark {
-      --bg: #424242e7;
-      --text: #f3f3f3;
-      --container-bg: #353535fc;
-      --header-bg: linear-gradient(90deg, #b46900, #d87e00);
-      --header-text: #ffffff;
-      --section-bg: #414040b9;
-      --section-title: #ffffff;
-      --section-title-bg: #d05a004c;
-      --section-title-border: #d87e00;
-      --h3: #d87e00;
-      --trennlinie: #44495a;
-      --link: #d87e00;
-      --link-hover: #ae6600;
-      --back-link-bg: #9b948e40;
-      --back-link: #e87000;
-      --back-link-hover-bg: #c8c6c651;
-      --back-link-hover: #e38101;
-      --aside-bg: #453f3c53;
-      --aside-shadow: rgba(60,60,80,0.12);
-      --container-shadow: 0 2px 16px rgba(60,60,80,0.18);
-      --sublist-color: #cccccc;
-    }
-    body {
-      background-color: var(--bg);
-      color: var(--text);
-      font-family: "Segoe UI", Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      transition: background 0.3s, color 0.3s;
-    }
-    .container {
-      max-width: 1000px;
-      margin: 20px auto;
-      background: var(--container-bg);
-      border-radius: 16px;
-      box-shadow: var(--container-shadow);
-      transition: background 0.3s;
-      position: relative;
-      z-index: 10;
-      padding-bottom: 10px;
-    }
-    .outer-container {
-      max-width: 1100px; /* etwas größer als dein eigentlicher Container */
-      margin: 20px auto; /* etwas mehr Abstand */
-      background: rgba(255, 255, 255, 0.3); /* leicht transparent, wirkt „hinter“ dem Container */
-      border-radius: 20px;
-      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
-      padding-left: 8px;
-      padding-right: 8px;
-      padding-top: 0.005%;
-      position: relative;
-      z-index: 5; /* liegt hinter deinem echten Container */
-    }
-    body.dark .outer-container {
-      background: rgba(50, 50, 50, 0.4);
-    }
 
-    header {
-      background: var(--header-bg);
-      color: var(--header-text);
-      padding: 24px 0 16px 0;
-      border-radius: 16px 16px 0 0;
-      text-align: center;
-      box-shadow: 0 2px 8px var(--aside-shadow);
-      transition: background 0.3s, color 0.3s;
-    }
-    h1 {
-      margin: 0;
-      font-size: 2em;
-      letter-spacing: 1px;
-      color: #ffffff;
-    }
-    section {
-      padding: 20px 24px;
-      border-radius: 12px;
-      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
-      margin-bottom: 28px;
-      transition: background 0.3s;
-      background: var(--section-bg);
-    }
-    .section-title {
-      font-size: 1.4em;
-      font-weight: 600;
-      margin-top: 32px;
-      margin-bottom: 12px;
-      color: var(--section-title);
-      border-left: 4px solid var(--section-title-border);
-      padding-left: 8px;
-      background: var(--section-title-bg);
-      border-radius: 4px;
-      transition: background 0.3s, color 0.3s;
-    }
-    p {
-      margin-bottom: 16px;
-      line-height: 1.9;
-    }
-    b {
-        color: #dc7900;
-        background: rgba(152, 152, 152, 0.084)
-    }
-    ul {
-      margin-bottom: 24px;
-      padding-left: 20px;
-    }
-    li {
-      margin-bottom: 12px;
-      line-height: 1.6;
-    }
-    ul ul {
-      margin-top: 6px;
-      margin-bottom: 12px;
-      list-style-type: circle;
-      color: var(--sublist-color);
-    }
-    h3 {
-      margin-top: 20px;
-      color: var(--h3);
-    }
-    .trennlinie {
-      border: none;
-      border-top: 1px solid var(--trennlinie);
-      margin: 32px 0;
-      transition: border-color 0.3s;
-    }
-    a {
-      color: var(--link);
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.2s;
-    }
-    a:hover {
-      color: var(--link-hover);
-    }
-    .back-link {
-      display: inline-block;
-      margin-top: 16px;
-      background: var(--back-link-bg);
-      color: var(--back-link);
-      padding: 10px 18px;
-      border-radius: 8px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: background 0.2s, color 0.2s;
-      border: 1px solid var(--trennlinie);
-    }
-    .back-link:hover {
-      background: var(--back-link-hover-bg);
-      color: var(--back-link-hover);
-    }
-    aside {
-      background: var(--aside-bg);
-      border-radius: 8px;
-      padding: 18px 24px;
-      margin-top: 24px;
-      box-shadow: 0 1px 4px var(--aside-shadow);
-      transition: background 0.3s;
-    }
-    .mode-toggle {
-      position: fixed;
-      top: 24px;
-      right: 24px;
-      z-index: 100;
-      background: #423c46af;
-      color: var(--back-link);
-      border: 1px solid var(--trennlinie);
-      border-radius: 8px;
-      padding: 10px 18px;
-      font-size: 1em;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s;
-    }
-    .mode-toggle:hover {
-      background: var(--back-link-hover-bg);
-      color: var(--back-link-hover);
-    }
-    @media (max-width: 800px) {
-      .container {
-        max-width: 95%;
-        padding: 16px;
-      }
-      h1 {
-        font-size: 1.5em;
-      }
-      .mode-toggle {
-        background: var(--back-link-bg);
-        top: 8px;
-        right: 8px;
-        padding: 8px 12px;
-      }
-      .floating-logo {
-        top: 8px;
-        left: 8px;
-        width: 48px;
-        height: 48px;
-      }
-      .floating-logo img {
-        max-width: 38px;
-        max-height: 38px;
-      }
-    }
-    .floating-logo {
-      position: fixed;
-      top: 24px;
-      left: 24px;
-      width: 80px;
-      height: 80px;
-      z-index: 101;
-      background: rgba(255, 255, 255, 0.782);
-      border-radius: 16px;
-      box-shadow: 0 2px 8px var(--aside-shadow);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.3s, box-shadow 0.3s;
-    }
-    .floating-logo img {
-      max-width: 65px;
-      max-height: 65px;
-      display: block;
-      border-radius: 8px;
-    }
-    body.dark .floating-logo {
-      background: rgba(40, 40, 40, 0.85);
-    }
-    .bottom-links {
-      position: fixed;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: 0px;
-      background: var(--container-bg);
-      box-shadow: 0 -2px 12px rgba(0,0,0,0.07);
-      display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      padding: 12px 0;
-      z-index: 200;
-      border-radius: 12px 12px 0 0;
-      gap: 8px;
-      max-width: 1000px;
-      width: 65%;
-    }
-    @media (max-width: 1000px) {
-      .bottom-links {
-        max-width: 95vw;
-        padding: 8px 8px;
-      }
-    }
-    @media (max-width: 800px) {
-      .bottom-links {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 8px;
-      }
-    }
-    
-    
-/* --- Logo areas: left/right gutters that match the centered content width --- */
-.logo-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 1000;
-  display: block;
-}
+<head>
+  <meta charset="utf-8" />
+  <title>Ausbildungsthemen</title>
+  <link href="Icon.ico" rel="icon" type="image/x-icon" />
+  <link rel="stylesheet" href="css/style.css">
+</head>
 
-.logo-area-left,
-.logo-area-right {
-  position: fixed;
-  width: calc((100vw - min(1000px, 95vw)) / 2);
-  display: flex;
-  justify-content: center;
-  pointer-events: none;
-  z-index: 1000;
-  padding: 4px;
-  align-items: flex-start;
-  margin-top: -60px;
-}
+<body>
+  <button class="mode-toggle" onclick="toggleMode()">?? Dunkelmodus</button>
+  <div class="page-wrapper">
+    <aside class="sidebar" aria-label="Inhaltsverzeichnis">
+      <h2>Inhaltsverzeichnis</h2>
+      <nav class="sidebar-nav">
+        <a href="#uebersicht">Überblick</a>
+        <a href="#themen">Themenübersicht</a>
+        <a href="#hinweise">Hinweise</a>
+      </nav>
+    </aside>
+    <main class="main-column">
+      <header class="page-header">
+        <h1>Ausbildungsthemen</h1>
+      </header>
 
-/* wir setzen sie jetzt mit calc() vertikal passend */
-.logo-area-left { 
-  left: 0;
-  top: calc(50% + 100px); /* nach Bedarf anpassen */
-  transform: translateY(-50%);
-}
-
-.logo-area-right { 
-  right: 0;
-  top: calc(50% + 100px); /* nach Bedarf anpassen */
-  transform: translateY(-50%);
-}
-
-/* position the two areas */
-.logo-area-left { left: 0; }
-.logo-area-right { right: 0; }
-
-/* the link is clickable, allow pointer events on it and center the image */
-.logo-area-left a,
-.logo-area-right a {
-  pointer-events: auto;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: auto;
-  text-align: center;
-  padding: 0;
-  margin: 0;
-  background: none;
-}
-
-/* image sizing: scale with viewport but never exceed the gutter area minus padding */
-.logo-area-left img,
-.logo-area-right img {
-  width: clamp(60px, 18vw, 500px);
-  max-width: calc(100% - 20px); /* ensure equal inner spacing of 10px left/right */
-  height: auto;
-  object-fit: contain;
-  display: block;
-  transition: width 0.18s ease;
-}
-
-.logo-card {
-  background: rgb(251, 64, 26); /* leicht transparentes Weiß */
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 20px;
-  backdrop-filter: blur(10px) saturate(150%);
-  -webkit-backdrop-filter: blur(10px) saturate(150%);
-  padding: 16px 22px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-
-/* Dark Mode-Variante */
-body.dark .logo-card {
-  background: rgb(251, 64, 26);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
-}
-
-/* optionaler Hover-Effekt, um den modernen Touch zu betonen */
-.logo-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
-}
-
-.logo-card:hover {
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25),
-              0 0 12px rgb(237, 131, 1);
-  transform: translateY(-4px);
-}
-
-/* Linke Box – Teccle Group Orange */
-.logo-left-card {
-  background: rgba(251, 64, 26, 0.999); /* leicht transparentes Orange */
-  border: 1px solid rgba(251, 65, 26, 0.4);
-  box-shadow: 0 4px 20px rgba(251, 65, 26, 0.3);
-}
-
-body.dark .logo-left-card {
-  background: rgba(251, 65, 26, 0.25);
-  border: 1px solid rgba(251, 65, 26, 0.5);
-  box-shadow: 0 4px 25px rgba(251, 65, 26, 0.35);
-}
-
-/* Rechte Box – klassisch transparent-weiß */
-.logo-right-card {
-  background: rgb(255, 255, 255);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-}
-
-body.dark .logo-right-card {
-  background: rgb(251, 251, 251);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
-}
-
-/* When the gutter becomes too small to host the minimum logo size, hide the logos */
-@media (max-width: 1842px) {
-  /* Empirical breakpoint chosen so logos don't overlap main content on moderate screens */
-  .logo-area-left img,
-  .logo-area-right img {
-    display: none;
-  }
-}
-
-/* Extra fallback for very small screens */
-@media (max-width: 420px) {
-  .logo-area-left,
-  .logo-area-right {
-    display: none;
-  }
-}
-  </style>
- </head>
- <body>
-  <div class="logo-bar">
-  
-    <div class="logo-area-left">
-  <div class="logo-card logo-left-cart">
-    <a class="logo-left" href="https://www.teccle-group.de" target="_blank">
-      <img alt="Tecle Group Logo" src="TeccleGroup.png"/>
-    </a>
-  </div>
-</div>
-
-<div class="logo-area-right">
-  <div class="logo-card logo-right-card">
-    <a class="logo-right" href="https://www.netzplan.de" target="_blank">
-      <img alt="NetzplanLogo" src="NetzplanLogo.png"/>
-    </a>
-  </div>
-</div>
-
-  </div>
-  <div class="floating-logo">
-   <a href="Ausbildungsthemen.html" title="Zur Übersicht">
-    <img alt="Teccle Logo" id="teccle-logo" src="TeccleLogo.png" title="Teccle Group Logo"/>
-   </a>
-  </div>
-  <button class="mode-toggle" onclick="toggleMode()">
-   🌙 Dunkelmodus
-  </button>
-  <div class="container">
-    <div class="outer-container">
-      <div class="container">
-        <div class="outer-container">
-        <div class="container">
-        <header>
-            <h1>Ausbildungsthemen</h1>
-        </header>
-        <section>
-        <div class="info">
-            Hier findest du alle Ausbildungsthemen aus dem Wiki als Lerneinheit:
+      <section class="content-section" id="uebersicht">
+        <h2>1. Überblick</h2>
+        <p>Diese Seite bündelt alle Ausbildungsthemen als digitale Lerneinheiten. Jeder Eintrag führt direkt zu einem
+          ausführlichen Kapitel mit Dark-Mode, Inhaltsverzeichnis und zusätzlichen Ressourcen. Nutze die Liste, um gezielt
+          in Themen einzusteigen oder dein Wissen schnell zu wiederholen.</p>
+        <div class="note-box">
+          <p><b>Tipp:</b> Öffne die Kapitel in neuen Tabs, damit du bequem zwischen Übersicht und Detailseiten wechseln kannst.</p>
         </div>
-        <div class="verzeichnis">
-            <div class="section-title">Inhaltsverzeichnis</div>
-            <ul>
-                <li><a href="01 - TCP IP Routing NAT.html" target="blank">01 - TCP/IP, Routing, NAT (Einfach/Erweitert)</a></li>
-                <li><a href="02 - Switching VLAN PoE.html" target="blank">02 - Switching / VLAN / POE</a></li>
-                <li><a href="03 - Raid.html" target="blank">03 - RAID</a></li>
-                <li><a href="04 - Verschlüsselung.html" target="blank">04 - Verschlüsselung</a></li>
-                <li><a href="05 - Datensicherungskonzepte.html" target="blank">05 - Datensicherungskonzepte</a>
-            </ul>
+      </section>
+
+      <section class="content-section" id="themen">
+        <h2>2. Themenübersicht</h2>
+        <p>Alle bisher veröffentlichten Inhalte auf einen Blick:</p>
+        <ul>
+          <li><a href="01 - TCP IP Routing NAT.html" target="_blank">01 &ndash; TCP/IP, Routing, NAT (Einfach/Erweitert)</a></li>
+          <li><a href="02 - Switching VLAN PoE.html" target="_blank">02 &ndash; Switching / VLAN / PoE</a></li>
+          <li><a href="03 - Raid.html" target="_blank">03 &ndash; RAID</a></li>
+          <li><a href="04 - Verschlüsselung.html" target="_blank">04 &ndash; Verschlüsselung</a></li>
+          <li><a href="05 - Datensicherungskonzepte.html" target="_blank">05 &ndash; Datensicherungskonzepte</a></li>
+          <li><a href="06 - USV.html" target="_blank">06 &ndash; USV</a></li>
+        </ul>
+        <p><i>*Weitere Kapitel folgen*</i></p>
+      </section>
+
+      <section class="content-section" id="hinweise">
+        <h2>3. Hinweise &amp; Updates</h2>
+        <p>Alle Seiten teilen ein einheitliches Layout mit Dark-/Light-Mode, Logo-Umschaltung und responsivem Aufbau. Bei
+          gewünschten Erweiterungen oder Feedback melde dich einfach über den Support-Link in der rechten Spalte.</p>
+        <p>Die Inhalte werden laufend ergänzt; schau regelmäßig vorbei oder setze dir Bookmarks für wichtige Kapitel.</p>
+      </section>
+
+      <div class="bottom-links">
+        <a href="01 - TCP IP Routing NAT.html" class="back-link" target="_blank">→ Starte mit 01 - TCP/IP Routing NAT</a>
+        <a href="06 - USV.html" class="back-link" target="_blank">→ Direkt zu 06 - USV</a>
+      </div>
+    </main>
+    <aside class="right-column">
+      <div class="logo-stack">
+        <a class="logo-card" href="https://www.teccle-group.de" target="_blank" rel="noopener">
+          <img id="teccle-logo" src="TeccleLogo.png" alt="Teccle Group Logo" />
+        </a>
+        <span class="logo-divider" aria-hidden="true"></span>
+        <a class="logo-card" href="https://www.netzplan.de" target="_blank" rel="noopener">
+          <img src="NetzplanLogo.png" alt="Netzplan Logo" />
+        </a>
+      </div>
+      <div class="info-box">
+        <strong>Mehr entdecken</strong>
+        Direkt zu Support, Dokumentation oder zurück zur Übersicht.
+        <div class="info-links">
+          <a href="mailto:support@teccle-group.de">Support kontaktieren</a>
+          <br>
+          <a href="https://www.netzplan.de" target="_blank" rel="noopener">Dokumentation</a>
+          <br>
+          <a href="Ausbildungsthemen.html">Zur Übersicht</a>
         </div>
-        <p>*Wird noch aktualisiert*</p>
-    </div>
-        </section>
-    <script>
+      </div>
+    </aside>
+  </div>
+  <script>
     function setLogoByMode() {
       const logo = document.getElementById('teccle-logo');
-      if(document.body.classList.contains('dark')) {
-        logo.src = 'TeccleLogoBlack.png';
-      } else {
-        logo.src = 'TeccleLogo.png';
-      }
+      if (!logo) return;
+      logo.src = document.body.classList.contains('dark') ? 'TeccleLogoBlack.png' : 'TeccleLogo.png';
     }
     function toggleMode() {
       document.body.classList.toggle('dark');
       const btn = document.querySelector('.mode-toggle');
-      if(document.body.classList.contains('dark')) {
-        btn.textContent = '☀️ Hellmodus';
-      } else {
-        btn.textContent = '🌙 Dunkelmodus';
+      if (btn) {
+        btn.textContent = document.body.classList.contains('dark') ? '☀️ Hellmodus' : '🌙 Dunkelmodus';
       }
       setLogoByMode();
     }
-    window.addEventListener('DOMContentLoaded', setLogoByMode);
-    </script>
+    window.addEventListener('DOMContentLoaded', () => {
+      setLogoByMode();
+    });
+  </script>
 </body>
+
 </html>
