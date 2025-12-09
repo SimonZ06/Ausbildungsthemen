@@ -16,6 +16,15 @@
       <nav class="sidebar-nav">
         <a href="#warum-vpn-wichtig">Warum VPN wichtig ist</a>
         <a href="#ssl-vpn">SSL-VPN</a>
+        <a href="#ip-sec-vpn">IPsec-VPN</a>
+        <a href="#informationen_aufbau_ipsec">Informationen Aufbau IPsec-Site-to-Site-Tunnel</a>
+        <a href="#watchguard_konfig_verstehen">Die WatchGuard-Konfiguartion verstehen</a>
+        <a href="#unterschied_phase1_phase2">Unterschied zwischen Phase 1 und Phase 2</a>
+        <a href="#bovpn-tunnel_vs_bovpn-vif">BOVPN-Tunnel vs. BOVPN-VIF auf WatchGuard</a>
+        <a href="#wann_welche_variante">Wann verwendet man welche Variante?</a>
+        <a href="#ssl-vpn_vs_ipsec-vpn">SSL-VPN vs. IPsec-VPN – Hauptunterschiede in der Praxis</a>
+        <a href="#automatisch_runterfahren_ausfall">Automatisches Herunterfahren bei Stromausfall</a>
+        <a href="#zusammenfassung">Zusammenfassung</a>
       </nav>
     </aside>
     <main class="main-column">
@@ -29,9 +38,9 @@
         <p>Man unterscheidet dabei grundsätzlich zwei große Arten von VPN-Verbindungen:</p>
         <ul>
             <li><b>Mobile-User-VPNs</b><br>
-            Ein eintzelner Benutzer verbindet sich von außen (z. B. von Zuhause) in das Firmennetz.</li>
+            Ein einzelner Benutzer verbindet sich von außen (z. B. von Zuhause) in das Firmennetz.</li>
             <li><b>Site-to-Site-VPNs</b><br>
-            Zwei Standorte - zum Beispiel die Haubptstelle und ein Außenlager - werden dauerhaft miteinander verbunden, sodass sie sich verhalten, als wären sie lokal im selben Netzwerk.</li>
+            Zwei Standorte - zum Beispiel die Hauptstelle und ein Außenlager - werden dauerhaft miteinander verbunden, sodass sie sich verhalten, als wären sie lokal im selben Netzwerk.</li>
         </ul>
         <p>Beide Varianten folgen denselben Zielen:<br>
         Vertrauenswürdigkeit, Integrität, Authentizität und ein möglichst störungsfreier Zugriff.</p>
@@ -40,14 +49,13 @@
       <h2>2. SSL-VPN (Mobile User)</h2>
       <h3>2.1 Wie ein SSL-VPN grundsätzlich funktioniert</h3>
       <p>Ein SSL-VPN nutzt dieselben Mechanismen wie HTTPS.<br>
-      Statt einen speziellen VPN-Port zu verwenden, läuft der Tunnel über Port <strong>443</strong>, also genau dort, wo auch Webbrowser kommunizieren. Dadurch sind SSL-VPNs extrem Kompatibel, selbst in streng abgesicherten WLANs oder Firmennetzen.</p>
-      <p>Technisch läuft ein SSL-VPN auf einer höheren Netzwerkebene (Layer 5-7). Der Tunnel wird oft über eine Art Webportal oder Client initalisiert, der dann die Daten in sichere, TLS-verschlüsselte Pakete verpackt.</p>
+      Statt einen speziellen VPN-Port zu verwenden, läuft der Tunnel über Port <strong>443</strong>, also genau dort, wo auch Webbrowser kommunizieren. Dadurch sind SSL-VPNs extrem kompatibel, selbst in streng abgesicherten WLANs oder Firmennetzen.</p>
+      <p>Technisch läuft ein SSL-VPN auf einer höheren Netzwerkebene (Layer 5-7). Der Tunnel wird oft über eine Art Webportal oder Client initialisiert, der dann die Daten in sichere, TLS-verschlüsselte Pakete verpackt.</p>
       <p>Man kann sich das wie eine Art "VPN im Browser-Kostüm" vorstellen:<br>
       Die Verbindung fühlt sich an wie ein normaler HTTPS-Dialog, ist aber in Wahrheit ein sicherer Netzwerkzugang.</p>
-    </section>
-    <section class="content-section">
+      <hr class="trennlinie">
       <h3>2.2 Unterschied zum IPsec-VPN für Mobile User</h3>
-      <p>Auch wenn beide das gleiche ziel haben, unterscheiden sie sich im Kern:</p>
+      <p>Auch wenn beide das gleiche Ziel haben, unterscheiden sie sich im Kern:</p>
       <b>SSL-VPN</b>
       <ul>
         <li>Ideal für Homeoffice</li>
@@ -64,14 +72,13 @@
       </ul>
       <p>Wenn ein Kunde eine Lösung möchte, die "immer irgendwo funktioniert", sollte man SSL-VPN wählen.<br>
       Wenn volle Standortintegration benötigt wird, ist IPsec das Mittel der Wahl.</p>
-    </section>
-    <section class="content-section">
-      <h2>2.3 SSL-VPN auf einer WatchGuard einrichten</h2>
+      <hr class="trennlinie">
+      <h3>2.3 SSL-VPN auf einer WatchGuard einrichten</h3>
       <ol class="fette-zahlen">
-        <li><span><b>SSL-VPN auf der Watchguard aktivieren</b><br>
+        <li><span><b>SSL-VPN auf der WatchGuard aktivieren</b><br>
         Dabei muss definiert werden, welche Benutzer sich anmelden dürfen.</span></li>
         <li><span><b>Benutzer lokal anlegen</b><br>
-        Diese Prüfung nutzt selten Active Directory - meist reicht ein lokales Konto</span></li>
+        Die Authentifizierung nutzt selten Active Directory - meist reicht ein lokales Konto</span></li>
         <li><span><b>Client installieren und anmelden</b><br>
         Ziel: Die Verbindung soll "green" werden.</span></li>
         <li><span><b>Zugriff einschränken</b><br>
@@ -83,9 +90,169 @@
           <li>Tunnel etabliert?</li>
           <li>Authentifizierung erfolgreich?</li>
           <li>Welche IP hat der Benutzer erhalten?</li>
-          <li>Welche Regeln greiften beim Zugriff?</li>
+          <li>Welche Regeln griffen beim Zugriff?</li>
         </ul></span></li>
       </ol>
+    </section>
+    <section class="content-section" id="ip-sec-vpn">
+      <h2>3. IPsec-VPN</h2>
+      <p>IPsec ist im Vergleich zu SSL-VPN technisch deutlich komplexer.<br>
+      Der große Vorteil: Es ist das weltweit etablierte Standardverfahren für professionelle Standortvernetzung.</p>
+      <p>Damit ein Tunnel funktioniert, müssen beide Seiten sich exakt auf dieselben technischen Parameter einigen - wie zwei Menschen, die nur dann miteinander reden können, wenn sie dieselbe Sprache, denselben Dialekt, denselben Wortschatz und dieselbe Grammatik benutzen.</p>
+    </section>
+    <section class="content-section" id="informationen_aufbau_ipsec">
+      <h2>4. Welche Informationen benötigt man zum Aufbau eines IPsec-Site-to-Site-Tunnels?</h2>
+      <p>Damit zwei Firewalls einen Tunnel aufbauen können, müssen folgende Informationen übereinstimmen:</p>
+      <ul>
+        <li><b>Öffentliche IP-Adresse</b> der Gegenstelle</li>
+        <li><b>Lokales Subnetz</b> (z. B. 192.168.1.0/24)</li>
+        <li><b>Entferntes Subnetz</b> (z. B. 192.168.2.0/24)</li>
+        <li><b>Pre-Shared Key (PSK)</b> - das gemeinsame VPN-Passwort</li>
+        <li><b>IKE-Version</b> (IKEv1 oder IKEv2)</li>
+        <li><b>Proposals</b> (Verschlüsselung & Hashing: AES-256, SHA-256)</li>
+        <li><b>Diffie-Hellman-Gruppe</b> für sicheren Schlüsselaustausch</li>
+        <li><b>SA-Lifetime</b> - wie lange ein Schlüssel gültig bleibt</li>
+        <li><b>Tunnelmodus</b> (bei Site-to-Site immer "Tunnel Mode")</li>
+      </ul>
+      <p>Wenn auch nur eine einzige Angabe nicht exakt passt, kommt kein Tunnel zustande.</p>
+    </section>
+    <section class="content-section" id="watchguard_konfig_verstehen">
+      <h2>5. Die WatchGuard-Konfiguration verstehen</h2>
+      <p>WatchGuard ist sehr logisch aufgebaut und zeigt technisch sauber an, was in den einzelnen IPsec-Phasen passiert.</p>
+      <h3>Wichtigste Parameter und ihre Bedeutung</h3>
+      <b>Verschlüsselungsalgorithmus (Encryption)</b>
+      <p>Gibt an, wie die Nutzdaten geschützt werden.<br>
+      Typisch: AES-128 oder AES-256.</p>
+      <b>Hash-Algorithmus (Integrity)</b>
+      <p>Schützt vor Manipulation.<br>
+      Typisch: SHA-256.</p>
+      <b>Diffie-Hellman-Gruppe</b>
+      <p>Regelt, wie der gemeinsame Schlüssel sicher ausgetauscht wird.<br>
+      Eine höhere Gruppe bedeutet mehr Sicherheit, aber auch mehr CPU-Last.</p>
+      <b>SA-Lebensdauer (Lifetime)</b>
+      <p>Bestimmt, wann IPsec neue Schlüssel generiert.<br>
+      Wert von 28.800 Sekunden ist gängig.</p>
+    </section>
+    <section class="content-section" id="unterschied_phase1_phase2">
+      <h2>6. Unterschied zwischen Phase 1 und Phase 2</h2>
+      <p>IPsec besteht aus zwei hintereinander geschalteten "Verhandlungsphasen".</p>
+      <h3>6.1 Phase 1 - Authentifizierung & sicherer Kanal</h3>
+      <b>Die Geräte prüfen:</b>
+      <ul>
+        <li>Kennwort / PSK</li>
+        <li>Identitäten</li>
+        <li>DH-Gruppe</li>
+        <li>Verschlüsselungsstärken</li>
+      </ul>
+      <p>Danach steht ein sicherer Kommunikationskanal, über den die Details des eigentlichen Tunnels ausgehandelt werden können.</p>
+      <hr class="trennlinie">
+      <h3>6.2 Phase 2 - Der eigentliche VPN-Tunnel</h3>
+      <b>Hier wird festgelegt:</b>
+      <ul>
+        <li>welche Netzwerke miteinander kommunizieren dürfen</li>
+        <li>welche Verschlüsselung verwendet wird</li>
+        <li>wie Routing funktioniert</li>
+      </ul>
+      <p>Merksatz:<br>
+      <b>Phase 1 = Sicherheit | Phase 2 = Datenverkehr</b></p>
+    </section>
+    <section class="content-section" id="bovpn-tunnel_vs_bovpn-vif">
+      <h2>7. BOVPN-Tunnel vs. BOVPN-VIF auf WatchGuard</h2>
+      <p>Die WatchGuard bietet zwei sehr unterschiedliche Bauarten für IPsec-Tunnel.</p>
+      <h3>7.1 BOVPN-Tunnel (klassisch)</h3>
+      <ul>
+        <li>starre Zuordnung zwischen zwei Netzen</li>
+        <li>keine dynamischen Routen</li>
+        <li>einfache Konfiguration</li>
+        <li>ideal für kleine, einfache Vernetzungen</li>
+      </ul>
+      <hr class="trennlinie">
+      <h3>7.2 BOVPN-VIF (Virtual Interface)</h3>
+      <ul>
+        <li>der Tunnel erscheint wie ein eigenes Netzwerk-Interface</li>
+        <li>unterstützt dynamisches Routing (OSPF, BGP)</li>
+        <li>perfekt für komplexere oder skalierbare Umgebungen</li>
+        <li>geeignet für mehrere Subnetze pro Tunnel</li>
+      </ul>
+      <p>Praktischer Merksatz:<br>
+      <b>BOVPN-Tunnel = simpel</b><br>
+      <b>BOVPN-VIF = modern, flexibel, professionell</b></p>
+    </section>
+    <section class="content-section" id="wann_welche_variante">
+      <h2>8. Wann verwendet man welche Variante?</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Situation</th>
+            <th>Empfehlung</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>kleiner Standort, einfache Verbindung</td>
+            <td>klassischer BOVPN-Tunnel</td>
+          </tr>
+          <tr>
+            <td>mehrere VLANs, dynamisches Routing</td>
+            <td>VIF-Tunnel</td>
+          </tr>
+          <tr>
+            <td>redundante Leitungen</td>
+            <td>VIF-Tunnel</td>
+          </tr>
+          <tr>
+            <td>kleine Außenstellen</td>
+            <td>klassischer Tunnel</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    <section class="content-section" id="ssl-vpn_vs_ipsec-vpn">
+      <h2>9. SSL-VPN vs. IPsec-VPN - Hauptunterschiede in der Praxis</h2>
+      <h3>SSL-VPN</h3>
+      <ul>
+        <li><strong>Wird genutzt, wenn:</strong></li>
+        <li>Benutzer flexibel von überall arbeiten sollen</li>
+        <li>Hotels / öffentliche WLANs eine Rolle spielen</li>
+        <li>weniger Aufwand gewünscht ist</li>
+        <li>nur einzelne Dienste (z. B. RDP) freigegeben werden sollen</li>
+      </ul>
+      <br>
+      <h3>IPsec-VPN</h3>
+      <ul>
+        <li><strong>Wird genutzt, wenn:</strong></li>
+        <li>zwei Standorte dauerhaft gekoppelt werden sollen</li>
+        <li>Performance wichtig ist</li>
+        <li>vollständige Routing-Integration notwendig ist</li>
+        <li>mehrere Subnetze verbunden werden müssen</li>
+      </ul>
+    </section>
+    <section class="content-section" id="automatisch_runterfahren_ausfall">
+      <h2>10. Automatisches Herunterfahren bei Stromausfall</h2>
+      <p>Der praktische Ablauf:</p>
+      <ol class="fette-zahlen">
+        <li><span>APC-USV per USB oder Netzwerk anschließen</span></li>
+        <li><span>PowerChute installieren</span></li>
+        <li><span>Software erkennt die USV und zeigt Statuswerte an</span></li>
+        <li><span>Ereignis definieren:</span><br>
+        <b>"Wenn Batterie unter x% fällt ⟶ Rechner sauber herunterfahren"</b></li>
+        <li><span>Test durchführen ("Strom ziehen")</span></li>
+      </ol>
+      <p><strong>Warum ist das Teil der Ausbildung?</strong><br>
+      Weil in der Praxis Server und Firewalls bei Stromausfall kontrolliert herunterfahren müssen - sonst drohen Datenkorruption und Hardwarefehler.</p>
+    </section>
+    <section class="content-section" id="zusammenfassung">
+      <h2>11. Zusammenfassung</h2>
+      <ul>
+        <li><b>SSL-VPN</b> = flexibel, überall nutzbar, perfekt für Mobile User</li>
+        <li><b>IPsec-VPN</b> = Profi-VPN für Standort-Kopplung</li>
+        <li><b>Phase 1</b> = Authentifizierung</li>
+        <li><b>Phase 2</b> = Tunnel / Netze</li>
+        <li><b>BOVPN-VIF</b> = Interface-Modell für dynamische und moderne Umgebungen</li>
+        <li><b>BOVPN-Tunnel</b> = klassisch und einfach</li>
+        <li>Für IPsec braucht man immer:<br>
+        <b>Public IP, Subnetze, PSK, Algorithmen, DH-Gruppe, SA-Lifetime, Tunnel-Mode</b></li>
+      </ul>
     </section>
       <div class="bottom-links">
         <a href="Ausbildungsthemen.html" class="back-link">⟵ Zurück zum Inhaltsverzeichnis</a>
@@ -116,25 +283,7 @@
       </div>
     </aside>
   </div>
-  <script>
-    function setLogoByMode() {
-      const logo = document.getElementById('teccle-logo');
-      if (!logo) return;
-      logo.src = document.body.classList.contains('dark') ? 'TeccleLogoBlack.png' : 'TeccleLogo.png';
-    }
-    function toggleMode() {
-      document.body.classList.toggle('dark');
-      const btn = document.querySelector('.mode-toggle');
-      if (btn) {
-        btn.textContent = document.body.classList.contains('dark') ? '☀️ Hellmodus' : '🌙 Dunkelmodus';
-      }
-      setLogoByMode();
-    }
-    window.addEventListener('DOMContentLoaded', () => {
-      setLogoByMode();
-    });
-  </script>
-  </div>
+  
   <script>
     function setLogoByMode() {
       const logo = document.getElementById('teccle-logo');
