@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="utf-8" />
+  <title>09 - Grundlagen Scripting</title>
+  <link href="Icon.ico" rel="icon" type="image/x-icon" />
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <button class="mode-toggle" onclick="toggleMode()">🌙 Dunkelmodus</button>
+  <div class="page-wrapper">
+    <aside class="sidebar" aria-label="Inhaltsverzeichnis">
+      <h2>Inhaltsverzeichnis</h2>
+      <nav class="sidebar-nav">
+        <a href="#einleitung">Einleitung</a>
+        <a href="#einsatzgebiete">Typische Einsatzgebiete von Scriptsprachen</a>
+        <a href="#hallo_welt">"Hallo Welt" - Erklärung und Beispiele</a>
+        <a href="#prozeduren_funktionen">Prozeduren und Funktionen</a>
+        <a href="#"></a>
+        <a href="#"></a>
+        <a href="#"></a>
+      </nav>
+    </aside>
+    <main class="main-column">
+      <header class="page-header">
+        <h1>09 - Grundlagen Scripting</h1>
+      </header>
+    <section class="content-section" id="einleitung">
+        <h2>Einleitung</h2>
+        <p>Scriptprogrammierung ist ein wichtiger Bestandteil der Systemadministration und Automatisierung. Ziel ist es, wiederkehrende Aufgaben niocht jedes Mal manuell auszuführen, sondern sie durch ein Script atomatisiert ablaufen zu lassen. Ein Script ist dabei eine Textdatei, die aus einer Abfolge von Befehlen besteht, welche von einem Interpreter (z. B. PowerShell, CMD oder Windows Script Host) Schritt für Schritt ausgeführt werden.</p>
+        <p>Im Gegensatz zu klassischen Programmen werden Scripte <b>nicht kompiliert</b>, sondern direkt ausgeführt. Dadurch sind sie schnell erstellt, leicht anpassbar und ideal  für administrative Aufgaben. Typische Einsatzgebiete sind Systemverwaltung, Benutzerverwaltung, Wartungsarbeiten, Installationen oder einfache Prüf- und Auswertungsaufgaben.</p>
+        <p>Ein klassisches Einstiegsbeispiel in jede Script- oder Programmiersprache ist das sogenannte <b>"Hallo Welt" - Beispiel</b>. Es dient nicht der Funktionalität, sondern zeigt, dass:</p>
+        <ul>
+            <li>das Script korrekt aufgebaut ist,</li>
+            <li>die Laufzeitumgebung funktioniert,</li>
+            <li>und Ausgaben erfolgreich erzeugt werden können.</li>
+        </ul>
+    </section>
+    <section class="content-section" id="einsatzgebiete">
+        <h2>1. Typische Einsatzgebiete von Scriptsprachen</h2>
+        <p>Scripting-Sprachen werden überall dort eingesetzt, wo Abläufe standardisiert, beschleunigt oder fehlerfrei wiederholt werden sollen.</p>
+        <p><b>PowerShell</b> wird hauptsächlich in Windows-Umgebungen verwendet und ist sehr eng mit dem Betriebssystem verzahnt. Sie arbeitet objektorientiert und kann tief in Systeme eingreifen. Typische Einsatzgebiete sind:</p>
+        <ul>
+            <li>Verwaltung von Active Directory (Benutzer, Gruppen, Computer)</li>
+            <li>Auslesen von Systeminformationen</li>
+            <li>Automatisierung von Server- und Clientaufgaben</li>
+            <li>Softwareinstallation und -konfiguration</li>
+            <li>Steuerung von Diensten, Prozessen und Netzwerkkomponenten</li>
+        </ul>
+        <p><b>Batch (CMD)</b> ist die klassische Windows-Skriptsprache. Sie ist einfacher aufgebaut und wenigter mächtig als PowerShell, eignet sich aber gut für:</p>
+        <ul>
+            <li>Starten von Programmen</li>
+            <li>Kopieren, Verschieben oder Löschen von Dateien</li>
+            <li>einfache Installations- oder Startskripte</li>
+            <li>kleine Automatisierungen ohne große Logik</li>
+        </ul>
+        <p><b>VBScript (VBS)</b> wurde früher häufig in Windows-Umgebungen eingesetzt, z. B. für Logon-Skripte oder Systemabfragen. Heute gilt es als veraltet, ist aber in älteren Umgebungen noch vorhanden. Typische Einsätze waren:</p>
+        <ul>
+            <li>Benutzeranmeldeskripte</li>
+            <li>einfache GUI-Meldungen</li>
+            <li>WMI-Abfragen</li>
+        </ul>
+        <p>Grundsätzlich gilt:<br>
+        Scripts sind besonders dann sinnvoll, wenn Aufgaben <b>regelmäßig, wiederholbar</b> und <b>nach festen Regeln</b> ablaufen.</p>
+    </section>
+    <section class="content-section" id="hallo_welt">
+        <h2>2. "Hallo Welt" - Erklärung und Beispiele</h2>
+        <h3>PowerShell - Hallo Welt</h3>
+        <div class="note-box">
+            <small>powershell</small>
+            <br>
+            <br>
+            <p style="font-family: 'Courier New', Courier, monospace;">Write-Host "Hallo Welt"</p>
+        </div>
+        <p>Dieses Script besteht aus einem einzigen Befehl. <i style="font-family: 'Courier New', Courier, monospace;">Write-Host</i> gibt Text direkt in der Konsole aus. Der Text <i style="font-family: 'Courier New', Courier, monospace;">"Hallo Welt"</i> ist ein sogenannter String. Das Script zeigt, dass PowerShell korrekt funktioniert und Befehle ausführen kann.</p>
+        <p>Start über die Kommandozeile:</p>
+        <div class="note-box">
+            <small>powershell</small>
+            <br>
+            <br>
+            <p style="font-family: 'Courier New', Courier, monospace;">.\hallo.ps1</p>
+        </div>
+        <p>Dabei ist zu beachten, dass PowerShell da Ausführen von Scripts nur erlaubt, wenn die Ausführungsrichtlinie (Execution Policy) entsprechend gesetzt ist.</p>
+        <hr class="trennlinie">
+        <h3>Batch - Hallo Welt</h3>
+        <div class="note-box">
+            <small>batch</small>
+            <br>
+            <br>
+            <p style="font-family: 'Courier New', Courier, monospace;">@echo off<br>
+            echo Hallo Welt<br>
+            pause</p>
+        </div>
+        <p><i style="font-family: 'Courier New', Courier, monospace;"><i style="background-color:rgba(164, 168, 168, 0.353);">@echo off</i></i> verhindert, dass die einzelnen Befehle selbst angezeigt werden.<br>
+        <i style="font-family: 'Courier New', Courier, monospace;"><i style="background-color:rgba(164, 168, 168, 0.353);">echo Hallo Welt</i></i> gibt den Text aus.<br>
+        <i style="font-family: 'Courier New', Courier, monospace;"><i style="background-color:rgba(164, 168, 168, 0.353);">pause</i></i> sorgt dafür, dass das Konsolenfenster geöffnet bleibt.</p>
+        <p>Start über die Kommandozeile:</p>
+        <div class="note-box">
+            <small>cmd</small>
+            <br>
+            <br>
+            <p style="font-family: 'Courier New', Courier, monospace;">hallo.bat</p>
+        </div>
+        <hr class="trennlinie">
+        <h3>VBScript - Hallo Welt</h3>
+        <div class="note-box">
+            <small>vbscript</small>
+            <br>
+            <br>
+            <p style="font-family: 'Courier New', Courier, monospace;">MsgBox "Hallo Welt"</p>
+        </div>
+        <p>Dieses Script zeigt ein grafisches Meldungsfenster an. Im Gegensatz zu PowerShell oder Batch erfolgt die Ausgabe hier nicht in der Konsole, sondern über eine Dialogbox.</p>
+        <p>Start über die Kommandozeile:</p>
+        <div class="note-box">
+            <small>cmd</small>
+            <br>
+            <br>
+            <p style="font-family: 'Courier New', Courier, monospace;">cscript hallo.vbs</p>
+        </div>
+        <p>oder per Doppelklick.</p>
+    </section>
+    <section class="content-section" id="prozeduren_funktionen">
+        <h2>Prozeduren und Funktionen - Unterschied und Einsatz</h2>
+        <p>In der Scriptprogrammierung unterscheidet man zwischen <b>Prozeduren</b> und <b>Funktionen</b>.</p>
+        <p>Eine <b>Prozedur</b> ist ein zusammengefasster Codeblock, der eine bestimmte Aufgabe ausführt, aber <b>keinen Wert zurückgibt</b>. Sie wird genutzt, um Abläufe übersichtlich zu strukturieren, zum Beispiel:</p>
+        <ul>
+            <li>Ausgaben erzeugen</li>
+            <li>Dateien kopieren</li>
+            <li>Meldungen anzeigen</li>
+            <li>Logs schreiben</li>
+        </ul>
+        <p>Eine <b>Funktion</b> hingegen gibt <b>immer ein Ergebnis zurück</b>. Dieses Ergebnis kann anschließend weiterverarbeitet oder ausgewertet werden. Funktionen werden verwendet, wenn:</p>
+        <ul>
+            <li>Berechnungen durchgeführt werden</li>
+            <li>Werte zurückgegeben werden sollen</li>
+            <li>Ergebnisse in Bedingungen (<i style="font-family: 'Courier New', Courier, monospace;">if</i>) genutzt werden</li>
+        </ul>
+        <p>Kurz zusammengefasst:</p>
+        <ul>
+            <li><b>Prozedur</b> ⟶ führt etwas aus</li>
+            <li><b>Funktion</b> ⟶ liefert ein Ergebnis zurück</li>
+        </ul>
+    </section>
+    <div class="bottom-links">
+        <a href="Ausbildungsthemen.html" class="back-link">⟵ Zurück zum Inhaltsverzeichnis</a>
+        <a href="08 - Telefonie.html" target="_blank" class="back-link">⟵ Zurück zu 08 - Telefonie</a>
+        <a href="10 - Netzwerkverkabelung.html" target="_blank" class="back-link">10 - Netzwerkverkabelung ⟶</a>
+      </div>
+    </main>
+    <aside class="right-column">
+      <div class="logo-stack">
+        <a class="logo-card" href="https://www.teccle-group.de" target="_blank" rel="noopener">
+          <img id="teccle-logo" src="TeccleLogo.png" alt="Teccle Group Logo" />
+        </a>
+        <span class="logo-divider" aria-hidden="true"></span>
+        <a class="logo-card" href="https://www.netzplan.de" target="_blank" rel="noopener">
+          <img src="NetzplanLogo.png" alt="Netzplan Logo" />
+        </a>
+      </div>
+      <div class="info-box">
+        <strong>Mehr entdecken</strong>
+        Direkt zu Support, Dokumentation oder zurück zur Übersicht.
+        <div class="info-links">
+          <a href="mailto:support@teccle-group.de">Support kontaktieren</a>
+          <br>
+          <a href="https://www.netzplan.de" target="_blank" rel="noopener">Dokumentation</a>
+          <br>
+          <a href="Ausbildungsthemen.html">Zur Übersicht</a>
+        </div>
+      </div>
+    </aside>
+  </div>
+  
+  <script>
+    function setLogoByMode() {
+      const logo = document.getElementById('teccle-logo');
+      if (document.body.classList.contains('dark')) {
+        logo.src = 'TeccleLogoBlack.png';
+      } else {
+        logo.src = 'TeccleLogo.png';
+      }
+    }
+    function toggleMode() {
+      document.body.classList.toggle('dark');
+      const btn = document.querySelector('.mode-toggle');
+      if (document.body.classList.contains('dark')) {
+        btn.textContent = '☀️ Hellmodus';
+      } else {
+        btn.textContent = '🌙 Dunkelmodus';
+      }
+      setLogoByMode();
+    }
+    window.addEventListener('DOMContentLoaded', setLogoByMode);
+  </script>
+</body>
+
+</html>

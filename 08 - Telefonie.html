@@ -17,8 +17,10 @@
         <a href="#einleitung">Ein umfassender Überblick für moderne IT-Umgebungen</a>
         <a href="#analoge_telefonie">Analoge Telefonie</a>
         <a href="#isdn">ISDN - Der digitale Nachfolger</a>
-        <a href="#voip">VoIP - die Moderne Telefonie</a>
+        <a href="#voip">VoIP - die moderne Telefonie</a>
         <a href="#codecs_und_sip">Codecs & SIP - Zwei zentrale Begriffe</a>
+        <a href="#sip_verbindung_ablauf">Wie baut SIP eine Verbindung auf? - Der Ablauf</a>
+        <a href="#zusammenfassung">Zusammenfassung zum Merken</a>
       </nav>
     </aside>
     <main class="main-column">
@@ -27,17 +29,17 @@
       </header>
     <section class="content-section" id="einleitung">
         <h2>Telefonie - Analog, ISDN und VoIP</h2>
-        <p><h3>Ein umfassender Überblick für moderne IT-Umgebungen</h3>
+        <h3>Ein umfassender Überblick für moderne IT-Umgebungen</h3>
         <p>Telefonie wirkt auf den ersten Blick einfach ("Man telefoniert eben..."), aber technisch haben sich die letzten Jahrzehnte mehrere Generationen von Übertragungsmethoden entwickelt. Jede hat ihre eigenen Eigenschaften, Anforderungen und Einsatzorte.<br>
         <p>Heute begegnet man in Unternehmen fast ausschließlich <b>VoIP</b>, aber es lohnt sich zu verstehen, warum Analog & ISDN früher so wichtig waren und warum sie langsam verschwinden.</p>
     </section>
     <section class="content-section" id="analoge_telefonie">
         <h2>1. Analoge Telefonie</h2>
-        <p><h3>1.1 Was ist analoge Telefonie?</h3>
-        <p>Analoge Telefonie ist die älteste Form der digitalen Kommunikation. Die Stimme wird nicht als Datenpaket übertragen, sondern als <b>elektrisches analoges Signal</b>, dessen Spannung und Frequenz direkt die Sprache abbilden.<br>
+        <h3>1.1 Was ist analoge Telefonie?</h3>
+        <p>Analoge Telefonie ist die älteste Form der telefonischen Kommunikation. Die Stimme wird nicht als Datenpaket übertragen, sondern als <b>elektrisches analoges Signal</b>, dessen Spannung und Frequenz direkt die Sprache abbilden.<br>
         Das ist simpel, zuverlässig - aber technisch sehr eingeschränkt.</p>
         <hr class="trennlinie">
-        <p><h3>1.2 Wo trifft man Analogtelefonie heute noch an?</h3>
+        <h3>1.2 Wo trifft man Analogtelefonie heute noch an?</h3>
         <p>Obwohl die meisten Anbieter Analoganschlüsse abschalten, gibt es sie noch:</p>
         <ul>
             <li>in Aufzugnotrufsystemen</li>
@@ -49,7 +51,7 @@
         </ul>
         <p>In Unternehmen wird analog fast nur noch für Notfalltechnik verwendet, da es extrem robust ist und ohne komplexe Netzwerke auskommt.</p>
         <hr class="trennlinie">
-        <p><h3>1.3 Wie viele Leiter benötigt ein Analogtelefon?</h3>
+        <h3>1.3 Wie viele Leiter benötigt ein Analogtelefon?</h3>
         <p>Ein klassisches analoges Telefon benötigt <b>2 Leiter (Drähte):</b></p>
         <ul>
             <li><b>a-Ader</b></li>
@@ -60,7 +62,7 @@
     </section>
     <section class="content-section" id="isdn">
         <h2>2. ISDN - Der digitale Nachfolger</h2>
-        <p><h3>2.1 Grundidee von ISDN</h3>
+        <h3>2.1 Grundidee von ISDN</h3>
         <p>ISDN (Integrated Services Digital Network) war der große Fortschritt nach analoger Telefonie. Sprache wurde erstmals <b>digital übertragen</b>, zusätzlich bot ISDN:</p>
         <ul>
             <li>bessere Sprachqualität</li>
@@ -73,7 +75,7 @@
         <h3>2.2 Wo findet man ISDN heute noch?</h3>
         <p>ISDN wird in Deutschland seit 2018 großflächig abgeschaltet, taucht aber noch auf:</p>
         <ul>
-          <li>in älteren Telefonanlage (TK-Anlagen), die noch nicht umgestellt wurden</li>
+          <li>in älteren Telefonanlagen (TK-Anlagen), die noch nicht umgestellt wurden</li>
           <li>in Firmen, die ISDN-Protokolle intern weiter nutzen</li>
           <li>in Spezialhardware wie alten Türsprechstellen oder Alarmmodulen</li>
           <li>in sehr alten Standleitungsverbindungen</li>
@@ -82,15 +84,16 @@
         <hr class="trennlinie">
         <h3>2.3 Wie viele Leiter benötigt ISDN?</h3>
         <p>Hier muss man unterscheiden:</p>
-        <b>S<sub>o</sub>-Bus (Standard für Telefone/Anlagen)</b>
+        <b>S<sub>0</sub>-Bus (Standard für Telefone/Anlagen)</b>
         <ul>
-          <li><b>4 Leiter</b></li>
+          <li><b>4 Leiter</b>
           <ul>
             <li>2 für Empfang</li>
             <li>2 für Senden</li>
           </ul>
+          </li>
         </ul>
-        <b>U<sub>k</sub>- Schnittstelle (Verbindung vom Provider zum NTBA)</b>
+        <b>U<sub>k0</sub>-Schnittstelle (Provider ↔ NTBA), 2-drahtig</b>
         <ul>
           <li><b>2 Leiter</b></li>
         </ul>
@@ -106,16 +109,14 @@
           <li>Jedes Gerät, das Netzwerk und Internet hat, kann telefonieren.</li>
           <li>Telefonanlagen werden zu Softwarediensten (Cloud- oder On-Prem-Systeme).</li>
         </ul>
-        VoIP bildet heute den Standard - günstig, flexibel, zukunftssicher.
+        VoIP ist heute der Standard - günstig, flexibel, zukunftssicher.
         <hr class="trennlinie">
         <h3>3.2 Wie viele Leiter benötigt ein VoIP-Gerät?</h3>
         <p>VoIP nutzt <b>normales Ethernet</b>, also:</p>
         <ul>
-          <li><b>4 Adern (Fast Ethernet, 100 Mbit/s)</b></li>
-          <p>oder<br>
-          </p><li><b>8 Adern (Gigabit-Ethernet)</b></li>
+          <li>Typisch ist ein <b>Ethernet-Kabel (8 Adern)</b>. Fast-Ethernet nutzt davon nur 4, Gigabit nutzt alle 8.</li>
         </ul>
-        <p>In der Praxis verwendet man fast immer <b>8 Adern</b>, da Moderne Geräte per Gigabit angebunden werden.</p>
+        <p>In der Praxis verwendet man fast immer <b>8 Adern</b>, da moderne Geräte per Gigabit angebunden werden.</p>
         <hr class="trennlinie">
         <h3>3.3 Was benötigt man, um ein VoIP-Telefon zu betreiben?</h3>
         <p>Ein VoIP-Gerät setzt mehr Infrastruktur voraus als Analog oder ISDN.<br>
@@ -133,8 +134,8 @@
             <li>alternativ Netzteil</li>
           </ul>
           <li><span><b>SIP-Account</b></span></li>
-          Ein Telefon registriert sich bei einer Telefonanlage.<br>
-          Dazu braucht es:
+          <p>Ein Telefon registriert sich bei einer Telefonanlage.<br>
+          Dazu braucht es:</p>
           <ul>
             <li>SIP-Benutzername</li>
             <li>SIP-Passwort</li>
@@ -155,7 +156,7 @@
         </ol>
         <hr class="trennlinie">
         <h3>3.4 Typische Fehlerquellen bei VoIP</h3>
-        <p>VoIP kann empfindlicher sein als alte Telefonieformen, weil es auf vielen Ebenen funktioneren muss. Häufige Probleme:</p>
+        <p>VoIP kann empfindlicher sein als alte Telefonieformen, weil es auf vielen Ebenen funktionieren muss. Häufige Probleme:</p>
         <b>Netzwerkprobleme</b>
         <ul>
           <li>falsches VLAN</li>
@@ -169,7 +170,7 @@
           <li>falsche SIP-Zugangsdaten</li>
           <li>falscher Registrar</li>
           <li>NAT-Probleme (häufig!)</li>
-          <li>doppeltes SIP-ALG - sorgt für beschädigte Pakete</li>
+          <li>aktives SIP-ALG kann Pakete verändern und Probleme verursachen</li>
         </ul>
         <b>QoS (Quality of Service)</b>
         <ul>
@@ -204,7 +205,7 @@
           <br>
           - Standard in Deutschland
           <br>
-          <br>w
+          <br>
           <li><b>G.722</b></li>
           - HD-Voice, höhere Sprachqualität
           <br>
@@ -212,12 +213,57 @@
           <li><b>G.729</b></li>
           - stark komprimiert, spart Bandbreite
         </ul>
-        <p>Der Codec wir zwischen Telefon und Anlage ausgehandelt.</p>
+        <p>Der Codec wird zwischen Telefon und Anlage ausgehandelt.</p>
+        <hr class="trennlinie">
+        <h3>4.2 Was ist SIP?</h3>
+        <p>SIP ("Session Initiation Protocol") ist <b>das Signalisierungsprotokoll</b> im VoIP-Universum.<br>
+        Es regelt:</p>
+        <ul>
+          <li>wer mit wem telefonieren will</li>
+          <li>Rufaufbau</li>
+          <li>Rufannahme</li>
+          <li>Rufbeendigung</li>
+          <li>Weiterleitung</li>
+          <li>Registrierung beim Server</li>
+        </ul>
+        <p>Wichtig:<br>
+        <b>SIP überträgt nicht die Stimme.</b><br>
+      Für die Sprachdaten wird ein seperates Protokoll verwendet: <b>RTP (Real-Time Transport Protocol)</b>.</p>
+      </section>
+      <section class="content-section" id="sip_verbindung_ablauf">
+        <h2>5. Wie baut SIP eine Verbindung auf? - Der Ablauf</h2>
+        <p>Ein Rufaufbau besteht technisch aus einer Reihe von Requests und Responses.</p>
+        <p><b>1. REGISTER</b><br>
+        Das Telefon meldet sich mit Benutzername + Passwort bei der Telefonanlage an.</p>
+        <p><b>2. INVITE</b><br>
+        Das Telefon signalisiert einen Anruf an die Gegenstelle.</p>
+        <p><b>3. TRYING / RINGING</b><br>
+        Die Gegenstelle antwortet:<br>
+        "Ich kümmere mich darum" ⟶ TRYING<br>
+        "Es klingelt" ⟶ RINGING</p>
+        <p><b>4. OK</b><br>
+        Jemand hebt ab ⟶ Verbindung angenommen.</p>
+        <p><b>5. ACK</b><br>
+        Telefon bestätigt ⟶ Sprachkanal wird geöffnet (RTP).</p>
+        <p><b>6. BYE</b><br>
+        Einer legt auf ⟶ Sitzung wird beendet.</p>
+        <p>Damit ist der komplette Rufaufbau sauber beschrieben.</p>
+      </section>
+      <section class="content-section" id="zusammenfassung">
+        <h2>Zusammenfassung zum Merken</h2>
+        <ul>
+          <li><b>Analog:</b> alt, robust, 2 Adern, heute nur noch in Spezialbereichen.</li>
+          <li><b>ISDN:</b> digital, 4 Adern am S<sub>0</sub>-Bus, heute kaum noch im Einsatz.</li>
+          <li><b>VoIP:</b> modern, läuft komplett über IP-Netze, benötigt Netzwerk + SIP + PBX.</li>
+          <li><b>Fehler bei VoIP</b> entstehen meist durch Netzwerk, Ports, SIP oder QoS.</li>
+          <li><b>Codecs</b> bestimmen Qualität & Bandbreite.</li>
+          <li><b>SIP</b> ist das Gehirn, <b>RTP</b> die Stimme.</li>
+        </ul>
       </section>
       <div class="bottom-links">
         <a href="Ausbildungsthemen.html" class="back-link">⟵ Zurück zum Inhaltsverzeichnis</a>
-        <a href="06 - USV.html" target="_blank" class="back-link">⟵ Zurück zu 06 - USV</a>
-        <a href="08 - Telefonie.html" target="_blank" class="back-link">08 - Telefonie ⟶</a>
+        <a href="07 - VPN-Techniken.html" target="_blank" class="back-link">⟵ Zurück zu 07 - VPN-Techniken</a>
+        <a href="09 - Grundlagen Scripting.html" target="_blank" class="back-link">09 - Grundlagen Scripting ⟶</a>
       </div>
     </main>
     <aside class="right-column">
