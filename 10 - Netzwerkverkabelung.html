@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="utf-8" />
+  <title>10 - Netzwerkverkabelung</title>
+  <link href="Icon.ico" rel="icon" type="image/x-icon" />
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <button class="mode-toggle" onclick="toggleMode()">🌙 Dunkelmodus</button>
+  <div class="page-wrapper">
+    <aside class="sidebar" aria-label="Inhaltsverzeichnis">
+      <h2>Inhaltsverzeichnis</h2>
+      <nav class="sidebar-nav">
+        <a href="#strukturierte_verkabelung">Was versteht man unter "strukturierter Verkabelung"?</a>
+        <a href="#netzwerkkabel_aufbau">Wie ist ein Netzwerkkabel aufgebaut?</a>
+        <a href="#cat.x">Was besagt die Angabe "Cat. (X)" auf dem Kabel?</a>
+        <a href="#max_leistungslänge_kupfer">Von welchen Faktoren hängt die maximale Leistungslänge bei Kupfer ab?</a>
+        <a href="#lwl">Wann nutzt man üblicherweise LWL (Glasfaser)?</a>
+        <a href="#abkürzungen_bedeutung">Was bedeuten die Abkürzungen LC / SC / ST?</a>
+        <a href="#aufbau_aktuelles_netzwerkkabel">Wie ist ein aktuelles Netzwerkkabel aufgebaut?</a>
+        <a href="#adernpaare_rollen">Welche Rollen übernehmen die Adernpaare?</a>
+        <a href="#poe">Wie Funktioniert PoE (Power over Ethernet)?</a>
+        <a href="#"></a>
+        <a href="#"></a>
+        <a href="#"></a>
+        <a href="#"></a>
+      </nav>
+    </aside>
+    <main class="main-column">
+      <header class="page-header">
+        <h1>10 - Netzwerkverkabelung</h1>
+      </header>
+    <section class="content-section" id="strukturierte_verkabelung">
+        <h2>1. Was versteht man unter "strukturierter Verkabelung"?</h2>
+        <p>Unter <b>strukturierter Verkabelung</b> versteht man ein <b>einheitliches, normiertes Verkabelungssystem</b>, das in Gebäuden für die gesamte IT- und Kommunikationsinfrastruktur genutzt wird. Ziel ist es, Netzwerke <b>übersichtlich, erweiterbar, wartungsfreundlich und herstellerunabhängig</b> aufzubauen.</p>
+        <p>Dabei wird nicht "wild" verkabelt, sondern nach einem klaren Konzept: Alle Leitungen laufen sternförmig von zentralen Verteilpunkten (z. B. Patchfelder in Serverschränken) zu den Anschlussdosen in den Räumen. Dieses System bleibt über viele Jahre bestehen, auch wenn sich aktive Geräte wie Switches oder Server ändern.</p>
+        <p>Typische Merkmale strukturierter Verkabelung:</p>
+        <ul>
+          <li>Einheitliche Kabeltypen und Steckverbinder</li>
+          <li>Klare Trennung von <b>Primär-, Sekundär- und Tertiärverkabelung</b></li>
+          <li>Lange Nutzungdauer (10 - 20 Jahre)</li>
+          <li>Unterstützung für Daten, VoIP, PoE, teilweise auch Video</li>
+        </ul>
+        <p>Man kann sich strukturierte Verkabelung wie das <b>Straßennetz</b> eines Gebäudes vorstellen: Die Straßen bleiben gleich, egal welche Autos (Geräte) darüber fahren.</p>
+    </section>
+    <section class="content-section" id="netzwerkkabel_aufbau">
+      <h2>
+        2. Wie ist ein Netzwerkkabel aufgebaut?</h2>
+      <p>Ein klassisches <b>Kupfer-Netzwerkkabel (Twisted-Pair-Kabel)</b> besteht aus mehreren Schichten:</p>
+      <ul>
+        <li><b>8 Kupferadern</b>, die zu 4 Adernpaaren zusammengefasst sind</li>
+        <li>Jedes Adernpaar ist <b>verdrillt (twisted)</b>, um Störungen zu reduzieren</li>
+        <li>Die Paare sind farblich kodiert (z. B. blau, orange, grün, braun)</li>
+        <li>Je nach Kategorie gibt es zusätzliche Abschirmungen</li>
+        <li>Außen befindet sich ein <b>Kabelmantel</b> aus Kunststoff</li>
+      </ul>
+      <p>Die Verdrillung sorgt dafür, dass elektromagnetische Störungen sich gegenseitig aufheben. Je höher die Kategorie, desto genauer sind Verdrillung und Abschirmung.</p>
+    </section>
+    <section class="content-section" id="cat.x">
+      <h2>3. Was besagt die Angabe "Cat. (X)" auf dem Kabel?</h2>
+      <p>Die <b>Kategorie (Cat)</b> gibt an, <b>für welche maximale Frequenz und Datenrate</b> ein Netzwerkkabel ausgelegt ist.<br>
+      Sie ist ein Qualitätsmerkmal und Teil internationaler Normen.</p>
+      <p>Typische Kategorien:</p>
+      <ul>
+        <li><b>Cat.5e</b> ⟶ bis 1 Gbit/s</li>
+        <li><b>Cat.6</b> ⟶ bis 1 Gbit/s (kurze Strecken auch 10 Gbit/s)</li>
+        <li><b>Cat.6a</b> ⟶ bis 10 Gbit/s</li>
+        <li><b>Cat.7 / Cat.7a</b> ⟶ hohe Abschirmung, meist mit speziellen Steckern</li>
+        <li><b>Cat.8</b> ⟶ sehr hohe Datenraten auf kurzen Strecken (Rechenzentren)</li>
+      </ul>
+      <p>Wichtig: Die <b>schlechteste Komponente bestimmt die Gesamtqualität</b>. Ein Cat.6-Kabel bringt nichts, wenn Dosen oder Patchkabel nur Cat.5e sind.</p>
+    </section>
+    <section class="content-section" id="max_leistungslänge_kupfer">
+      <h2>4. Von welchen Faktoren hängt die maximale Leistungslänge bei Kupfer ab?</h2>
+      <p>Die maximale Länge einer Kupferverbindung beträgt im Ethernet-Standard <b>100 Meter</b> (90 m Verlegekabel + 10 m Patchkabel). Diese Grenze hängt von mehreren Faktoren ab:</p>
+      <ul>
+        <li><b>Dämpfung</b> des Signals über die Leitung</li>
+        <li><b>Übersprechen</b> zwischen den Adernpaaren</li>
+        <li><b>Qualität des Kabels</b> (Kategorie, Hersteller)</li>
+        <li><b>Abschirmung</b></li>
+        <li><b>Datenrate</b> (höhere Geschwindigkeit = empfindlicher)</li>
+        <li><b>PoE-Nutzung</b> (zusätzliche Erwärmung)</li>
+      </ul>
+      <p>Je höher die Datenrate und je schlechter die Umgebung (z. B. viele Stromleitungen), desto kritischer wird die Länge.</p>
+    </section>
+    <section class="content-section" id="lwl">
+      <h2>5. Wann nutzt man üblicherweise LWL (Glasfaser)?</h2>
+      <p><b>Lichtwellenleiter (LWL)</b> werden eingesetzt, wenn Kupfer an seine Grenzen kommt. Typische Einsatzfälle sind:</p>
+      <ul>
+        <li><b>Sehr große Entfernungen</b> (mehrere hundert Meter bis Kilometer)</li>
+        <li><b>Hohe Datenbanken</b> (10, 40, 100 Gbit/s und mehr)</li>
+        <li><b>Störungsreiche Umgebungen</b> (Industrie, Maschinenhallen)</li>
+        <li><b>Gebäudeverbindungen</b> (keine Potentialunterschiede)</li>
+        <li><b>Backbone-Verkabelung</b></li>
+      </ul>
+      <p>LWL ist <b>unempfindlich gegenüber elektromagnetischen Störungen</b> und bietet deutlich mehr Zukunftssicherheit.</p>
+    </section>
+    <section class="content-section" id="abkürzungen_bedeutung">
+      <h2>6. Was bedeuten die Abkürzungen LC / SC / ST?</h2>
+      <p>Diese Abkürzungen bezeichnen <b>Steckertypen für LWL-Kabel</b>:</p>
+      <ul>
+        <li><b>LC (Lucent Connector)</b><br>
+        Klein, modern, heute sehr verbreitet (Switches, SFP-Module)</li>
+        <li><b>SC (Subscriber Connector)</b><br>
+        Größer, rechteckig, oft in Gebäudeverkabelung</li>
+        <li><b>ST (Straight Tip)</b><br>
+        Bajonettverschluss, älter, heute kaum noch neu eingesetzt</li>
+      </ul>
+      <p>Der Stecker beeinflusst <b>nicht die Übertragungsart</b>, sondern nur die mechanische Verbindung.</p>
+    </section>
+    <section class="content-section" id="aufbau_aktuelles_netzwerkkabel">
+      <h2>7. Wie ist ein aktuelles Netzwerkkabel (z. B. Cat.6) aufgebaut?</h2>
+      <p>Ein modernes Cat.6-Kabel besitzt:</p>
+      <ul>
+        <li>4 verdrillte Adernpaare</li>
+        <li>Teilweise einen <b>Kreuzseparator</b>, der die Paare voneinander trennt</li>
+        <li>Häufig zusätzliche Abschirmung</li>
+        <ul>
+          <li><b>U/UTP</b> ⟶ ungeschirmt</li>
+          <li><b>F/UTP</b> ⟶ Folienschirm gesamt</li>
+          <li><b>S/FTP</b> ⟶ Geflechtschirm + Folie pro Paar</li>
+        </ul>
+      </ul>
+      <p>Je besser die Abschirmung, desto weniger Störungen - aber auch desto steifer das Kabel.</p>
+    </section>
+    <section class="content-section" id="adernpaare_rollen">
+      <h2>8. Welche Rollen übernehmen die Adernpaare?</h2>
+      <p>Bei klassischen Ethernet-Verbindungen:</p>
+      <ul>
+        <li>Zwei Paare werden für <b>Senden</b></li>
+        <li>Zwei Paare für <b>Empfangen</b> genutzt</li>
+      </ul>
+      <p>Bei neueren Standards (Gigabit und höher):</p>
+      <ul>
+        <li><b>Alle viel Paare gleichzeitig</b></li>
+        <li>Daten werden bidirektional übertragen</li>
+      </ul>
+      <p>Für <b>PoE</b> werden die Adernpaare zusätzlich zur Stromversorgung genutzt.</p>
+    </section>
+    <section class="content-section" id="poe">
+      <h2>9. Wie Funktioniert PoE (Power over Ethernet)?</h2>
+    </section>
+    <div class="bottom-links">
+        <a href="Ausbildungsthemen.html" class="back-link">⟵ Zurück zum Inhaltsverzeichnis</a>
+        <a href="08 - Telefonie.html" target="_blank" class="back-link">⟵ Zurück zu 09 - Grundlagen Scripting</a>
+        <a href="10 - Netzwerkverkabelung.html" target="_blank" class="back-link">11 -  ⟶</a>
+      </div>
+    </main>
+    <aside class="right-column">
+      <div class="logo-stack">
+        <a class="logo-card" href="https://www.teccle-group.de" target="_blank" rel="noopener">
+          <img id="teccle-logo" src="TeccleLogo.png" alt="Teccle Group Logo" />
+        </a>
+        <span class="logo-divider" aria-hidden="true"></span>
+        <a class="logo-card" href="https://www.netzplan.de" target="_blank" rel="noopener">
+          <img src="NetzplanLogo.png" alt="Netzplan Logo" />
+        </a>
+      </div>
+      <div class="info-box">
+        <strong>Mehr entdecken</strong>
+        Direkt zu Support, Dokumentation oder zurück zur Übersicht.
+        <div class="info-links">
+          <a href="mailto:support@teccle-group.de">Support kontaktieren</a>
+          <br>
+          <a href="https://www.netzplan.de" target="_blank" rel="noopener">Dokumentation</a>
+          <br>
+          <a href="Ausbildungsthemen.html">Zur Übersicht</a>
+        </div>
+      </div>
+    </aside>
+  </div>
+  
+  <script>
+    function setLogoByMode() {
+      const logo = document.getElementById('teccle-logo');
+      if (document.body.classList.contains('dark')) {
+        logo.src = 'TeccleLogoBlack.png';
+      } else {
+        logo.src = 'TeccleLogo.png';
+      }
+    }
+    function toggleMode() {
+      document.body.classList.toggle('dark');
+      const btn = document.querySelector('.mode-toggle');
+      if (document.body.classList.contains('dark')) {
+        btn.textContent = '☀️ Hellmodus';
+      } else {
+        btn.textContent = '🌙 Dunkelmodus';
+      }
+      setLogoByMode();
+    }
+    function setupCodeCopy() {
+      const boxes = document.querySelectorAll('.code-box');
+      boxes.forEach((box) => {
+        const button = box.querySelector('.code-copy');
+        const codeLine = box.querySelector("p[style*='Courier New']") || box.querySelector('p');
+        if (!button || !codeLine) {
+          return;
+        }
+        button.addEventListener('click', async () => {
+          const text = codeLine.innerText.trim();
+          if (!text) {
+            return;
+          }
+          try {
+            await navigator.clipboard.writeText(text);
+            button.textContent = 'Kopiert';
+            setTimeout(() => {
+              button.textContent = 'Code kopieren';
+            }, 1200);
+          } catch (error) {
+            const helper = document.createElement('textarea');
+            helper.value = text;
+            helper.setAttribute('readonly', '');
+            helper.style.position = 'absolute';
+            helper.style.left = '-9999px';
+            document.body.appendChild(helper);
+            helper.select();
+            document.execCommand('copy');
+            document.body.removeChild(helper);
+            button.textContent = 'Kopiert';
+            setTimeout(() => {
+              button.textContent = 'Code kopieren';
+            }, 1200);
+          }
+        });
+      });
+    }
+    window.addEventListener('DOMContentLoaded', setLogoByMode);
+    window.addEventListener('DOMContentLoaded', setupCodeCopy);
+  </script>
+</body>
+
+</html>
