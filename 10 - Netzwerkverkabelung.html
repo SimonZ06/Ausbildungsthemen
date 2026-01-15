@@ -23,10 +23,10 @@
         <a href="#aufbau_aktuelles_netzwerkkabel">Wie ist ein aktuelles Netzwerkkabel aufgebaut?</a>
         <a href="#adernpaare_rollen">Welche Rollen übernehmen die Adernpaare?</a>
         <a href="#poe">Wie Funktioniert PoE (Power over Ethernet)?</a>
-        <a href="#"></a>
-        <a href="#"></a>
-        <a href="#"></a>
-        <a href="#"></a>
+        <a href="#single_multi_mode_lwl">Unterschied zwischen Single Mode und Multi Mode LWL</a>
+        <a href="#welche_wellenlängen">Welche Wellenlängen werden verwendet? Kann man das Licht sehen?</a>
+        <a href="#lwl_vorsichtiger_kupfer">Warum muss man LWL vorsichtiger behandeln als Kupfer?</a>
+        <a href="#zusammenfassung">Zusammenfassung (Merksätze)</a>
       </nav>
     </aside>
     <main class="main-column">
@@ -91,7 +91,7 @@
       <p><b>Lichtwellenleiter (LWL)</b> werden eingesetzt, wenn Kupfer an seine Grenzen kommt. Typische Einsatzfälle sind:</p>
       <ul>
         <li><b>Sehr große Entfernungen</b> (mehrere hundert Meter bis Kilometer)</li>
-        <li><b>Hohe Datenbanken</b> (10, 40, 100 Gbit/s und mehr)</li>
+        <li><b>Hohe Datenraten</b> (10, 40, 100 Gbit/s und mehr)</li>
         <li><b>Störungsreiche Umgebungen</b> (Industrie, Maschinenhallen)</li>
         <li><b>Gebäudeverbindungen</b> (keine Potentialunterschiede)</li>
         <li><b>Backbone-Verkabelung</b></li>
@@ -117,12 +117,13 @@
       <ul>
         <li>4 verdrillte Adernpaare</li>
         <li>Teilweise einen <b>Kreuzseparator</b>, der die Paare voneinander trennt</li>
-        <li>Häufig zusätzliche Abschirmung</li>
+        <li>Häufig zusätzliche Abschirmung
         <ul>
           <li><b>U/UTP</b> ⟶ ungeschirmt</li>
           <li><b>F/UTP</b> ⟶ Folienschirm gesamt</li>
           <li><b>S/FTP</b> ⟶ Geflechtschirm + Folie pro Paar</li>
         </ul>
+        </li>
       </ul>
       <p>Je besser die Abschirmung, desto weniger Störungen - aber auch desto steifer das Kabel.</p>
     </section>
@@ -131,22 +132,100 @@
       <p>Bei klassischen Ethernet-Verbindungen:</p>
       <ul>
         <li>Zwei Paare werden für <b>Senden</b></li>
-        <li>Zwei Paare für <b>Empfangen</b> genutzt</li>
+        <li>Zwei Paare für <b>Empfangen</b> genutzt<br>
+        (gilt für Fast Ethernet; bei Gigabit werden alle Paare bidirektional genutzt)</li>
       </ul>
       <p>Bei neueren Standards (Gigabit und höher):</p>
       <ul>
-        <li><b>Alle viel Paare gleichzeitig</b></li>
+        <li><b>Alle vier Paare gleichzeitig</b></li>
         <li>Daten werden bidirektional übertragen</li>
       </ul>
       <p>Für <b>PoE</b> werden die Adernpaare zusätzlich zur Stromversorgung genutzt.</p>
     </section>
     <section class="content-section" id="poe">
-      <h2>9. Wie Funktioniert PoE (Power over Ethernet)?</h2>
+      <h2>9. Wie funktioniert PoE (Power over Ethernet)?</h2>
+      <p><b>PoE</b> ermöglicht es, Geräte <b>über das Netzwerkkabel mit Strom zu versorgen</b>. Typische Geräte sind:</p>
+      <ul>
+        <li>IP-Telefone</li>
+        <li>Access Points</li>
+        <li>IP-Kameras</li>
+      </ul>
+      <p>Funktionsprinzip:</p>
+      <ul>
+        <li>Der Switch prüft, ob das angeschlossene Gerät PoE unterstützt</li>
+        <li>Erst danach wird Spannung auf die Leitung gelegt</li>
+        <li>Strom und Daten laufen parallel über dieselben Adern</li>
+      </ul>
+      <p>Vorteile:</p>
+      <ul>
+        <li>Kein extra Netzteil</li>
+        <li>Zentrale Stromversorgung</li>
+        <li>Geräte starten automatisch mit dem Switch</li>
+      </ul>
+    </section>
+    <section class="content-section" id="single_multi_mode_lwl">
+      <h2>10. Unterschied zwischen Single Mode und Multi Mode LWL</h2>
+      <b>Multimode (MM):</b>
+      <ul>
+        <li>Größerer Kerndurchmesser</li>
+        <li>Mehrere Lichtwege</li>
+        <li>Kürzere Distanzen (bis ca. 550 m)</li>
+        <li>Günstiger, häufig im Gebäude</li>
+      </ul>
+      <b>Single Mode (SM):</b>
+      <ul>
+        <li>Sehr kleiner Kern</li>
+        <li>Nur ein Lichtweg</li>
+        <li>Sehr große Distanzen (Kilometer)</li>
+        <li>Teuer, Backbone und Provider-Netze</li>
+      </ul>
+    </section>
+    <section class="content-section" id="welche_wellenlängen">
+      <h2>11. Welche Wellenlängen werden verwendet? Kann man das Licht sehen?</h2>
+      <p>Typische Wellenlängen:</p>
+      <ul>
+        <li><b>850 nm</b> (Multimode)</li>
+        <li><b>1310 nm</b> (Single Mode)</li>
+        <li><b>1550 nm</b> (Single Mode, große Distanzen)</li>
+      </ul>
+      <p>Dieses Licht liegt im <b>Infrarotbereich</b> und ist <b>für das menschliche Auge unsichtbar</b>.<br>
+      Achtung: Trotzdem kann es <b>gefährlich für die Augen</b> sein.</p>
+    </section>
+    <section class="content-section" id="lwl_vorsichtiger_kupfer">
+      <h2>12. Warum muss man LWL vorsichtiger behandeln als Kupfer?</h2>
+      <p>LWL ist empfindlicher, weil:</p>
+      <ul>
+        <li>Glasfasern sehr dünn sind</li>
+        <li>Knicke das Licht brechen oder dämpfen</li>
+        <li>Schmutz an Steckern massive Signalverluste verursacht</li>
+      </ul>
+      <p>Wichtige Regeln:</p>
+      <ul>
+        <li><b>Mindestbiegeradius einhalten</b></li>
+        <li>Stecker niemals berühren</li>
+        <li>Schutzkappen immer aufsetzen</li>
+        <li>Kabel nicht quetschen oder ziehen</li>
+        <li>Reinigung vor dem Stecken</li>
+      </ul>
+      <p>Ein verschmutzter LWL-Stecker kann eine komplette Verbindung unbrauchbar machen.</p>
+    </section>
+    <section class="content-section" id="zusammenfassung">
+      <h2>Zusammenfassung (Merksätze)</h2>
+      <ul>
+        <li>Strukturierte Verkabelung = langfristige, normierte Gebäudeverkabelung</li>
+        <li>Cat-Kategorie bestimmt Geschwindigkeit & Qualität</li>
+        <li>Kupfer: max. 100m</li>
+        <li>LWL: hohe Geschwindigkeit & große Entfernungen</li>
+        <li>LC/SC/ST = Steckertypen</li>
+        <li>PoE = Strom + Daten über ein Kabel</li>
+        <li>Single Mode = weit, Multimode = kurz</li>
+        <li>LWL immer sauber und knickfrei behandeln</li>
+      </ul>
     </section>
     <div class="bottom-links">
         <a href="Ausbildungsthemen.html" class="back-link">⟵ Zurück zum Inhaltsverzeichnis</a>
-        <a href="08 - Telefonie.html" target="_blank" class="back-link">⟵ Zurück zu 09 - Grundlagen Scripting</a>
-        <a href="10 - Netzwerkverkabelung.html" target="_blank" class="back-link">11 -  ⟶</a>
+        <a href="09 - Grundlagen Scripting.html" target="_blank" class="back-link">⟵ Zurück zu 09 - Grundlagen Scripting</a>
+        <a href="11 - ISO_OSI Schichtenmodell.html" target="_blank" class="back-link">11 - ISO/OSI Schichtenmodell ⟶</a>
       </div>
     </main>
     <aside class="right-column">

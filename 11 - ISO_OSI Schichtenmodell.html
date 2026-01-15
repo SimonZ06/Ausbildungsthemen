@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="utf-8" />
+  <title>11 - ISO/OSI Schichtenmodell</title>
+  <link href="Icon.ico" rel="icon" type="image/x-icon" />
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <button class="mode-toggle" onclick="toggleMode()">🌙 Dunkelmodus</button>
+  <div class="page-wrapper">
+    <aside class="sidebar" aria-label="Inhaltsverzeichnis">
+      <h2>Inhaltsverzeichnis</h2>
+      <nav class="sidebar-nav">
+        <a href="#einleitung">Warum gibt es das ISO/OSI-Schichtenmodell überhaubt?</a>
+        <a href="#überblick">Überblick: Die 7 OSI-Schichten</a>
+        <a href="#zuordnung">Zuordnung der Schichten zu Netzwerkbestandteilen</a>
+        <a href="#schichtenaufbau">TCP/IPv4-Paket - Schichtenaufbau am Beispiel</a>
+        <a href="#zusammenfassung">Merksätze und Zusammenfassung</a>
+      </nav>
+    </aside>
+    <main class="main-column">
+      <header class="page-header">
+        <h1>11 - ISO/OSI Schichtenmodell</h1>
+      </header>
+    <section class="content-section" id="warum_iso_osi_schichtenmodell">
+        <h2>1. Warum gibt es das ISO/OSI-Schichtenmodell überhaubt?</h2>
+        <p>Das <b>ISO/OSI-Schichtenmodell</b> ist ein <b>theoretisches Referenzmodell</b>, das beschreibt, wie Daten in einem Netzwerk <b>Schritt für Schritt von einer Anwendung bis zum Übertragungsmedium und wieder zurück</b> gelangen. Es wurde entwickelt, um komplexe Netzwerkkommunikation verständlich, standardisiert und herstellerunabhängig zu machen.</p>
+        <p>Die Grundidee ist einfach:<br>
+        Statt alles auf einmal zu betrachten, wird die Kommunikation in <b>7 logisch getrennte Schichten</b> aufgeteilt. Jede Schicht hat eine klar definierte Aufgabe und kommuniziert nur mit der direkt darüber- und darunterliegenden Schicht.</p>
+        <p>Ein großer Vorteil:<br>
+        Wenn ein Problem auftritt, kann man es <b>systematisch eingrenzen</b> (z. B. "physikalisch ok, aber kein IP-Routing").</p>
+    </section>
+    <section class="content-section" id="überblick">
+        <h2>2. Überblick: Die 7 OSI-Schichten</h2>
+        <p>Von <b>unten nach oben</b>:</p>
+        <ol class="fette-zahlen">
+            <li><span>Bitübertragungsschicht (Physical Layer)</span></li>
+            <li><span>Sicherungsschicht (Data Link Layer)</span></li>
+            <li><span>Vermittlungsschicht (Network Layer)</span></li>
+            <li><span>Transportschicht (Transport Layer)</span></li>
+            <li><span>Sitzungsschicht (Session Layer)</span></li>
+            <li><span>Darstellungsschicht (Presentation Layer)</span></li>
+            <li><span>Anwendungsschicht (Application Layer)</span></li>
+        </ol>
+        <p>Ein Merksatz (von unten nach oben):<br>
+        <b>"Alle Deutschen Studenten Trinken Verschiedene Sorten Bier"</b></p>
+    </section>
+    <section class="content-section" id="schichten_detail">
+        <h2>3. Die Schichten im Detail - mit Praxisbezug</h2>
+        <h3>3.1. Bitübertragungsschicht (Physical Layer)</h3>
+        <p>Diese Schicht kümmert sich um die <b>reine physikalische Übertragung von Bits</b> (0 und 1). Hier geht es nicht um Daten oder Pakete, sondern ausschließlich um elektrische, optische oder Funk-Signale.</p>
+        <p>Typische Beispiele:</p>
+        <ul>
+            <li>Netzwerkkabel (Kupfer, LWL)</li>
+            <li>Stecker (RJ45, LC, SC)</li>
+            <li>Spannung, Lichtimpulse, Funkwellen</li>
+            <li>Bitrate, Taktung</li>
+        </ul>
+        <p>Fehler auf dieser Schicht:</p>
+        <ul>
+            <li>Kabel defekt</li>
+            <li>Stecker locker</li>
+            <li>Falsches Kabel (z. B. Patchkabel kaputt)</li>
+        </ul>
+        <hr class="trennlinie">
+        <h3>3.2. Sicherungsschicht (Data Link Layer)</h3>
+        <p>Diese Schicht sorgt für eine <b>zuverlässige Übertragung zwischen zwei direkt verbundenen Geräten</b>. Sie arbeitet mit <b>MAC-Adressen</b> und organisiert den Zugriff auf das Medium.</p>
+        <p>Typische Aufgaben:</p>
+        <ul>
+            <li>MAC-Adressen</li>
+            <li>Frame-Bildung</li>
+            <li>Fehlererkennung (CRC)</li>
+            <li>Zugriffskontrolle (z. B. Ethernet)</li>
+        </ul>
+        <p>Beispiele</p>
+        <ul>
+            <li>Switches arbeiten hauptsächlich auf Layer 2</li>
+            <li>ARP (Übersetzung IP ⟶ MAC)</li>
+            <li>VLANs (802.1Q)</li>
+        </ul>
+        <p>Typischer Fehler:</p>
+        <ul>
+            <li>Falsches VLAN</li>
+            <li>MAC-Adresse wird nicht gelernt</li>
+        </ul>
+        <hr class="trennlinie">
+        <h3>3.3. Vermittlungsschicht (Network Layer)</h3>
+        <p>Die Vermittlungsschicht ist für die <b>logische Adressierung und Weiterleitung über Netzgrenzen hinweg</b> zuständig. Hier kommen <b>IP-Adressen</b> ins Spiel.</p>
+        <p>Typische Aufgaben</p>
+        <ul>
+            <li>Routing</li>
+            <li>IP-Adressierung</li>
+            <li>Weiterleitung zwischen Netzwerken</li>
+        </ul>
+        <p>Beispiele:</p>
+        <ul>
+            <li>IPv4 / IPv6</li>
+            <li>Router</li>
+            <li>ICMP (z. B. Ping)</li>
+        </ul>
+        <p>Typischer Fehler:</p>
+        <ul>
+            <li>Falsche IP-Adresse</li>
+            <li>Falsches Gateway</li>
+            <li>Routing-Problem</li>
+        </ul>
+        <hr class="trennlinie">
+        <h3>3.4. Transportschicht (Transport Layer)</h3>
+        <p>Diese Schicht sorgt für den <b>Ende-zu-Ende-Transport zwischen zwei Anwendungen</b>. Sie entscheidet, <b>wie zuverlässig</b> die Übertragung sein soll.</p>
+        <p>Wichtige Protokolle:</p>
+        <ul>
+            <li><b>TCP:</b> verbindungsorientiert, zuverlässig, mit Bestätigungen</li>
+            <li><b>UDP:</b> verbindungslos, schnell, keine Garantie</li>
+        </ul>
+        <p>Typische Aufgaben:</p>
+        <ul>
+            <li>Portnummern</li>
+            <li>Segmentierung</li>
+            <li>Flusskontrolle</li>
+            <li>Fehlerbehandlung</li>
+        </ul>
+        <p>Beispiele:</p>
+        <ul>
+            <li>TCP Port 443 (HTTPS)</li>
+            <li>UDP Port 5060 (SIP)</li>
+        </ul>
+        <hr class="trennlinie">
+        <h3>3.5. Sitzungsschicht (Session Layer)</h3>
+        <p>Die Sitzungsschicht verwaltet <b>Sitzungen zwischen zwei Kommunikationspartnern.</b> Sie sorgt dafür, dass Verbindungen aufgebaut, gehalten und sauber beendet werden.</p>
+        <p>Typische Aufgaben:</p>
+        <ul>
+            <li>Sitzungsaufbau</li>
+            <li>Sitzungssteuerung</li>
+            <li>Wiederaufnahme nach Unterbrechung</li>
+        </ul>
+        <p>Beispiele:</p>
+        <ul>
+            <li>Login-Sessions</li>
+            <li>Remote-Desktop-Sitzungen</li>
+            <li>SIP-Session-Steuerung</li>
+        </ul>
+        <p>In der Praxis wird diese Schicht oft von höheren Protokollen "mit erledigt".</p>
+        <hr class="trennlinie">
+        <h3>3.6. Darstellungsschicht (Presentation Layer)</h3>
+        <p>Diese Schicht kümmert sich um die <b>Darstellung und Aufbereitung der Daten,</b> sodass beide Seiten sie verstehen können.</p>
+        <p>Typische Aufgaben:</p>
+        <ul>
+            <li>Verschlüsselung / Entschlüsselung</li>
+            <li>Komprimierung</li>
+            <li>Zeichensatzkonvertierung</li>
+        </ul>
+        <p>Beispiele:</p>
+        <ul>
+            <li>TLS/SSL</li>
+            <li>UTF-8</li>
+            <li>Datenformate</li>
+        </ul>
+        <p>Wichtig:<br>
+        Hier wird <b>nicht gesendet,</b> sondern vorbereitet.</p>
+        <hr class="trennlinie">
+        <h3>3.7. Anwendungsschicht (Application Layer)</h3>
+        <p>Die Anwendungsschicht ist die <b>Schnittstelle zum Benutzer bzw. zur Anwendung.</b> Alles, womit der Anwender direkt arbeitet, befindet sich hier.</p>
+        <p>Typische Protokolle:</p>
+        <ul>
+            <li>HTTP / HTTPS</li>
+            <li>FTP</li>
+            <li>SMTP, IMAP</li>
+            <li>DNS</li>
+            <li>SIP</li>
+        </ul>
+        <p>Beispiele</p>
+        <ul>
+            <li>Webbrowser</li>
+            <li>E-Mail-Client</li>
+            <li>VoIP-Telefon</li>
+        </ul>
+    </section>
+    <section class="content-section" id="zuordnung">
+        <h2>4. Zuordnung der Schichten zu Netzwerkbestandteilen</h2>
+        <ul>
+            <li>Kabel, Stecker ⟶ <b>Layer 1</b></li>
+            <li>Switch, MAC, VLAN ⟶ <b>Layer 2</b></li>
+            <li>IP, Routing, Router ⟶ <b>Layer 3</b></li>
+            <li>TCP/UDP, Ports ⟶ <b>Layer 4</b></li>
+            <li>Sitzungen, Verbindungssteuerung ⟶ <b>Layer 5</b></li>
+            <li>Verschlüsselung, Kodierung ⟶ <b>Layer 6</b></li>
+            <li>Anwendungen & Protokolle ⟶ <b>Layer 7</b></li>
+        </ul>
+    </section>
+    <section class="content-section" id="schichtenaufbau">
+        <h2>5. TCP/IPv4-Paket - Schichtenaufbau am Beispiel</h2>
+        <p>Wenn eine Anwendung (z. B. ein Browser) Daten sendet, werden diese <b>schrittweise gekapselt:</b></p>
+        <ol class="fette-zahlen">
+            <li><span class="layer-title"></span><b>Anwendungsschicht</b></span><br>
+            <span class="layer-text">HTTP-Daten werden erzeugt</li>
+            <br>
+            <li><span class="layer-title"><b>Transportschicht</b></span><br>
+            <span class="layer-text">TCP fügt:</span>
+            <ul>
+                <li>Quellport</li>
+                <li>Zielport</li>
+                <li>Sequenznummern hinzu</li>
+            </ul>
+            </li>
+            <br>
+            <li><span class="layer-title"><b>Vermittlungsschicht</b></span><br>
+            <span class="layer-text">IP fügt:</span>
+            <ul>
+                <li>Quell-IP</li>
+                <li>Ziel-IP</li>
+                <li>TTL hinzu</li>
+            </ul>
+            </li>
+            <br>
+            <li><span class="layer-title"><b>Sicherungsschicht</b></span><br>
+            <span class="layer-text">Ethernet-Frame:</span>
+            <ul>
+                <li>Quell-MAC</li>
+                <li>Ziel-MAC</li>
+                <li>Prüfsumme</li>
+            </ul>
+            </li>
+            <br>
+            <li><span class="layer-title"><b>Bitübertragungsschicht</b></span><br>
+            <span class="layer-text">Übertragung als elektrische Signale oder Licht</span>
+            </li>
+        </ol>
+        <p>Auf der Gegenseite passiert das Ganze <b>in umgekehrter Reihenfolge</b> (Entkapselung).</p>
+    </section>
+    <section class="content-section" id="zusammenfassung">
+        <h2>Merksätze & Zusammenfassung</h2>
+        <ul>
+            <li>OSI ist ein <b>Denkmodell,</b> kein echtes Protokoll</li>
+            <li>Jede Schicht hat <b>eine klar definierte Aufgabe</b></li>
+            <li>Fehler lassen sich systematisch eingrenzen</li>
+            <li>TCP/IPv4 nutzt mehrere OSI-Schichten gleichzeitig</li>
+            <li>Je höher die Schicht, desto näher am Anwender</li>
+        </ul>
+    </section>
+    <div class="bottom-links">
+        <a href="Ausbildungsthemen.html" class="back-link">⟵ Zurück zum Inhaltsverzeichnis</a>
+        <a href="10 - Netzwerkverkabelung.html" target="_blank" class="back-link">⟵ Zurück zu 10 - Netzwerkverkabelung</a>
+        <a href="12 - Netzwerkprotokoll DHCP.html" target="_blank" class="back-link">12 - Netzwerkprotokoll DHCP ⟶</a>
+      </div>
+    </main>
+    <aside class="right-column">
+      <div class="logo-stack">
+        <a class="logo-card" href="https://www.teccle-group.de" target="_blank" rel="noopener">
+          <img id="teccle-logo" src="TeccleLogo.png" alt="Teccle Group Logo" />
+        </a>
+        <span class="logo-divider" aria-hidden="true"></span>
+        <a class="logo-card" href="https://www.netzplan.de" target="_blank" rel="noopener">
+          <img src="NetzplanLogo.png" alt="Netzplan Logo" />
+        </a>
+      </div>
+      <div class="info-box">
+        <strong>Mehr entdecken</strong>
+        Direkt zu Support, Dokumentation oder zurück zur Übersicht.
+        <div class="info-links">
+          <a href="mailto:support@teccle-group.de">Support kontaktieren</a>
+          <br>
+          <a href="https://www.netzplan.de" target="_blank" rel="noopener">Dokumentation</a>
+          <br>
+          <a href="Ausbildungsthemen.html">Zur Übersicht</a>
+        </div>
+      </div>
+    </aside>
+  </div>
+  
+  <script>
+    function setLogoByMode() {
+      const logo = document.getElementById('teccle-logo');
+      if (document.body.classList.contains('dark')) {
+        logo.src = 'TeccleLogoBlack.png';
+      } else {
+        logo.src = 'TeccleLogo.png';
+      }
+    }
+    function toggleMode() {
+      document.body.classList.toggle('dark');
+      const btn = document.querySelector('.mode-toggle');
+      if (document.body.classList.contains('dark')) {
+        btn.textContent = '☀️ Hellmodus';
+      } else {
+        btn.textContent = '🌙 Dunkelmodus';
+      }
+      setLogoByMode();
+    }
+    function setupCodeCopy() {
+      const boxes = document.querySelectorAll('.code-box');
+      boxes.forEach((box) => {
+        const button = box.querySelector('.code-copy');
+        const codeLine = box.querySelector("p[style*='Courier New']") || box.querySelector('p');
+        if (!button || !codeLine) {
+          return;
+        }
+        button.addEventListener('click', async () => {
+          const text = codeLine.innerText.trim();
+          if (!text) {
+            return;
+          }
+          try {
+            await navigator.clipboard.writeText(text);
+            button.textContent = 'Kopiert';
+            setTimeout(() => {
+              button.textContent = 'Code kopieren';
+            }, 1200);
+          } catch (error) {
+            const helper = document.createElement('textarea');
+            helper.value = text;
+            helper.setAttribute('readonly', '');
+            helper.style.position = 'absolute';
+            helper.style.left = '-9999px';
+            document.body.appendChild(helper);
+            helper.select();
+            document.execCommand('copy');
+            document.body.removeChild(helper);
+            button.textContent = 'Kopiert';
+            setTimeout(() => {
+              button.textContent = 'Code kopieren';
+            }, 1200);
+          }
+        });
+      });
+    }
+    window.addEventListener('DOMContentLoaded', setLogoByMode);
+    window.addEventListener('DOMContentLoaded', setupCodeCopy);
+  </script>
+</body>
+
+</html>
