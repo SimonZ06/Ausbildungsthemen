@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="utf-8" />
+  <title>12 - Netzwerkprotokoll DHCP</title>
+  <link href="Icon.ico" rel="icon" type="image/x-icon" />
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <button class="mode-toggle" onclick="toggleMode()">🌙 Dunkelmodus</button>
+  <div class="page-wrapper">
+    <aside class="sidebar" aria-label="Inhaltsverzeichnis">
+      <h2>Inhaltsverzeichnis</h2>
+      <nav class="sidebar-nav">
+        <a href="#grundidee_zweck">Grundidee und Zweck von DHCP</a>
+        <a href="#"></a>
+        <a href="#"></a>
+        <a href="#"></a>
+        <a href="#"></a>
+        <a href="#"></a>
+      </nav>
+    </aside>
+    <main class="main-column">
+      <header class="page-header">
+        <h1>12 - Netzwerkprotokoll DHCP</h1>
+      </header>
+    <section class="content-section" id="grundidee_zweck">
+        <h2>1. Grundidee und Zweck von DHCP</h2>
+        <p>DHCP steht für <b>Dynamic Host Configuration Protocol.</b> Es handelt sich um eine Netzwerkprotokoll, das dafür sorgt, dass Geräte in einem IP-Netzwerk <b>automatisch</b> mit den nötigen Netzwerkeinstellungen versorgt werden. Ohne DHCP müsste jedes Gerät manuell konfiguriert werden, was in modernen Netzwerken kaum praktikabel wäre.</p>
+        <p>Typische Informationen, die ein Client über DHCP erhält, sind:</p>
+        <ul>
+            <li>eine <b>IP-Adresse</b></li>
+            <li>die <b>Subnetzmaske</b></li>
+            <li>das <b>Standardgateway</b></li>
+            <li>ein oder mehrere <b>DNS-Server</b></li>
+            <li>optional weitere Parameter (z. B. Domainname, NTP-Server, PXE-Optionen)</li>
+        </ul>
+    </section>
+    <div class="bottom-links">
+        <a href="Ausbildungsthemen.html" class="back-link">⟵ Zurück zum Inhaltsverzeichnis</a>
+        <a href="11 - ISO_OSI Schichtenmodell.html" target="_blank" class="back-link">⟵ Zurück zu 11 - ISO/OSI Schichtenmodell</a>
+        <a href="13 - Netzwerkprotokoll DNS.html" target="_blank" class="back-link">13 - Netzwerkprotokoll DNS ⟶</a>
+      </div>
+    </main>
+    <aside class="right-column">
+      <div class="logo-stack">
+        <a class="logo-card" href="https://www.teccle-group.de" target="_blank" rel="noopener">
+          <img id="teccle-logo" src="TeccleLogo.png" alt="Teccle Group Logo" />
+        </a>
+        <span class="logo-divider" aria-hidden="true"></span>
+        <a class="logo-card" href="https://www.netzplan.de" target="_blank" rel="noopener">
+          <img src="NetzplanLogo.png" alt="Netzplan Logo" />
+        </a>
+      </div>
+      <div class="info-box">
+        <strong>Mehr entdecken</strong>
+        Direkt zu Support, Dokumentation oder zurück zur Übersicht.
+        <div class="info-links">
+          <a href="mailto:support@teccle-group.de">Support kontaktieren</a>
+          <br>
+          <a href="https://www.netzplan.de" target="_blank" rel="noopener">Dokumentation</a>
+          <br>
+          <a href="Ausbildungsthemen.html">Zur Übersicht</a>
+        </div>
+      </div>
+    </aside>
+  </div>
+  
+  <script>
+    function setLogoByMode() {
+      const logo = document.getElementById('teccle-logo');
+      if (document.body.classList.contains('dark')) {
+        logo.src = 'TeccleLogoBlack.png';
+      } else {
+        logo.src = 'TeccleLogo.png';
+      }
+    }
+    function toggleMode() {
+      document.body.classList.toggle('dark');
+      const btn = document.querySelector('.mode-toggle');
+      if (document.body.classList.contains('dark')) {
+        btn.textContent = '☀️ Hellmodus';
+      } else {
+        btn.textContent = '🌙 Dunkelmodus';
+      }
+      setLogoByMode();
+    }
+    function setupCodeCopy() {
+      const boxes = document.querySelectorAll('.code-box');
+      boxes.forEach((box) => {
+        const button = box.querySelector('.code-copy');
+        const codeLine = box.querySelector("p[style*='Courier New']") || box.querySelector('p');
+        if (!button || !codeLine) {
+          return;
+        }
+        button.addEventListener('click', async () => {
+          const text = codeLine.innerText.trim();
+          if (!text) {
+            return;
+          }
+          try {
+            await navigator.clipboard.writeText(text);
+            button.textContent = 'Kopiert';
+            setTimeout(() => {
+              button.textContent = 'Code kopieren';
+            }, 1200);
+          } catch (error) {
+            const helper = document.createElement('textarea');
+            helper.value = text;
+            helper.setAttribute('readonly', '');
+            helper.style.position = 'absolute';
+            helper.style.left = '-9999px';
+            document.body.appendChild(helper);
+            helper.select();
+            document.execCommand('copy');
+            document.body.removeChild(helper);
+            button.textContent = 'Kopiert';
+            setTimeout(() => {
+              button.textContent = 'Code kopieren';
+            }, 1200);
+          }
+        });
+      });
+    }
+    window.addEventListener('DOMContentLoaded', setLogoByMode);
+    window.addEventListener('DOMContentLoaded', setupCodeCopy);
+  </script>
+</body>
+
+</html>

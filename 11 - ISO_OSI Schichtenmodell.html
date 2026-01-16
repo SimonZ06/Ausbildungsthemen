@@ -14,10 +14,11 @@
     <aside class="sidebar" aria-label="Inhaltsverzeichnis">
       <h2>Inhaltsverzeichnis</h2>
       <nav class="sidebar-nav">
-        <a href="#einleitung">Warum gibt es das ISO/OSI-Schichtenmodell überhaubt?</a>
+        <a href="#einleitung">Warum gibt es das ISO/OSI-Schichtenmodell überhaupt?</a>
         <a href="#überblick">Überblick: Die 7 OSI-Schichten</a>
+        <a href="#schichten_detail">Die Schichten im Detail</a>
         <a href="#zuordnung">Zuordnung der Schichten zu Netzwerkbestandteilen</a>
-        <a href="#schichtenaufbau">TCP/IPv4-Paket - Schichtenaufbau am Beispiel</a>
+        <a href="#schichtenaufbau">TCP/IPv4-Kommunikation - Kapsekung entlang der OSI-Schichten</a>
         <a href="#zusammenfassung">Merksätze und Zusammenfassung</a>
       </nav>
     </aside>
@@ -25,8 +26,8 @@
       <header class="page-header">
         <h1>11 - ISO/OSI Schichtenmodell</h1>
       </header>
-    <section class="content-section" id="warum_iso_osi_schichtenmodell">
-        <h2>1. Warum gibt es das ISO/OSI-Schichtenmodell überhaubt?</h2>
+    <section class="content-section" id="einleitung">
+        <h2>1. Warum gibt es das ISO/OSI-Schichtenmodell überhaupt?</h2>
         <p>Das <b>ISO/OSI-Schichtenmodell</b> ist ein <b>theoretisches Referenzmodell</b>, das beschreibt, wie Daten in einem Netzwerk <b>Schritt für Schritt von einer Anwendung bis zum Übertragungsmedium und wieder zurück</b> gelangen. Es wurde entwickelt, um komplexe Netzwerkkommunikation verständlich, standardisiert und herstellerunabhängig zu machen.</p>
         <p>Die Grundidee ist einfach:<br>
         Statt alles auf einmal zu betrachten, wird die Kommunikation in <b>7 logisch getrennte Schichten</b> aufgeteilt. Jede Schicht hat eine klar definierte Aufgabe und kommuniziert nur mit der direkt darüber- und darunterliegenden Schicht.</p>
@@ -78,7 +79,7 @@
         <p>Beispiele</p>
         <ul>
             <li>Switches arbeiten hauptsächlich auf Layer 2</li>
-            <li>ARP (Übersetzung IP ⟶ MAC)</li>
+            <li>ARP (IP ⟶ MAC, arbeitet zwischen Layer 2 und 3)</li>
             <li>VLANs (802.1Q)</li>
         </ul>
         <p>Typischer Fehler:</p>
@@ -129,7 +130,7 @@
         </ul>
         <hr class="trennlinie">
         <h3>3.5. Sitzungsschicht (Session Layer)</h3>
-        <p>Die Sitzungsschicht verwaltet <b>Sitzungen zwischen zwei Kommunikationspartnern.</b> Sie sorgt dafür, dass Verbindungen aufgebaut, gehalten und sauber beendet werden.</p>
+        <p>Die Sitzungsschicht verwaltet <b>Sitzungen zwischen zwei Kommunikationspartnern (In modernen TCP/IP-Netzen oft in Anwendungen integriert).</b> Sie sorgt dafür, dass Verbindungen aufgebaut, gehalten und sauber beendet werden.</p>
         <p>Typische Aufgaben:</p>
         <ul>
             <li>Sitzungsaufbau</li>
@@ -191,11 +192,12 @@
         </ul>
     </section>
     <section class="content-section" id="schichtenaufbau">
-        <h2>5. TCP/IPv4-Paket - Schichtenaufbau am Beispiel</h2>
+        <h2>5. TCP/IPv4-Kommunikation - Kapsekung entlang der OSI-Schichten</h2>
         <p>Wenn eine Anwendung (z. B. ein Browser) Daten sendet, werden diese <b>schrittweise gekapselt:</b></p>
         <ol class="fette-zahlen">
-            <li><span class="layer-title"></span><b>Anwendungsschicht</b></span><br>
-            <span class="layer-text">HTTP-Daten werden erzeugt</li>
+            <li><span class="layer-title"><b>Anwendungsschicht</b></span><br>
+            <span class="layer-text">HTTP-Daten werden erzeugt</span>
+            </li>
             <br>
             <li><span class="layer-title"><b>Transportschicht</b></span><br>
             <span class="layer-text">TCP fügt:</span>
@@ -243,7 +245,7 @@
     <div class="bottom-links">
         <a href="Ausbildungsthemen.html" class="back-link">⟵ Zurück zum Inhaltsverzeichnis</a>
         <a href="10 - Netzwerkverkabelung.html" target="_blank" class="back-link">⟵ Zurück zu 10 - Netzwerkverkabelung</a>
-        <a href="12 - Netzwerkprotokoll DHCP.html" target="_blank" class="back-link">12 - Netzwerkprotokoll DHCP ⟶</a>
+        <a href="12 - Netzwerkprotokoll (DHCP).html" target="_blank" class="back-link">12 - Netzwerkprotokoll DHCP ⟶</a>
       </div>
     </main>
     <aside class="right-column">
