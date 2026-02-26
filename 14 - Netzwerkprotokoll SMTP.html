@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="utf-8" />
+  <title>14 - Netzwerkprotokoll SMTP</title>
+  <link href="Icon.ico" rel="icon" type="image/x-icon" />
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <button class="mode-toggle" onclick="toggleMode()">🌙 Dunkelmodus</button>
+  <div class="page-wrapper">
+    <aside class="sidebar" aria-label="Inhaltsverzeichnis">
+      <h2>Inhaltsverzeichnis</h2>
+      <nav class="sidebar-nav">
+        <a href="#einleitung">Einleitung - Warum braucht man SMTP überhaupt?</a>
+        <a href="#was_macht_smtp">Was macht SMTP konkret?</a>
+        <a href="#tcpip_ports_smtp">TCP/IP Ports von SMTP</a>
+        <a href="#sicher_erweiterung_smtp">Sicherheits-Erweiterungen von SMTP</a>
+        <a href="#tls_vs_ssl">TLS vs. SSL - Was ist der Unterschied?</a>
+        <a href="#smtp_kommunikation">Wie läuft eine einfache SMTP-Kommunikation ab?</a>
+        <a href="#namensauflösung_mx_record">Namensauflösung und MX-Record - Wie findet die Mail den richtigen Server?</a>
+        <a href="#ablauf">Kompletter Ablauf vom Senden bis zur Zustellung</a>
+        <a href="#zusammenfassung">Zusammenfassung - Was man verstanden haben sollte</a>
+      </nav>
+    </aside>
+    <main class="main-column">
+      <header class="page-header">
+        <h1>14 - Netzwerkprotokoll SMTP</h1>
+      </header>
+    <section class="content-section" id="einleitung">
+        <h2>1. Einleitung - Warum braucht man SMTP überhaupt?</h2>
+        <p>Wenn man eine E-Mail verschickt, passiert im Hintergrund deutlich mehr als nur "Senden drücken". Das Protokoll, das dafür zuständig ist, heißt <b>SMTP - Simple Mail Transfer Protocol.</b></p>
+        <p>SMTP ist das Protokoll für den <b>Versand von E-Mails</b> zwischen Mail-Clients und Mail-Servern sowie zwischen Mail-Servern untereinander. Es kümmert sich ausschließlich um das <b>Senden und Weiterleiten</b> von Nachrichten. Das <b>Abholen</b> von E-Mails läuft dagegen über andere Protokolle wie POP3 oder IMAP.</p>
+        <p>Wichtig: SMTP arbeitet textbasiert. Das bedeutet, dass Server und Client sich mit klar lesbaren Befehlen unterhalten - ähnlich wie bei Telnet.</p>
+    </section>
+    <section class="content-section" id="was_macht_smtp">
+        <h2>2. Was macht SMTP konkret?</h2>
+        <p>SMTP übernimmt mehrere Aufgaben:</p>
+        <ul>
+            <li>Annahme einer E-Mail vom Mail-Client</li>
+            <li>Weiterleitung an den zuständigen Mailserver</li>
+            <li>Transport über mehrere Server hinweg</li>
+            <li>Fehlerbehandlung (z. B. Empfänger nicht erreichbar)</li>
+            <li>Statusmeldungen (z. B. "Mailbox unavailable")</li>
+        </ul>
+        <p>Man kann sich SMTP wie ein digitales Postverteilzentrum vorstellen. Es prüft: "Wo muss diese Nachricht hin?" und sorgt dafür, dass sie an den richtigen Zielserver gelangt.</p>
+    </section>
+    <section class="content-section" id="tcpip_ports_smtp">
+        <h2>3. TCP/IP Ports von SMTP</h2>
+        <p>SMTP verwendet standardmäßig folgende Ports:</p>
+        <b>Port 25 (TCP)</b>
+        <ul>
+            <li>Klassischer SMTP-Port</li>
+            <li>Wird hauptsächlich für Server-zu-Server-Kommunikation verwendet</li>
+            <li>Oft für Clients gesperrt (Spam-Schutz durch Provider)</li>
+        </ul>
+        <b>Port 587 (TCP)</b>
+        <ul>
+            <li>Submission-Port</li>
+            <li>Wird von Mail-Clients zum Versand genutzt</li>
+            <li>Unterstützt Authentifizierung und STARTTLS</li>
+        </ul>
+        <b>Port 465 (TCP)</b>
+        <p>Port 465 wird heute als "SMTP Submission over implicit TLS" verwendet. Die TLS-Verschlüsselung wird hier direkt beim Verbindungsaufbau aktiviert (kein STARTTLS nötig).</p>
+        <p>Merksatz:<br>
+        25 = Server zu Server<br>
+        587 = Client zu Server<br>
+        465 = älteres SMTPS</p>
+    </section>
+    <section class="content-section" id="sicher_erweiterung_smtp">
+        <h2>4. Sicherheits-Erweiterungen von SMTP</h2>
+        <p>Das ursprüngliche SMTP war komplett unverschlüsselt.<br>
+        Das bedeutet: Benutzername, Passwort und Mailinhalt konnten im Klartext übertragen werden.</p>
+        <p>Das ist heute natürlich inakzeptabel. Deshalb gibt es Erweiterungen:</p>
+        <b><strong>STARTTLS</strong></b>
+        <p>STARTTLS ist eine Erweiterung, mit der eine unverschlüsselte SMTP-Verbindung nachträglich auf TLS-Verschlüsselung umgestellt wird.</p>
+        <p>Ablauf:</p>
+        <ol class="fette-zahlen">
+            <li><span class="layer-text">Verbindung beginnt unverschlüsselt</span></li>
+            <li><span class="layer-text">Client sendet EHLO</span></li>
+            <li><span class="layer-text">Server meldet STARTTLS als Capability</span></li>
+            <li><span class="layer-text">Client sendet STARTTLS</span></li>
+            <li><span class="layer-text">TLS-Handshake beginnt</span></li>
+        </ol>
+        <p>Das ist heute Standard auf Port 587.</p>
+        <br>
+        <b><strong>SMTPS (SSL/TLS von Anfang an)</strong></b>
+        <p>Früher wurde SMTP direkt über SSL verschlüsselt (Port 465).<br>
+        Technisch korrekt ist heute die Verwendung von <b>TLS,</b> da SSL veraltet und unsicher ist.</p>
+    </section>
+    <section class="content-section" id="tls_vs_ssl">
+        <h2>5. TLS vs. SSL - Was ist der Unterschied?</h2>
+        <p>SSL (Secure Sockets Layer) war der ursprüngliche Standard zur Verschlüsselung von Netzwerkverbindungen.</p>
+        <p>TLS (Transport Layer Security) ist die modernere und sichere Weiterentwicklung von SSL.</p>
+        <p>Wichtige Punkte:</p>
+        <ul>
+            <li>SSL 2.0 und 3.0 gelten als unsicher</li>
+            <li>TLS 1.2 und 1.3 sind aktuelle sichere Standards</li>
+            <li>TLS ist technisch gesehen der Nachvolger von SSL</li>
+            <li>Man sollte ausschließlich TLS verwenden</li>
+        </ul>
+        <p>Viele Systeme sprechen noch von "SSL", meinen aber technisch TLS.</p>
+    </section>
+    <section class="content-section" id="smtp_kommunikation">
+      <h2>6. Wie läuft eine einfache SMTP-Kommunikation ab?</h2>
+      <p>Hier ist einmal der strukturierte Ablauf:</p>
+      <h3>1. Mail wird im Client erstellt</h3>
+      <p>Du schreibst eine Mail in Outlook oder Thunderbird und klickst auf "Senden".</p>
+      <br>
+      <h3>2. Verbindung zum SMTP-Server</h3>
+      <p>Der Client verbindet sich mit dem konfigurierten SMTP-Server über Port 587.</p>
+      <br>
+      <h3>3. Authentifizierung</h3>
+      <p>Der Client meldet sich mit Benutzername und Passwort an.<br>
+      Bei Server-zu-Server-Kommunikation erfolgt normalerweise keine Benutzer-Authentifizierung.</p>
+      <br>
+      <h3>4. SMTP-Befehle</h3>
+      <p>Die Kommunikation läuft textbasiert ab:</p>
+      <p>HELO oder EHLO<br>
+      MAIL FROM:<br>
+      RCPT TO:<br>
+      DATA<br>
+      QUIT<br>
+      <br>
+      Beispiel vereinfacht:</p>
+      <div class="code-box">
+        <button class="code-copy" type="button">Kopieren</button>
+        <p>EHLO mailserver.de<br>
+        MAIL FROM: sender@firma.de<br>
+        RCPT TO: empfaenger@ziel.de<br>
+        DATA<br>
+        Nachrichtentext<br>
+        .<br>
+        QUIT</p>
+      </div>
+    </section>
+    <section class="content-section" id="namensauflösung_mx_record">
+      <h2>7. Namensauflösung und MX-Record - Wie findet die Mail den richtigen Server?</h2>
+      <p>Hier kommt DNS ins Spiel.</p>
+      <p>Wenn du eine Mail an <i style="font-family: 'Courier New', Courier, monospace;">max@example.com</i> sendest, passiert Folgendes:</p>
+      <ol class="fette-zahlen">
+            <li><span class="layer-text">Der Mailserver schaut sich die Domain an: example.com</span></li>
+            <br>
+            <li><span class="layer-text">Er fragt einen DNS-Server:<br>
+            "Welcher Mailserver ist für example.com zuständig?"</span></li>
+            <br>
+            <li><span class="layer-text">DNS antwortet mit einem <b>MX-Record (Mail Exchange Record)</b></span></li>
+      </ol>
+      <p>Ein MX-Record enthält:</p>
+      <ul>
+        <li>Priorität</li>
+        <li>Ziel-Mailserver</li>
+      </ul>
+      <p>Beispiel:</p>
+      <p>example.com ⟶ MX ⟶ mail.example.com</p>
+      <p>Jetzt weiß der sendende Mailserver, wohin er die Mail zustellen muss.</p>
+      <p>In der Praxis funktioniert SMTP nur mit DNS. Üblicherweise über MX-Records. ersatzweise über A-Records.</p>
+    </section>
+    <section class="content-section" id="ablauf">
+      <h2>8. Kompletter Ablauf vom Senden bis zur Zustellung</h2>
+      <ol class="fette-zahlen">
+        <li><span class="layer-text">Benutzer klickt auf "Senden"</span></li>
+        <br>
+        <li><span class="layer-text">Client verbindet sich mit SMTP-Server (Submission Port 587)</span></li>
+        <br>
+        <li><span class="layer-text">TLS-Verschlüsselung wird aufgebaut</span></li>
+        <br>
+        <li><span class="layer-text">Authentifizierung erfolgt</span></li>
+        <br>
+        <li><span class="layer-text">SMTP-Befehle werden übertragen</span></li>
+        <br>
+        <li><span class="layer-text">Der Server prüft die Empfänger-Domain</span></li>
+        <br>
+        <li><span class="layer-text">DNS-Abfrage nach MX-Record</span></li>
+        <br>
+        <li><span class="layer-text">Verbindung zum Ziel-Mailserver über Port 25</span></li>
+        <br>
+        <li><span class="layer-text">Übergabe der Mail</span></li>
+        <br>
+        <li><span class="layer-text">Zielserver speichert Mail im Postfach</span></li>
+      </ol>
+      <p>Erst danach kann der Empfänger die Mail per IMAP oder POP3 abrufen.</p>
+    </section>
+    <section class="content-section" id="zusammenfassung">
+      <h2>9. Zusammenfassung - Was man verstanden haben sollte</h2>
+      <p>SMTP ist das Protokoll für den Versand von E-Mails.<br>
+      <br>
+      Es nutzt TCP, hauptsächlich Port 25 und 587.<br>
+      <br>
+      Moderne Sicherheit basiert auf TLS.<br>
+      <br>
+      SSL ist veraltet und sollte nicht mehr verwendet werden.<br>
+      <br>
+      Die Zustellung funktioniert nur mit DNS und MX-Records.<br>
+      <br>
+      Die Kommunikation läuft textbasiert über klar definierte Befehle.</p>
+      <br>
+      <p>SMTP ist ursprünglich unverschlüsselt komzipiert worden. Die Verschlüsselung erfolgt über TLS als Transport-Layer-Erweiterung.</p>
+    </section>
+    <div class="bottom-links">
+        <a href="Ausbildungsthemen.html" class="back-link">⟵ Zurück zum Inhaltsverzeichnis</a>
+        <a href="13 - Netzwerkprotokoll DNS.html" target="_blank" class="back-link">⟵ Zurück zu 13  - Netzwerkprotokoll DNS</a>
+        <a href="15 - Netzwerkprotokoll POP3_IMAP4.html" target="_blank" class="back-link">15 - Netzwerkprotokoll POP3_IMAP4 ⟶</a>
+      </div>
+    </main>
+    <aside class="right-column">
+      <div class="logo-stack">
+        <a class="logo-card" href="https://www.teccle-group.de" target="_blank" rel="noopener">
+          <img id="teccle-logo" src="TeccleLogo.png" alt="Teccle Group Logo" />
+        </a>
+        <span class="logo-divider" aria-hidden="true"></span>
+        <a class="logo-card" href="https://www.netzplan.de" target="_blank" rel="noopener">
+          <img src="NetzplanLogo.png" alt="Netzplan Logo" />
+        </a>
+      </div>
+      <div class="info-box">
+        <strong>Mehr entdecken</strong>
+        Direkt zu Support, Dokumentation oder zurück zur Übersicht.
+        <div class="info-links">
+          <a href="mailto:support@teccle-group.de">Support kontaktieren</a>
+          <br>
+          <a href="https://www.netzplan.de" target="_blank" rel="noopener">Dokumentation</a>
+          <br>
+          <a href="Ausbildungsthemen.html">Zur Übersicht</a>
+        </div>
+      </div>
+    </aside>
+  </div>
+  
+  <script>
+    function setLogoByMode() {
+      const logo = document.getElementById('teccle-logo');
+      if (document.body.classList.contains('dark')) {
+        logo.src = 'TeccleLogoBlack.png';
+      } else {
+        logo.src = 'TeccleLogo.png';
+      }
+    }
+    function toggleMode() {
+      document.body.classList.toggle('dark');
+      const btn = document.querySelector('.mode-toggle');
+      if (document.body.classList.contains('dark')) {
+        btn.textContent = '☀️ Hellmodus';
+      } else {
+        btn.textContent = '🌙 Dunkelmodus';
+      }
+      setLogoByMode();
+    }
+    function setupCodeCopy() {
+      const boxes = document.querySelectorAll('.code-box');
+      boxes.forEach((box) => {
+        const button = box.querySelector('.code-copy');
+        const codeLine = box.querySelector("p[style*='Courier New']") || box.querySelector('p');
+        if (!button || !codeLine) {
+          return;
+        }
+        button.addEventListener('click', async () => {
+          const text = codeLine.innerText.trim();
+          if (!text) {
+            return;
+          }
+          try {
+            await navigator.clipboard.writeText(text);
+            button.textContent = 'Kopiert';
+            setTimeout(() => {
+              button.textContent = 'Code kopieren';
+            }, 1200);
+          } catch (error) {
+            const helper = document.createElement('textarea');
+            helper.value = text;
+            helper.setAttribute('readonly', '');
+            helper.style.position = 'absolute';
+            helper.style.left = '-9999px';
+            document.body.appendChild(helper);
+            helper.select();
+            document.execCommand('copy');
+            document.body.removeChild(helper);
+            button.textContent = 'Kopiert';
+            setTimeout(() => {
+              button.textContent = 'Code kopieren';
+            }, 1200);
+          }
+        });
+      });
+    }
+    window.addEventListener('DOMContentLoaded', setLogoByMode);
+    window.addEventListener('DOMContentLoaded', setupCodeCopy);
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="utf-8" />
+  <title>15 - Netzwerkprotokoll POP3/IMAP4</title>
+  <link href="Icon.ico" rel="icon" type="image/x-icon" />
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <button class="mode-toggle" onclick="toggleMode()">🌙 Dunkelmodus</button>
+  <div class="page-wrapper">
+    <aside class="sidebar" aria-label="Inhaltsverzeichnis">
+      <h2>Inhaltsverzeichnis</h2>
+      <nav class="sidebar-nav">
+        <a href="#mailtransfer">Wie funktioniert der Mailtransfer im Internet generell?</a>
+        <a href="#wo_smtp_pop3_imap">An welchen Stellen wird SMTP, POP3 oder IMAP verwendet?</a>
+        <a href="#abkürzungen">Bedeutung der Abkürzungen</a>
+        <a href="#tcp_udp_ports">TCP-/UDP-Ports der Protokolle</a>
+        <a href="#unterschied">Unterschied zwischen POP3 und IMAP</a>
+        <a href="#praktisch">-- PRAKTISCHER TEIL --</a>
+        <a href="#vorbereitung">Vorbereitung: hMailServer installieren</a>
+        <a href="#ssl_einbinden">SSL-Zertifikat einbinden</a>
+        <a href="#ablauf_telnet">Praktischer Ablauf per Telnet</a>
+        <a href="#funktionsweise">Funktionsweise der SSL/TLS-Verschlüsselung (kurz erklärt)</a>
+        <a href="#zusammenfassung">Zusammenfassung</a>
+      </nav>
+    </aside>
+    <main class="main-column">
+      <header class="page-header">
+        <h1>15 - Netzwerkprotokoll POP3 / IMAP4</h1>
+      </header>
+    <section class="content-section" id="mailtransfer">
+      <h2>1. Wie funktioniert der Mailtransfer im Internet generell?</h2>
+      <p>Wenn man eine E-Mail verschickt, läuft der Prozess in mehreren klar getrennten Phasen ab. Wichtig ist:<br>
+      <b>Senden und Empfangen sind zwei verschiedene Dinge</b> - technisch sogar komplett unterschiedliche Protokolle.</p>
+      <p>Der Ablauf sieht vereinfacht so aus:</p>
+      <ol>
+        <li>Du schreibst eine Mail in deinem Mailprogramm.</li>
+        <li>Dein Mailclient sendet die Mail per <b>SMTP</b> an deinen Mailserver.</li>
+        <li>Dieser Mailserver ermittelt über <b>DNS (MX-Record)</b> den zuständigen Mailserver der Empfänger-Domain.</li>
+        <li>Die Mail wird per <b>SMTP (Port 25)</b> an den Zielserver der Empfänger-Domain.</li>
+        <li>Der Zielserver speichert die Mail im Postfach des Empfängers.</li>
+        <li>Der Empfänger ruft seine Mail mit <b>POP3 oder IMAP</b> ab.</li>
+      </ol>
+      <p>SMTP ist also das Transportprotokoll.<br>
+        POP3 und IMAP sind Abrufprotokolle.</p>
+      <p>Man kann sich das wie die Post vorstellen:</p>
+      <ul>
+        <li>SMTP = Zustellung zum Briefkasten</li>
+        <li>POP3/IMAP = Brief aus dem Briefkasten holen</li>
+      </ul>
+    </section>
+    <section class="content-section" id="wo_smtp_pop3_imap">
+      <h2>2. An welchen Stellen wird SMTP, POP3 oder IMAP verwendet?</h2>
+      <p>SMTP wird ausschließlich zum<b> Versenden und Weiterleiten </b>von E-Mails verwendet. Es ist nie dafür gedacht gewesen, Mails beim Benutzer bereitzustellen.</p>
+      <p>POP3 und IMAP werden ausschließlich zum <b>Abrufen</b> von E-Mails aus einem Postfach verwendet.</p>
+      <p>Zusammengefasst:</p>
+      <ul>
+        <li>Client ⟶ Server (Versand): SMTP</li>
+        <li>Server ⟶ Server (Weiterleitung): SMTP</li>
+        <li>Client ⟶ Server (Abruf): POP3 oder IMAP</li>
+      </ul>
+      <p>Diese klare Trennung ist ein Grundprinzip der E-Mail-Architektur.</p>
+    </section>
+    <section class="content-section" id="abkürzungen">
+      <h2>3. Bedeutung der Abkürzungen</h2>
+      <p>SMTP steht für <b>Simple Mail Transfer Protocol</b> - einfaches Protokoll zum Übertragen von E-Mails.</p>
+      <p>POP3 steht für <b>Post Office Protocol Version 3</b> - ein Protokoll zum Abholen von Post aus einem Postfach.</p>
+      <p>IMAP steht für <b>Internet Message Access Protocol</b> - ein Protokoll zum Zugriff auf Nachrichten auf einem Server.</p>
+      <p>Schon an den Namen erkennt man:<br> 
+      POP3 holt Post ab.<br>
+      IMAP erlaubt Zugriff auf Nachrichten.</p>
+      <p>Das klingt ähnlich, ist technisch aber ein riesiger Unterschied.</p>
+    </section>
+    <section class="content-section" id="tcp_udp_ports">
+      <h2>4. TCP-/UDP-Ports der Protokolle</h2>
+      <p>Alle drei Protokolle arbeiten über TCP, da eine zuverlässige Übertragung benötigt wird.</p>
+      <p>SMTP:</p>
+      <ul>
+        <li>Port 25 ⟶ Server-zu-Server</li>
+        <li>Port 587 ⟶ Client Submission</li>
+        <li>Port 465 ⟶ SMTP über TLS (implicit TLS)</li>
+      </ul>
+      <p>POP3:</p>
+      <ul>
+        <li>Port 110 ⟶ unverschlüsselt</li>
+        <li>Port 995 ⟶ POP3 über TLS</li>
+      </ul>
+      <p>IMAP:</p>
+      <ul>
+        <li>Port 143 ⟶ unverschlüsselt</li>
+        <li>Port 993 ⟶ IMAP über TLS</li>
+      </ul>
+      <p>Wichtig:<br>
+      POP3 und IMAP verwenden <b>kein UDP.</b></p>
+    </section>
+    <section class="content-section" id="unterschied">
+      <h2>5. Unterschied zwischen POP3 und IMAP</h2>
+      <p>Hier liegt der eigentliche Kern des Themas.</p>
+      <h3>POP3 - "Download und fertig"</h3>
+      <p>POP3 arbeitet nach einem einfachen Prinzip:</p>
+      <ul>
+        <li>Verbindung zum Server</li>
+        <li>Authentifizierung</li>
+        <li>Abruf aller Mails</li>
+        <li>Mails werden meist lokal gespeichert</li>
+        <li>Optional: Löschen auf dem Server</li>
+      </ul>
+      <p>Das bedeutet:<br>
+      POP3 ist dafür gedacht, Mails lokal zu speichern und den Server eher als temporären Speicher zu nutzen:</p>
+      <p>Typische Eigenschaften:</p>
+      <ul>
+        <li>Kein serverseitiger Ordnerabgleich</li>
+        <li>Kein Synchronisieren zwischen mehreren Geräten</li>
+        <li>Sehr einfaches Protokoll</li>
+        <li>Geringer Serverbedarf</li>
+      </ul>
+      <p>POP3 passt gut in Szenarien mit nur einem Endgerät.</p>
+      <hr class="trennlinie">
+      <h3>IMAP - "Server ist die Wahrheit"</h3>
+      <p>IMAP funktioniert völlig anders.</p>
+      <p>Hier bleiben die Mails dauerhaft auf dem Server gespeichert.<br>
+      Der Client synchronisiert nur:</p>
+      <ul>
+        <li>Gelesen/Ungelesen Status</li>
+        <li>Ordnerstruktur</li>
+        <li>Verschieben von Mails</li>
+        <li>Löschen</li>
+        <li>Markierungen</li>
+      </ul>
+      <p>Das bedeutet:</p>
+      <p>Wenn du auf deinem Handy eine Mail als gelesen markierst, ist sie auf deinem PC ebenfalls gelesen.</p>
+      <p>IMAP ist also ein Synchronisationsprotokoll, kein reines Abrufprotokoll.</p>
+      <p>Typische Eigenschaften:</p>
+      <ul>
+        <li>Mehrere Geräte gleichzeitig</li>
+        <li>Serverseitige Ordner</li>
+        <li>Status-Synchronisation</li>
+        <li>Höherer Ressourcenbedarf auf dem Server</li>
+      </ul>
+      <p>In modernen Umgebungen ist IMAP Standard.</p>
+    </section>
+    <section class="content-section" id="praktisch">
+      <h2>-- PRAKTISCHER TEIL --</h2>
+    </section>
+    <section class="content-section" id="vorbereitung">
+      <h2>Vorbereitung: hMailServer installieren</h2>
+      <p>hMailServer ist ein kostenloser Mailserver für Windows, mit dem man SMTP, POP3 und IMAP lokal betreiben kann.</p>
+      <b>Installation</b>
+      <ul>
+        <li>Download von der offiziellen Website</li>
+        <li>Installation durchführen</li>
+        <li>Administrationskonsole starten</li>
+      </ul>
+      <b>Domain einrichten</b>
+      <p>In hMailServer wird zunächst eine Domain angelegt, z. B.:</p>
+      <p>mail.local</p>
+      <p>Innerhalb dieser Domain wird ein Postfach erstellt, z. B.:</p>
+      <p>max@mail.local</p>
+      <p>Dieses Postfach erhält ein Passwort.</p>
+      <p>Damit existiert ein vollständiger lokaler Mailserver.</p>
+    </section>
+    <section class="content-section" id="ssl_einbinden">
+      <h2>SSL-Zertifikat einbinden</h2>
+      <p>Für verschlüsselte Verbindungen benötigt man ein Zertifikat.</p>
+      <p>Grundprinzip:</p>
+      <ol>
+        <li>Zertifikat im Server hinterlegen</li>
+        <li>SMTP/POP3/IMAP auf TLS konfigurieren</li>
+        <li>Ports 465, 995, 993 aktivieren</li>
+      </ol>
+      <p>Technisch passiert Folgendes:</p>
+      <p>Beim Verbindungsaufbau wird ein TLS-Handshake durchgeführt:</p>
+      <ul>
+        <li>Server sendet Zertifikat</li>
+        <li>Client prüft Vertrauenswürdigkeit</li>
+        <li>Sitzungsschlüssel wird ausgehandelt</li>
+        <li>Kommunikation wird verschlüsselt</li>
+      </ul>
+      <p>Wichtig:<br>
+      SSL ist veraltet. Verwendet wird TLS.</p>
+    </section>
+    <section class="content-section" id="ablauf_telnet">
+      <h2>Praktischer Ablauf per Telnet</h2>
+      <h3>1. SMTP per Telnet</h3>
+      <p>Verbindung herstellen:</p>
+      <p>telnet localhost 25</p>
+      <p>Typischer Ablauf:</p>
+      <p>HELO test<br>
+      MAIL FROM: sender@mail.local<br>
+      RCPT TO: max@mail.local<br>
+      DATA<br>
+      Testnachricht<br>
+      .<br>
+      QUIT</p>
+      <p>Wichtig:<br>
+      Der Punkt allein in einer Zeile beendet DATA.</p>
+      <p>Damit wurde die Mail an hMailServer zugestellt.</p>
+      <hr class="trennlinie">
+      <h3>POP3 per Telnet</h3>
+      <p>Verbindung:</p>
+      <p>telnet localhost 110</p>
+      <p>Ablauf:</p>
+      <p>USER max@mail.local<br>
+      PASS passwort<br>
+      LIST<br>
+      RETR 1<br>
+      QUIT</p>
+      <p>POP3 lädt die Nachricht vollständig herunter.</p>
+      <hr class="trennlinie">
+      <h3>IMAP per Telnet</h3>
+      <p>Verbindung:</p>
+      <p>telnet localhost 143</p>
+      <p>IMAP arbeitet mit nummerierten Befehlen:</p>
+      <p>a1 LOGIN max@mail.local passwort<br>
+      a2 SELECT INBOX<br>
+      a3 FETCH 1 BODY[]<br>
+      a4 LOGOUT</p>
+      <p>IMAP zeigt die Nachricht an, ohne sie zwingend zu löschen.</p>
+      <p>Hier sieht man sehr gut:<br>
+      POP3 ist simpel.<br>
+      IMAP ist deutlich komplexer.</p>
+    </section>
+    <section class="content-section" id="funktionsweise">
+      <h2>Funktionsweise der SSL/TLS-Verschlüsselung (kurz erklärt)</h2>
+      <p>TLS arbeitet nach folgendem Prinzip:</p>
+      <ol>
+        <li>Client verbindet sich mit Server</li>
+        <li>Server sendet Zertifikat</li>
+        <li>Client prüft Zertifikat</li>
+        <li>Beide handeln einen Sitzungsschlüssel aus</li>
+        <li>Ab jetzt ist die Verbindung symmetrisch verschlüsselt</li>
+      </ol>
+      <p>Die eigentliche Datenverschlüsselung erfolgt mit symmetrischen Verfahren wie AES.<br>
+      Der Schlüsselaustausch läuft asymmetrisch (z. B. RSA oder ECC).</p>
+      <p>Das ist das gleiche Prinzip wie HTTPS.</p>
+    </section>
+    <section class="content-section" id="zusammenfassung">
+      <h2>Zusammenfassung</h2>
+      <p>SMTP transportiert E-Mails zwischen Servern.<br>
+      POP3 lädt Mails herunter und speichert sie lokal.<br>
+      IMAP synchronisiert Mails serverbasiert zwischen mehreren Geräten.</p>
+      <p>POP3 ist einfach, aber unflexibel.<br>
+      IMAP ist moderner und für Mehrgerätebetrieb geeignet.</p>
+      <p>Alle Protokolle nutzen TCP.<br>
+      Sicherheit erfolgt über TLS.</p>
+      <p>Mit hMailServer kann man das komplette System lokal nachbauen und die Protokolle per Telnet nachvollziehen. Und genau das macht das Verständnis plötzlich greifbar, statt nur theoretisch.</p>
+    </section>
+    <div class="bottom-links">
+        <a href="Ausbildungsthemen.html" class="back-link">⟵ Zurück zum Inhaltsverzeichnis</a>
+        <a href="14 - Netzwerkprotokoll SMTP.html" target="_blank" class="back-link">⟵ Zurück zu 14  - Netzwerkprotokoll SMTP</a>
+        <a href="16 - Netzwerkprotokoll NTP.html" target="_blank" class="back-link">16 - Netzwerkprotokoll NTP ⟶</a>
+      </div>
+    </main>
+    <aside class="right-column">
+      <div class="logo-stack">
+        <a class="logo-card" href="https://www.teccle-group.de" target="_blank" rel="noopener">
+          <img id="teccle-logo" src="TeccleLogo.png" alt="Teccle Group Logo" />
+        </a>
+        <span class="logo-divider" aria-hidden="true"></span>
+        <a class="logo-card" href="https://www.netzplan.de" target="_blank" rel="noopener">
+          <img src="NetzplanLogo.png" alt="Netzplan Logo" />
+        </a>
+      </div>
+      <div class="info-box">
+        <strong>Mehr entdecken</strong>
+        Direkt zu Support, Dokumentation oder zurück zur Übersicht.
+        <div class="info-links">
+          <a href="mailto:support@teccle-group.de">Support kontaktieren</a>
+          <br>
+          <a href="https://www.netzplan.de" target="_blank" rel="noopener">Dokumentation</a>
+          <br>
+          <a href="Ausbildungsthemen.html">Zur Übersicht</a>
+        </div>
+      </div>
+    </aside>
+  </div>
+  
+  <script>
+    function setLogoByMode() {
+      const logo = document.getElementById('teccle-logo');
+      if (document.body.classList.contains('dark')) {
+        logo.src = 'TeccleLogoBlack.png';
+      } else {
+        logo.src = 'TeccleLogo.png';
+      }
+    }
+    function toggleMode() {
+      document.body.classList.toggle('dark');
+      const btn = document.querySelector('.mode-toggle');
+      if (document.body.classList.contains('dark')) {
+        btn.textContent = '☀️ Hellmodus';
+      } else {
+        btn.textContent = '🌙 Dunkelmodus';
+      }
+      setLogoByMode();
+    }
+    function setupCodeCopy() {
+      const boxes = document.querySelectorAll('.code-box');
+      boxes.forEach((box) => {
+        const button = box.querySelector('.code-copy');
+        const codeLine = box.querySelector("p[style*='Courier New']") || box.querySelector('p');
+        if (!button || !codeLine) {
+          return;
+        }
+        button.addEventListener('click', async () => {
+          const text = codeLine.innerText.trim();
+          if (!text) {
+            return;
+          }
+          try {
+            await navigator.clipboard.writeText(text);
+            button.textContent = 'Kopiert';
+            setTimeout(() => {
+              button.textContent = 'Code kopieren';
+            }, 1200);
+          } catch (error) {
+            const helper = document.createElement('textarea');
+            helper.value = text;
+            helper.setAttribute('readonly', '');
+            helper.style.position = 'absolute';
+            helper.style.left = '-9999px';
+            document.body.appendChild(helper);
+            helper.select();
+            document.execCommand('copy');
+            document.body.removeChild(helper);
+            button.textContent = 'Kopiert';
+            setTimeout(() => {
+              button.textContent = 'Code kopieren';
+            }, 1200);
+          }
+        });
+      });
+    }
+    window.addEventListener('DOMContentLoaded', setLogoByMode);
+    window.addEventListener('DOMContentLoaded', setupCodeCopy);
+  </script>
+</body>
+
+</html>

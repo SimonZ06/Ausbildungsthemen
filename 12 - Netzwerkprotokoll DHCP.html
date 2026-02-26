@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="utf-8" />
+  <title>12 - Netzwerkprotokoll DHCP</title>
+  <link href="Icon.ico" rel="icon" type="image/x-icon" />
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <button class="mode-toggle" onclick="toggleMode()">🌙 Dunkelmodus</button>
+  <div class="page-wrapper">
+    <aside class="sidebar" aria-label="Inhaltsverzeichnis">
+      <h2>Inhaltsverzeichnis</h2>
+      <nav class="sidebar-nav">
+        <a href="#grundidee_zweck">Grundidee und Zweck von DHCP</a>
+        <a href="#lease_ablaufzeit">Was bedeutet die Lease-Ablaufzeit?</a>
+        <a href="#dhcp_konsole">Überblick über die Windows-DHCP-Konsole</a>
+        <a href="#konfigurationsmöglichkeiten">Grundlegende Konfigurationsmöglichkeiten</a>
+        <a href="#dora_prinzip">Ablauf der DHCP-Kommunikation (DORA-Prinzip)</a>
+        <a href="#dhcp_relay">DHCP Relay in VLAN-Umgebungen</a>
+        <a href="#installation_vm_vlan">Installation einer eigenen VM im isolierten VLAN</a>
+        <a href="#zusammenfassung">Zusammenfassung</a>
+      </nav>
+    </aside>
+    <main class="main-column">
+      <header class="page-header">
+        <h1>12 - Netzwerkprotokoll DHCP</h1>
+      </header>
+    <section class="content-section" id="grundidee_zweck">
+        <h2>1. Grundidee und Zweck von DHCP</h2>
+        <p>DHCP steht für <b>Dynamic Host Configuration Protocol.</b> Es handelt sich um ein Netzwerkprotokoll, das dafür sorgt, dass Geräte in einem IP-Netzwerk <b>automatisch</b> mit den nötigen Netzwerkeinstellungen versorgt werden. Ohne DHCP müsste jedes Gerät manuell konfiguriert werden, was in modernen Netzwerken kaum praktikabel wäre.</p>
+        <p>Typische Informationen, die ein Client über DHCP erhält, sind:</p>
+        <ul>
+            <li>eine <b>IP-Adresse</b></li>
+            <li>die <b>Subnetzmaske</b></li>
+            <li>das <b>Standardgateway</b></li>
+            <li>ein oder mehrere <b>DNS-Server</b></li>
+            <li>optional weitere Parameter (z. B. Domainname, NTP-Server, PXE-Optionen)</li>
+        </ul>
+        <p>DHCP wird überall dort eingesetzt, wo viele Endgeräte vorhanden sind oder sich Geräte häufig ändern, etwa in Unternehmensnetzwerken, Schulen, Gäste-WLANs oder Heimnetzen.</p>
+    </section>
+    <section class="content-section" id="lease_ablaufzeit">
+      <h2>2. Was bedeutet die Lease-Ablaufzeit?</h2>
+      <p>Eine zentrale Eigenschaft von DHCP ist die sogenannte <b>Lease</b> (Mietdauer).<br>
+      Die Lease-Ablaufzeit gibt an, <b>wie lange ein Client eine zugewiesene IP-Adresse nutzen darf,</b> bevor sie erneuert werden muss.</p>
+      <p>Das hat mehrere Vorteile:</p>
+      <ul>
+        <li>IP-Adressen werden <b>nicht dauerhaft blockiert</b></li>
+        <li>Geräte, die das Netzwerk verlassen, geben ihre Adresse nach Ablauf der Lease automatisch frei</li>
+        <li>Der Adressraum wird effizient genutzt</li>
+      </ul>
+      <p>Ein typischer Ablauf:</p>
+      <ul>
+        <li>Der Client erhält eine IP-Adresse für eine bestimmte Zeit (z. B. 8 Stunden oder 1 Tag)</li>
+        <li>Nach etwa 50 % <b>der Lease-Zeit</b> versucht der Client, die Lease zu verlängern</li>
+        <li>Ist der DHCP-Server erreichbar, wird die Lease erneuert</li>
+        <li>Ist der Server nicht erreichbar, darf der Client die IP bis zum Ablauf weiter nutzen</li>
+      </ul>
+      <p>Kurze Leases eignen sich für dynamische Netze (z. B. Gäste-WLAN), längere Leases für stabile Umgebungen (z. B. Server-Netze).</p>
+    </section>
+    <section class="content-section" id="dhcp_konsole">
+      <h2>3. Überblick über die Windows-DHCP-Konsole</h2>
+      <p>In einer Windows-Server-Umgebung wird DHCP über die <b>DHCP-Verwaltungskonsole</b> konfiguriert. Diese bietet eine strukturierte Oberfläche zur Verwaltung aller DHCP-Einstellungen.</p>
+      <p>Die Konsole gliedert sich typischerweise in folgende Bereiche:</p>
+      <b>Server</b>
+      <p>Hier wird der DHCP-Dienst des jeweiligen Servers angezeigt.<br>
+      Wichtig ist, dass der DHCP-Server <b>autorisiert</b> ist (bei Active Directory), da nicht autorisierte DHCP-Server keine Adressen vergeben dürfen.</p>
+      <br>
+      <b>IPv4 / IPv6</b>
+      <p>Die meisten Umgebungen arbeiten weiterhin mit IPv4.<br>
+      Unter IPv4 werden alle relevanten Konfigurationen vorgenommen:</p>
+      <ul>
+        <li>Bereiche (Scopes)</li>
+        <li>Reservierungen</li>
+        <li>Optionen</li>
+        <li>Adressleases</li>
+      </ul>
+      <br>
+      <b>Bereiche (Scopes)</b>
+      <p>Ein Bereich definiert:</p>
+      <ul>
+        <li>den <b>IP-Adressbereich,</b> aus dem Clients Adressen erhalten</li>
+        <li>Subnetzmaske</li>
+        <li>Lease-Dauer</li>
+        <li>optionale Einstellungen wie Gateway und DNS</li>
+      </ul>
+      <p>Ohne aktiven Bereich kann ein DHCP-Server <b>keine IP-Adressen vergeben.</b></p>
+      <br>
+      <b>Adressleases</b>
+      <p>Hier sieht man alle aktuell vergebenen IP-Adressen:</p>
+      <ul>
+        <li>IP-Adresse</li>
+        <li>MAC-Adresse</li>
+        <li>Gerätename</li>
+        <li>Lease-Ende</li>
+      </ul>
+      <p>Dieser Bereich ist besonders wichtig für Fehlersuche und Kontrolle.</p>
+      <br>
+      <b>Reservierungen</b>
+      <p>Reservierungen sorgen dafür, dass ein bestimmtes Gerät <b>immer dieselbe IP-Adresse</b> erhält, obwohl DHCP verwendet wird.<br>
+      Das ist sinnvoll für:</p>
+      <ul>
+        <li>Drucker</li>
+        <li>Server</li>
+        <li>Netzwerkgeräte</li>
+      </ul>
+    </section>
+    <section class="content-section" id="konfigurationsmöglichkeiten">
+      <h2>4. Grundlegende Konfigurationsmöglichkeiten</h2>
+      <p>Ein DHCP-Server erlaubt unter anderem:</p>
+      <ul>
+        <li>Festlegen von IP-Bereichen</li>
+        <li>Ausschluss bestimmter IP-Adressen</li>
+        <li>Konfiguration von Standardgateway und DNS</li>
+        <li>Anpassen der Lease-Dauer</li>
+        <li>Einrichten von Reservierungen</li>
+        <li>Verteilen zusätzlicher DHCP-Optionen</li>
+      </ul>
+      <p>Wichtig ist dabei immer, dass sich DHCP-Bereiche <b>nicht überschneiden</b> und zur Netzstruktur passen.</p>
+    </section>
+    <section class="content-section" id="dora_prinzip">
+      <h2>5. Ablauf der DHCP-Kommunikation (DORA-Prinzip)</h2>
+      <p>Die DHCP-Kommunikation folgt einem klaren Ablauf, der häufig mit <b>DORA</b> abgekürzt wird:</p>
+      <ol class="fette-zahlen">
+        <li><span class="layer-title"><b>Discover</b></span><br>
+        <span class="layer-text">Der Client sendet eine Broadcast-Nachricht ins Netzwerk, um einen DHCP-Server zu finden.</span>
+        <li><span class="layer-title"><b>Offer</b></span><br>
+        <span class="layer-text">Ein DHCP-Server antwortet mit einem Angebot, das eine freie IP-Adresse und weitere Netzwerkeinstellungen enthält.</span></li>
+        <li><span class="layer-title"><b>Request</b></span><br>
+        <span class="layer-text">Der Client akzeptiert ein Angebot und fordert diese IP-Adresse offiziell an.</span></li>
+        <li><span class="layer-title"><b>Acknowledge</b></span><br>
+        Der Server bestätigt die Anfrage und übergibt die IP-Adresse für die vereinbarte Lease-Zeit.</li>
+      </ol>
+      <p>Erst nach diesem Ablauf kann der Client vollständig im Netzwerk kommunizieren.</p>
+    </section>
+    <section class="content-section" id="dhcp_relay">
+      <h2>6. DHCP Relay in VLAN-Umgebungen</h2>
+      <p>In modernen Netzwerken sind Clients häufig in <b>verschiedenen VLANs</b> untergebracht.<br>
+      Da DHCP-Broadcasts <b>nicht über VLAN-Grenzen hinweg</b> weitergeleitet werden, ist ein DHCP Relay notwendig.</p>
+      <p>Ein DHCP Relay:</p>
+      <ul>
+        <li>nimmt DHCP-Broadcasts aus einem VLAN entgegen</li>
+        <li>leitet sie <b>gezielt an den DHCP-Server</b> weiter</li>
+        <li>übermittelt dabei die Information, aus welchem Netzwerk die Anfrage stammt</li>
+      </ul>
+      <br>
+      <p>Das Relay wird typischerweise auf einem:</p>
+      <ul>
+        <li>Router</li>
+        <li>Layer-3-Switch</li>
+        <li>Firewall</li>
+      </ul>
+      <p>konfiguriert.<br>
+      Der DHCP-Server erkennt anhand der Relay-Information, welcher Bereich (Scope) zuständig ist.</p>
+    </section>
+    <section class="content-section" id="installation_vm_vlan">
+      <h2>7. Installation einer eigenen VM im isolierten VLAN</h2>
+      <p>Für Test- und Ausbildungsumgebungen ist es sinnvoll, eigene virtuelle Maschinen in <b>abgeschotteten VLANs</b> zu betreiben.</p>
+      <p>Der typische Ablauf:</p>
+      <ul>
+        <li>Eine neue VM wird auf dem Azubi-Server erstellt</li>
+        <li>Die Netzwerkkarte der VM wird einem <b>leeren oder isolierten VLAN</b> zugewiesen</li>
+        <li>In diesem VLAN existiert zunächst kein DHCP-Server</li>
+        <li>Ohne DHCP oder statische IP erhält die VM keine Netzwerkverbindung</li>
+      </ul>
+      <p>Erst durch:</p>
+      <ul>
+        <li>Konfiguration eines DHCP-Servers <b>oder</b></li>
+        <li>Einrichtung eines DHCP Relays</li>
+      </ul>
+      <p>kann die VM automatisch eine IP-Adresse beziehen.<br>
+      So lassen sich DHCP, VLANs und Routing realitätsnah testen, ohne das produktive Netzwerk zu beeinflussen.</p>
+    </section>
+    <section class="content-section" id="zusammenfassung">
+      <h2>Zusammenfassung</h2>
+      <p>DHCP ist ein zentrales Protokoll für den automatisierten Betrieb moderner Netzwerke. Es reduziert Konfigurationsaufwand, verhindert Fehler und ermöglicht flexible Netzstrukturen. Durch Lease-Zeiten, VLAN-Unterstützung und Relay-Funktionen lässt sich DHCP sowohl in kleinen als auch in komplexen Umgebungen zuverlässig einsetzen.</p>
+    </section>
+    <div class="bottom-links">
+        <a href="Ausbildungsthemen.html" class="back-link">⟵ Zurück zum Inhaltsverzeichnis</a>
+        <a href="11 - ISO_OSI Schichtenmodell.html" target="_blank" class="back-link">⟵ Zurück zu 11 - ISO/OSI Schichtenmodell</a>
+        <a href="13 - Netzwerkprotokoll DNS.html" target="_blank" class="back-link">13 - Netzwerkprotokoll DNS ⟶</a>
+      </div>
+    </main>
+    <aside class="right-column">
+      <div class="logo-stack">
+        <a class="logo-card" href="https://www.teccle-group.de" target="_blank" rel="noopener">
+          <img id="teccle-logo" src="TeccleLogo.png" alt="Teccle Group Logo" />
+        </a>
+        <span class="logo-divider" aria-hidden="true"></span>
+        <a class="logo-card" href="https://www.netzplan.de" target="_blank" rel="noopener">
+          <img src="NetzplanLogo.png" alt="Netzplan Logo" />
+        </a>
+      </div>
+      <div class="info-box">
+        <strong>Mehr entdecken</strong>
+        Direkt zu Support, Dokumentation oder zurück zur Übersicht.
+        <div class="info-links">
+          <a href="mailto:support@teccle-group.de">Support kontaktieren</a>
+          <br>
+          <a href="https://www.netzplan.de" target="_blank" rel="noopener">Dokumentation</a>
+          <br>
+          <a href="Ausbildungsthemen.html">Zur Übersicht</a>
+        </div>
+      </div>
+    </aside>
+  </div>
+  
+  <script>
+    function setLogoByMode() {
+      const logo = document.getElementById('teccle-logo');
+      if (document.body.classList.contains('dark')) {
+        logo.src = 'TeccleLogoBlack.png';
+      } else {
+        logo.src = 'TeccleLogo.png';
+      }
+    }
+    function toggleMode() {
+      document.body.classList.toggle('dark');
+      const btn = document.querySelector('.mode-toggle');
+      if (document.body.classList.contains('dark')) {
+        btn.textContent = '☀️ Hellmodus';
+      } else {
+        btn.textContent = '🌙 Dunkelmodus';
+      }
+      setLogoByMode();
+    }
+    function setupCodeCopy() {
+      const boxes = document.querySelectorAll('.code-box');
+      boxes.forEach((box) => {
+        const button = box.querySelector('.code-copy');
+        const codeLine = box.querySelector("p[style*='Courier New']") || box.querySelector('p');
+        if (!button || !codeLine) {
+          return;
+        }
+        button.addEventListener('click', async () => {
+          const text = codeLine.innerText.trim();
+          if (!text) {
+            return;
+          }
+          try {
+            await navigator.clipboard.writeText(text);
+            button.textContent = 'Kopiert';
+            setTimeout(() => {
+              button.textContent = 'Code kopieren';
+            }, 1200);
+          } catch (error) {
+            const helper = document.createElement('textarea');
+            helper.value = text;
+            helper.setAttribute('readonly', '');
+            helper.style.position = 'absolute';
+            helper.style.left = '-9999px';
+            document.body.appendChild(helper);
+            helper.select();
+            document.execCommand('copy');
+            document.body.removeChild(helper);
+            button.textContent = 'Kopiert';
+            setTimeout(() => {
+              button.textContent = 'Code kopieren';
+            }, 1200);
+          }
+        });
+      });
+    }
+    window.addEventListener('DOMContentLoaded', setLogoByMode);
+    window.addEventListener('DOMContentLoaded', setupCodeCopy);
+  </script>
+</body>
+
+</html>

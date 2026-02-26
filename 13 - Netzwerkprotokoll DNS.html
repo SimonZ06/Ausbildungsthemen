@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="utf-8" />
+  <title>13 - Netzwerkprotokoll DNS</title>
+  <link href="Icon.ico" rel="icon" type="image/x-icon" />
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <button class="mode-toggle" onclick="toggleMode()">🌙 Dunkelmodus</button>
+  <div class="page-wrapper">
+    <aside class="sidebar" aria-label="Inhaltsverzeichnis">
+      <h2>Inhaltsverzeichnis</h2>
+      <nav class="sidebar-nav">
+        <a href="#einleitung">Wozu braucht man DNS?</a>
+        <a href="#dns_server_windows">Wo stellt man den DNS-Server in Windows ein?</a>
+        <a href="#dns_ac">Warum ist DNS für Active Directory so wichtig?</a>
+        <a href="#dns_name_aufbau">Wie ist ein DNS-Name aufgebaut und warum gibt es Punkte?</a>
+        <a href="#welche_ports">Über welche Ports kommuniziert DNS?</a>
+        <a href="#dns_recordtypen">DNS-Recordtypen und ihre Verwendung</a>
+        <a href="#reverse_dns">Reverse DNS - was steckt dahinter?</a>
+        <a href="#dyndns">Dynamisches DNS (DynDNS)</a>
+        <a href="#praxis">Praxis</a>
+        <a href="#abfrage">Abfrage des internen DNS-Servers mit NSLookup</a>
+        <a href="#abfrage2">Abfrage des externen DNS-Servers mit NSLookup</a>
+      </nav>
+    </aside>
+    <main class="main-column">
+      <header class="page-header">
+        <h1>13 - Netzwerkprotokoll DNS</h1>
+      </header>
+    <section class="content-section" id="einleitung">
+        <h2>1. Wozu braucht man DNS?</h2>
+        <p>DNS steht für <b>Domain Name System</b> und ist einer der grundlegendsten Dienste in IP-Netzwerken. Seine Hauptaufgabe besteht darin, <b>menschenlesbare Namen</b> in <b>IP-Adressen</b> zu übersetzen. Computer kommunizieren ausschließlich über IP-Adressen, Menschen hingegen arbeiten mit Namen wie <i style="font-family: 'Courier New', Courier, monospace;">server01.firma.local</i> oder <i style="font-family: 'Courier New', Courier, monospace;">www.example.de</i>. DNS ist die vermittelnde Instanz zwischen diesen beiden Welten.</p>
+        <p>Ohne DNS müsste jeder Benutzer und jedes System die IP-Adressen aller Server kennen, was in der Praxis nicht umsetzbar wäre. DNS sorgt außerdem dafür, dass sich IP-Adressen ändern können, ohne dass Benutzer oder Anwendungen davon etwas merken. Dienste bleiben über ihren Namen erreichbar, auch wenn sich die dahinterliegende Adresse ändert.</p>
+        <p>DNS wird nicht nur für Webseiten benötigt, sondern für nahezu alle Netzwerkdienste, darunter Datei- und Druckdienste, E-Mail, Datenbanken, VPNs und insbesondere für Active Directory.</p>
+    </section>
+    <section class="content-section" id="dns_server_windows">
+        <h2>2. Wo stellt man den DNS-Server in Windows ein?</h2>
+        <p>In Windows wird der DNS-Server <b>nicht zentral an einer einzigen Stelle</b> sondern immer <b>pro Netzwerkschnittstelle</b> konfiguriert. Die Einstellung befindet sich in den Netzwerkeinstellungen des jeweiligen Adapters.</p>
+        <p>Der übliche Weg führt über:</p>
+        <ul>
+            <li>Netzwerkeinstellungen</li>
+            <li>Adapteroptionen ändern</li>
+            <li>Eigenschaften der Netzwerkkarte</li>
+            <li>Internetprotokoll Version 4 (IPv4)</li>
+            <li>DNS-Serveradressen</li>
+        </ul>
+        <p>Hier wird festgelegt, <b>welcher DNS-Server für Namenauflösungen verwendet wird.</b> In Unternehmensnetzen ist dies in der Regel ein interner DNS-Server, häufig ein Windows-Domaincontroller. In Heimnetzen ist es oft der Router oder ein öffentlicher DNS-Server.</p>
+        <p>Diese Einstellung ist kritisch: Ist der DNS-Server falsch konfiguriert, funktionieren viele Netzwerkdienste nicht mehr, obwohl die reine IP-Konnektivität noch gegeben ist.</p>
+    </section>
+    <section class="content-section" id="dns_ac">
+        <h2>3. Warum ist DNS für Active Directory so wichtig?</h2>
+        <p>Active Directory ist <b>vollständig von DNS abhängig.</b> Nahezu alle Funktionen innerhalb einer Windows-Domäne basieren auf DNS-Namensauflösung. Domaincontroller, Clients und Dienste finden sich gegenseitig über spezielle DNS-Einträge, sogenannte <b>SRV-Records.</b></p>
+        <p>Ein Windows-Client meldet sich nicht "direkt" bei einem bestimmten Domaincontroller an, sondern fragt über DNS ab, <b>welcher Domaincontroller für welche bestimmte Dienste zuständig ist.</b> Auch Replikation, Gruppenrichtlinien, Kerberos-Authentifizierung und viele weitere AD-Funktionen nutzen DNS.</p>
+        <p>Ein Active Directory <b>würde ohne DNS nicht funktionieren.</b> Selbst wenn IP-Adressen manuell bekannt wären fehlen ohne DNS die notwendigen Mechanismen zur automatischen Dienstfindung. Deshalb ist eine korrekt funktionierende DNS-Infrastruktur die wichtigste Voraussetzung für ein stabiles Active Directory.</p>
+    </section>
+    <section class="content-section" id="dns_name_aufbau">
+        <h2>4. Wie ist ein DNS-Name aufgebaut und warum gibt es Punkte?</h2>
+        <p>Ein DNS-Name ist <b>hierarchisch aufgebaut</b> und besteht aus mehreren Ebenen, die durch Punkte getrennt sind. Jeder Punkt trennt eine Ebene der Namenshierarchie.</p>
+        <p>Beispiel:</p>
+        <i style="font-family: 'Courier New', Courier, monospace;">server01.it.abteilung.firma.local</i>
+        <p>Von rechts nach links gelesen:</p>
+        <ul>
+          <li><i style="font-family: 'Courier New', Courier, monospace;">local</i> ist die oberste Zone (Top-Level-Domain im internen Kontext)</li>
+          <li><i style="font-family: 'Courier New', Courier, monospace;">firma</i> ist eine darunterliegende Domain</li>
+          <li><i style="font-family: 'Courier New', Courier, monospace;">abteilung</i> und <i style="font-family: 'Courier New', Courier, monospace;">it</i> sind Subdomains</li>
+          <li><i style="font-family: 'Courier New', Courier, monospace;">server01</i> ist der eigentliche Hostname</li>
+        </ul>
+        <p>Diese Struktur ermöglicht eine <b>klare Delegation und Organisation von Namensräumen.</b> Unterschiedliche DNS-Server können für unterschiedliche Zonen zuständig sein, ohne dass es zu Namenskonflikten kommt. Die Punkte sind also kein Zufall, sondern ein zentrales Strukturmerkmal des DNS-Systems.</p>
+    </section>
+    <section class="content-section" id="welche_ports">
+      <h2>5. Über welche Ports kommuniziert DNS?</h2>
+      <p>DNS verwendet standardmäßig <b>Port 53.</b></p>
+      <ul>
+        <li><b>UDP Port 53</b> wird für normale DNS-Abfragen genutzt, da es schnell und ressourcenschonend ist.</li>
+        <li><b>TCP Port 53</b> wird verwendet, wenn Antworten sehr groß sind (z. B. bei Zonentransfers) oder wenn UDP nicht ausreicht.</li>
+      </ul>
+      <p>In der Praxis ist UDP der Regelfall, TCP kommt in speziellen Situationen oder bei internen DNS-Prozessen zum Einsatz.</p>
+    </section>
+    <section class="content-section" id="dns_recordtypen">
+      <h2>6. DNS-Recordtypen und ihre Verwendung</h2>
+      <p>DNS-Einträge, sogenannte <b>Resource Records,</b> definieren, welche Informationen ein DNS-Server zu einem Namen kennt. Zu den wichtigsten Typen gehören:</p>
+      <ul>
+        <li><b>A-Record</b><br>
+        Ordnet einem Hostnamen eine IPv4-Adresse zu. Er ist der klassische DNS-Eintrag für Server und Clients.</li>
+        <li><b>AAAA-Record</b><br>
+        Entspricht dem A-Record, jedoch für IPv6-Adressen.</li>
+        <li><b>CNAME-Record</b><br>
+        Erstellt einen Aliasnamen für einen bestehenden DNS-Namen. Der eigentliche Zielname bleibt unverändert.</li>
+        <li><b>MX-Record</b><br>
+        Legt fest, welche Mailserver für eine Domain zuständig sind und in welcher Priorität sie verwendet werden.</li>
+        <li><b>SRV-Record</b><br>
+        Wird vor allem von Active Directory genutzt, um Dienste und Domaincontroller auffindbar zu machen.</li>
+      </ul>
+      <p>Diese Einträge bestimmen maßgeblich, wie Dienste im Netzwerk gefunden und genutzt werden können.</p>
+    </section>
+    <section class="content-section" id="reverse_dns">
+      <h2>7. Reverse DNS - was steckt dahinter?</h2>
+      <p>Reverse DNS funktioniert genau umgekehrt zur normalen Namensauflösung. Hier wird <b>aus einer IP-Adresse ein Name ermittelt.</b> Technisch geschieht dies über spezielle Reverse-Lookup-Zonen.</p>
+      <p>Reverse DNS wird unter anderem benötigt für:</p>
+      <ul>
+        <li>Log-Analyse</li>
+        <li>Sicherheitsprüfungen</li>
+        <li>Mailserver (Spam-Erkennung)</li>
+        <li>Diagnosezwecke</li>
+      </ul>
+      <p>In internen Netzen wird Reverse DNS vom eigenen DNS-Administrator verwaltet. Für öffentliche IP-Adressen ist in der <b>Internetprovider</b> zuständig. Änderungswünsche für Reverse DNS bei öffentlichen IPs müssen daher an den Provider gerichtet werden.</p>
+    </section>
+    <section class="content-section" id="dyndns">
+      <h2>8. Dynamisches DNS (DynDNS)</h2>
+      <p>Dynamisches DNS wird eingesetzt, wenn sich die <b>öffentliche IP-Adresse regelmäßig ändert,</b> was bei privaten Internetanschlüssen häufig der Fall ist. Ein DynDNS-Dienst sorgt dafür, dass ein fester DNS-Name immer automatisch auf die aktuell gültige IP-Adresse zeigt.</p>
+      <p>Typische Einsatzszenarien sind:</p>
+      <ul>
+        <li>Fernzugriff auf das Heimnetz</li>
+        <li>Private Server mit wechselnder IP</li>
+        <li>VPN-Zugänge über DSL/Kabelanschlüsse</li>
+      </ul>
+      <p>Der DNS-Eintrag wird dabei automatisch aktualisiert, sobald sich die IP-Adresse ändert.</p>
+    </section>
+    <section class="content-section" id="praxis">
+      <h2>9. Praxis: Vorbereitung eines Windows-DNS-Dienstes</h2>
+      <p>Für praktische Übungen wird auf einem Windows-Server die DNS-Serverrolle installiert. Anschließend wird eine eigene Forward-Lookup-Zone angelegt, die als Übungszone dient. In dieser Zone können die verschiedenen DNS-Recordtypen erstellt, geändert und gelöscht werden, ohne produktive Systeme zu beeinflussen.</p>
+      <p>Diese Zone bildet die Grundlage, um DNS-Funktionalität realitätsnah nachzuvollziehen und die Auswirkungen von Konfigurationsänderungen direkt zu beobachten.</p>
+    </section>
+    <section class="content-section" id="abfrage">
+      <h2>10. Abfrage des internen DNS-Servers mit NSLookup</h2>
+      <p>Mit dem Kommandozeilentool <b>NSLookup</b> lassen sich gezielt DNS-Abfragen durchführen. Dabei kann festgelegt werden, welcher DNS-Server angesprochen wird. So lässt sich prüfen, ob der eigene DNS-Server korrekt arbeitet und die erstellten Einträge wie erwartet aufgelöst werden.</p>
+      <p>NSLookup eignet sich besonders gut, um DNS-Probleme einzugrenzen und die Funktionsweise von Namensauflösung transparent zu machen.</p>
+    </section>
+    <section class="content-section" id="abfrage2">
+      <h2>11. Abfrage des externen DNS-Servers mit NSLookup</h2>
+      <p>Zusätzlich zur internen Abfrage kann NSLookup genutzt werden, um <b>öffentliche DNS-Server</b> gezielt anzusprechen. Dadurch wird sichtbar, welche Informationen im Internet verfügbar sind und welche Namen nur intern auflösbar sind.</p>
+      <p>Der Vergleich zwischen interner und externer DNS-Abfrage verdeutlicht die Trennung von internen und öffentlichen Namensräumen und zeigt, warum interne DNS-Server in Unternehmensnetzen unverzichtbar sind.</p>
+    </section>
+    <div class="bottom-links">
+        <a href="Ausbildungsthemen.html" class="back-link">⟵ Zurück zum Inhaltsverzeichnis</a>
+        <a href="12 - Netzwerkprotokoll DHCP.html" target="_blank" class="back-link">⟵ Zurück zu 12  - Netzwerkprotokoll DHCP</a>
+        <a href="14 - Netzwerkprotokoll SMTP.html" target="_blank" class="back-link">14 - Netzwerkprotokoll SMTP ⟶</a>
+      </div>
+    </main>
+    <aside class="right-column">
+      <div class="logo-stack">
+        <a class="logo-card" href="https://www.teccle-group.de" target="_blank" rel="noopener">
+          <img id="teccle-logo" src="TeccleLogo.png" alt="Teccle Group Logo" />
+        </a>
+        <span class="logo-divider" aria-hidden="true"></span>
+        <a class="logo-card" href="https://www.netzplan.de" target="_blank" rel="noopener">
+          <img src="NetzplanLogo.png" alt="Netzplan Logo" />
+        </a>
+      </div>
+      <div class="info-box">
+        <strong>Mehr entdecken</strong>
+        Direkt zu Support, Dokumentation oder zurück zur Übersicht.
+        <div class="info-links">
+          <a href="mailto:support@teccle-group.de">Support kontaktieren</a>
+          <br>
+          <a href="https://www.netzplan.de" target="_blank" rel="noopener">Dokumentation</a>
+          <br>
+          <a href="Ausbildungsthemen.html">Zur Übersicht</a>
+        </div>
+      </div>
+    </aside>
+  </div>
+  
+  <script>
+    function setLogoByMode() {
+      const logo = document.getElementById('teccle-logo');
+      if (document.body.classList.contains('dark')) {
+        logo.src = 'TeccleLogoBlack.png';
+      } else {
+        logo.src = 'TeccleLogo.png';
+      }
+    }
+    function toggleMode() {
+      document.body.classList.toggle('dark');
+      const btn = document.querySelector('.mode-toggle');
+      if (document.body.classList.contains('dark')) {
+        btn.textContent = '☀️ Hellmodus';
+      } else {
+        btn.textContent = '🌙 Dunkelmodus';
+      }
+      setLogoByMode();
+    }
+    function setupCodeCopy() {
+      const boxes = document.querySelectorAll('.code-box');
+      boxes.forEach((box) => {
+        const button = box.querySelector('.code-copy');
+        const codeLine = box.querySelector("p[style*='Courier New']") || box.querySelector('p');
+        if (!button || !codeLine) {
+          return;
+        }
+        button.addEventListener('click', async () => {
+          const text = codeLine.innerText.trim();
+          if (!text) {
+            return;
+          }
+          try {
+            await navigator.clipboard.writeText(text);
+            button.textContent = 'Kopiert';
+            setTimeout(() => {
+              button.textContent = 'Code kopieren';
+            }, 1200);
+          } catch (error) {
+            const helper = document.createElement('textarea');
+            helper.value = text;
+            helper.setAttribute('readonly', '');
+            helper.style.position = 'absolute';
+            helper.style.left = '-9999px';
+            document.body.appendChild(helper);
+            helper.select();
+            document.execCommand('copy');
+            document.body.removeChild(helper);
+            button.textContent = 'Kopiert';
+            setTimeout(() => {
+              button.textContent = 'Code kopieren';
+            }, 1200);
+          }
+        });
+      });
+    }
+    window.addEventListener('DOMContentLoaded', setLogoByMode);
+    window.addEventListener('DOMContentLoaded', setupCodeCopy);
+  </script>
+</body>
+
+</html>
