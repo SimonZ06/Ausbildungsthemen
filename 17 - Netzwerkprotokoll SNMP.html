@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="utf-8" />
+  <title>17 - Netzwerkprotokoll SNMP</title>
+  <link href="Icon.ico" rel="icon" type="image/x-icon" />
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <button class="mode-toggle" onclick="toggleMode()">🌙 Dunkelmodus</button>
+  <div class="page-wrapper">
+    <aside class="sidebar" aria-label="Inhaltsverzeichnis">
+      <h2>Inhaltsverzeichnis</h2>
+      <nav class="sidebar-nav">
+        <a href="#grundidee_snmp">Gundidee und Zweck von SNMP</a>
+        <a href="#kommunikationsprinzip_ports">Kommunikationsprinzip und verwendete Ports</a>
+        <a href="#device_support_snmp">Geräte, die SNMP unterstützen</a>
+        <a href="#aufbau_snmp_datenstruktur">Aufbau der SNMP-Datenstruktur (MIB & OID)</a>
+        <a href="#community_strings">Community Strings (SNMP Version 1)</a>
+        <a href="#praktisch_teil">-- Praktischer Teil -- SNMP unter Windows</a>
+        <a href="#install_konfig_snmp">Installation und Konfiguration des SNMP-Dienstes</a>
+        <a href="#einstellung_wichtig">Wichtige Einstellungen im SNMP-Dienst</a>
+      </nav>
+    </aside>
+    <main class="main-column">
+      <header class="page-header">
+        <h1>17 - Netzwerkprotokoll SNMP (Simple Network Management Protocol)</h1>
+      </header>
+    <section class="content-section" id="grundidee_snmp">
+        <h2>1. Gundidee und Zweck von SNMP</h2>
+        <p>SNMP steht für <b>Simple Network Management Protocol</b>. Auf Deutsch kann man es als <b>einfaches Netzwerkverwaltungsprotokoll</b> übersetzen. Es wurde entwickelt, um <b>Netzwerkgeräte zentral überwachen und verwalten zu können</b>. In größeren Netzwerken ist es praktisch unmöglich, jedes Gerät manuell zu prüfen. Stattdessen sammeln Monitoring-Systeme automatisch Informationen über Geräte und deren Zustand. Genau dafür wird SNMP verwendet.</p>
+        <p>Das Protokoll erlaubt es, von einem zentralen System aus <b>Statusinformationen von Geräten im Netzwerk abzufragen</b>. Gleichzeitig können manche Parameter auch verändert werden. Ein Administrator kann also zum Beispiel sehen, wie stark ein Server ausgelastet ist, wie viel Speicher ein Router noch frei hat oder ob ein Drucker eine Fehlermeldung meldet.</p>
+        <p>SNMP basiert auf einem relativ einfachen Prinzip:<br>
+        Ein <b>Management-System</b> (z. B. eine Monitoring-Software) fragt Daten bei einem <b>SNMP-Agenten</b> ab. Der Agent ist ein Dienst auf dem jeweiligen Gerät, der bestimmte Systeminformationen bereitstellt.</p>
+        <p>Das Monitoring-System wird häufig <b>SNMP Manager</b> genannt, während der Dienst auf dem Gerät <b>SNMP Agent</b> heißt.</p>
+        <p>Die abgefragten Informationen können zum Beispiel sein:</p>
+        <ul>
+            <li>CPU-Auslastung</li>
+            <li>Speicherverbrauch</li>
+            <li>Netzwerkauslastung</li>
+            <li>Systemtemperatur</li>
+            <li>Laufwerksbelegung</li>
+            <li>Gerätefehler</li>
+        </ul>
+        <p>Monitoring-Systeme nutzen diese Daten, um <b>Dashboards, Warnmeldungen oder automatische Alarme</b> zu erstellen.</p>
+    </section>
+    <section class="content-section" id="kommunikationsprinzip_ports">
+        <h2>2. Kommunikationsprinzip und verwendete Ports</h2>
+        <p>SNMP arbeitet in der Regel über <b>UDP</b>, nicht über TCP. UDP ist verbindungslos und hat einen geringeren Overhead. Für Monitoring-Zwecke ist das sinnvoll, weil regelmäßig viele kleine Abfragen durchgeführt werden</p>
+        <p>Typischerweise werden folgende Ports verwendet:</p>
+        <ul>
+            <li><b>UDP Port 161</b> ⟶ SNMP-Abfragen (Manager ⟶ Agent)</li>
+            <li><b>UDP Port 162</b> ⟶ SNMP-Traps (Agent ⟶ Manager)</li>
+        </ul>
+        <p>Die meisten Abfragen laufen über Port 161. Der Manager fragt einen bestimmten Wert ab, und der Agent sendet eine Antwort zurück.</p>
+        <p>SNMP kennt außerdem sogenannte <b>Traps</b>. Dabei sendet ein Gerät selbstständig eine Nachricht an das Monitoring-System, wenn ein bestimmtes Ereignis eintritt. Beispiele wären:</p>
+        <ul>
+            <li>Netzwerkinterface fällt aus</li>
+            <li>Temperaturgrenze überschritten</li>
+            <li>Speicher fast voll</li>
+        </ul>
+        <p>Das Monitoring-System muss dann nicht ständig alles abfragen, sondern wird automatisch informiert.</p>
+    </section>
+    <section class="content-section" id="device_support_snmp">
+        <h2>3. Geräte, die SNMP unterstützen</h2>
+        <p>SNMP wird von sehr vielen Geräten unterstützt, besonders von Netzwerk- und Infrastrukturkomponenten.<br>
+        Das liegt daran, dass Monitoring für den stabilen Betrieb eines Netzwerks sehr wichtig ist.</p>
+        <p>Typische Geräte, die SNMP unterstützen, sind zum Beispiel:</p>
+        <p><b>Router</b><br>
+        Router liefern über SNMP häufig Informationen über:</p>
+        <ul>
+            <li>Netzwerkauslastung der Interfaces</li>
+            <li>Fehler auf Netzwerkports</li>
+            <li>CPU-Auslastung</li>
+            <li>Routing-Status</li>
+        </ul>
+        <p>Ein Administrator kann damit erkennen, ob ein Netzwerkport überlastet ist oder ob es Paketverluste gibt.</p>
+        <p><b>Switches</b><br>
+        Bei Switches sind besoners interessant:</p>
+        <ul>
+            <li>Status der einzelnen Ports</li>
+            <li>Bandbreitenauslastung</li>
+            <li>Fehlerhafte Frames</li>
+            <li>Aktivität einzelner Ports</li>
+        </ul>
+        <p>Damit lässt sich zum Beispiel feststellen, ob ein Port abgeschaltet ist oder ungewöhnlich viel Datenverkehr erzeugt.</p>
+        <p><b>Server</b><br>
+        Auch Server können über SNMP überwacht werden. Typische Werte sind:</p>
+        <ul>
+            <li>CPU-Auslastung</li>
+            <li>RAM-Auslastung</li>
+            <li>Festplattenkapazität</li>
+            <li>Systemtemperatur</li>
+        </ul>
+        <p>Gerade bei Servern ist die Überwachung des freien Speicherplatzes sehr wichtig, damit Systeme nicht unerwartet stehen bleiben.</p>
+        <p>Weitere Geräte, die SNMP häufig unterstützen:</p>
+        <ul>
+            <li>Drucker</li>
+            <li>Firewalls</li>
+            <li>USV-Systeme</li>
+            <li>Storage-Systeme</li>
+            <li>Access Points</li>
+        </ul>
+        <p>Das macht SNMP zu einem der wichtigsten Monitoring-Protokolle in IT-Infrastrukturen.</p>
+    </section>
+    <section class="content-section" id="aufbau_snmp_datenstruktur">
+        <h2>4. Aufbau der SNMP-Datenstruktur (MIB und OID)</h2>
+        <p>Die Daten, die SNMP bereitstellt, sind in einer hierarschischen Struktur organisiert. Diese Struktur wird <b>MIB (Management Information Base)</b> genannt.</p>
+        <p>Eine MIB ist im Grunde eine Art Datenbank mit allen möglichen Informationen, die ein Gerät bereitstellen kann. Jede einzelne Information wird über eine <b>OID (Object Identifier)</b> angesprochen.</p>
+        <p>Eine OID ist eine numerische Adresse innerhalb der MIB-Struktur.</p>
+        <p>Beispiel für eine OID:</p>
+        <p style="font-family: 'Courier New', Courier, monospace;">1.3.6.1.2.1.25.2.3.1.6</p>
+        <p>Diese Zahlenfolge beschreibt genau, welche Information abgefragt wird. Hinter dieser OID könnte zum Beispiel der <b>freie Speicherplatz eines Laufwerks</b> stehen.</p>
+        <p>Monitoring-Systeme kennen viele dieser OIDs bereits und können automatisch bestimmte Werte anzeigen.</p>
+    </section>
+    <section class="content-section" id="community_strings">
+        <h2>5. Community Strings (SNMP Version 1)</h2>
+        <p>In der ersten Version von SNMP (SNMPv1) erfolgt die Zugriffskontrolle über sogenannte <b>Community Strings</b>.</p>
+        <p>Ein Community String ist im Grunde ein <b>Passwort</b>, das beim Zugriff auf den SNMP-Agenten mitgesendt wird. Das Gerät prüft, ob dieser String erlaubt ist.</p>
+        <p>Typische Beispiele sind:</p>
+        <ul>
+            <li>public</li>
+            <li>private</li>
+        </ul>
+        <p>Dabei gilt meistens:</p>
+        <ul>
+            <li><b>public</b> ⟶ nur lesender Zugriff</li>
+            <li><b>private</b> ⟶ auch schreibender Zugriff</li>
+        </ul>
+        <p>Das Problem dabei ist, dass Community Strings <b>nicht Verschlüsselt übertragen werden</b>. Sie können also theoretisch im Netzwerk mitgelesen werden. Deshalb gelten SNMPv1 und SNMPv2 heute als <b>unsicher</b>.</p>
+        <p>Moderne Systeme verwenden deshalb häufig <b>SNMPv3</b>, dass Authentifizierung und Verschlüsselung unterstützt.</p>
+    </section>
+    <section class="content-section" id="praktisch_teil">
+        <h2>-- Praktischer Teil -- SNMP unter Windows</h2>
+    </section>
+    <section class="content-section" id="install_konfig_snmp">
+        <h2>1. Installation und Konfiguration des SNMP-Dienstes</h2>
+        <p>Auf Windows-Systemen kann ein SNMP-Agent installiert werden, damit der Rechner von Monitoring-Systemen überwacht werden kann.</p>
+        <p>Der SNMP-Dienst wird über die Windows-Features installiert.</p>
+        <p>Typischer Weg:</p>
+        <ol>
+            <li>Server Manager öffnen</li>
+            <li>Features hinzufügen</li>
+            <li><b>SNMP-Dienst installieren</b></li>
+        </ol>
+        <p>Nach der Installation erscheint der Dienst <b>SNMP Service</b> in der Windows-Dienstverwaltung.</p>
+    </section>
+    <section class="content-section" id="einstellung_wichtig">
+        <h2>2. Wichtige Einstellungen im SNMP-Dienst</h2>
+        <p>In den Eigenschaften des SNMP-Dienstes können mehrere wichtige Einstellungen vorgenommen werden.</p>
+        <p><b>Community Strings</b><br>
+        Hier werden die erlaubten Community Strings definiert.<br>
+        Man legt fest:</p>
+        <ul>
+            <li>welcher String erlaubt ist</li>
+            <li>ob er nur lesen darf oder auch schreiben</li>
+        </ul>
+        <p>Beispiel</p>
+        <div class="code-box">
+            <p style="font-family: 'Courier New', Courier, monospace;"><b>Community Name:</b> public<br>
+            <b>Rechte:</b> READ ONLY</p>
+        </div>
+    </section>
+    <div class="bottom-links">
+        <a href="Ausbildungsthemen.html" class="back-link">⟵ Zurück zum Inhaltsverzeichnis</a>
+        <a href="16 - Netzwerkprotokoll NTP.html" target="_blank" class="back-link">⟵ Zurück zu 16 - Netzwerkprotokoll NTP</a>
+        <a href="18 - MicrosoftAD.html" target="_blank" class="back-link">18 - Microsoft Active Directory ⟶</a>
+      </div>
+    </main>
+    <aside class="right-column">
+      <div class="logo-stack">
+        <a class="logo-card" href="https://www.teccle-group.de" target="_blank" rel="noopener">
+          <img id="teccle-logo" src="TeccleLogo.png" alt="Teccle Group Logo" />
+        </a>
+        <span class="logo-divider" aria-hidden="true"></span>
+        <a class="logo-card" href="https://www.netzplan.de" target="_blank" rel="noopener">
+          <img src="NetzplanLogo.png" alt="Netzplan Logo" />
+        </a>
+      </div>
+      <div class="info-box">
+        <strong>Mehr entdecken</strong>
+        Direkt zu Support, Dokumentation oder zurück zur Übersicht.
+        <div class="info-links">
+          <a href="mailto:support@teccle-group.de">Support kontaktieren</a>
+          <br>
+          <a href="https://www.netzplan.de" target="_blank" rel="noopener">Dokumentation</a>
+          <br>
+          <a href="Ausbildungsthemen.html">Zur Übersicht</a>
+        </div>
+      </div>
+    </aside>
+  </div>
+  
+  <script>
+    function setLogoByMode() {
+      const logo = document.getElementById('teccle-logo');
+      if (document.body.classList.contains('dark')) {
+        logo.src = 'TeccleLogoBlack.png';
+      } else {
+        logo.src = 'TeccleLogo.png';
+      }
+    }
+    function toggleMode() {
+      document.body.classList.toggle('dark');
+      const btn = document.querySelector('.mode-toggle');
+      if (document.body.classList.contains('dark')) {
+        btn.textContent = '☀️ Hellmodus';
+      } else {
+        btn.textContent = '🌙 Dunkelmodus';
+      }
+      setLogoByMode();
+    }
+    function setupCodeCopy() {
+      const boxes = document.querySelectorAll('.code-box');
+      boxes.forEach((box) => {
+        const button = box.querySelector('.code-copy');
+        const codeLine = box.querySelector("p[style*='Courier New']") || box.querySelector('p');
+        if (!button || !codeLine) {
+          return;
+        }
+        button.addEventListener('click', async () => {
+          const text = codeLine.innerText.trim();
+          if (!text) {
+            return;
+          }
+          try {
+            await navigator.clipboard.writeText(text);
+            button.textContent = 'Kopiert';
+            setTimeout(() => {
+              button.textContent = 'Code kopieren';
+            }, 1200);
+          } catch (error) {
+            const helper = document.createElement('textarea');
+            helper.value = text;
+            helper.setAttribute('readonly', '');
+            helper.style.position = 'absolute';
+            helper.style.left = '-9999px';
+            document.body.appendChild(helper);
+            helper.select();
+            document.execCommand('copy');
+            document.body.removeChild(helper);
+            button.textContent = 'Kopiert';
+            setTimeout(() => {
+              button.textContent = 'Code kopieren';
+            }, 1200);
+          }
+        });
+      });
+    }
+    window.addEventListener('DOMContentLoaded', setLogoByMode);
+    window.addEventListener('DOMContentLoaded', setupCodeCopy);
+  </script>
+</body>
+
+</html>

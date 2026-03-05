@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="utf-8" />
+  <title>16 - Netzwerkprotokoll NTP</title>
+  <link href="Icon.ico" rel="icon" type="image/x-icon" />
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <button class="mode-toggle" onclick="toggleMode()">🌙 Dunkelmodus</button>
+  <div class="page-wrapper">
+    <aside class="sidebar" aria-label="Inhaltsverzeichnis">
+      <h2>Inhaltsverzeichnis</h2>
+      <nav class="sidebar-nav">
+        <a href="#ntp">Wofür steht NTP?</a>
+        <a href="#besonderheiten_rücksicht">Welche Besonderheiten muss ein Zeitprotokoll berücksichtigen?</a>
+        <a href="#warum_notwendig">Warum ist Zeitsynchronisation technisch notwendig?</a>
+        <a href="#ntp_port">Welchen Port nutzt NTP?</a>
+        <a href="#ntp_funktion">Grundlegende Funktionsweise von NTP</a>
+        <a href="#praktischer_teil">-- Praktischer Teil - Windows --</a>
+        <a href="#zeitsynchronisation_konfigurieren">Zeitsynchronisation unter Windows Konfigurieren</a>
+        <a href="#zeitsync_service">Zeitsync-Servic prüfen</a>
+      </nav>
+    </aside>
+    <main class="main-column">
+      <header class="page-header">
+        <h1>16 - Netzwerkprotokoll NTP</h1>
+      </header>
+    <section class="content-section" id="ntp">
+      <h2>1. Wofür steht NTP?</h2>
+      <p>NTP steht für <b>Network Time Protocol</b> - also Netzwerk-Zeitprotokoll.</p>
+      <p>Es ist ein Protokoll zur <b>Synchronisation der Systemzeit</b> zwischen Rechnern über ein Netzwerk oder das Internet.</p>
+      <p>NTP sorgt dafür, dass alle beteiligten Systeme möglichst exakt die gleiche Uhrzeit verwenden - idealerweise bis in den Millisekundenbereich.</p>
+    </section>
+    <section class="content-section" id="besonderheiten_rücksicht">
+      <h2>2. Welche Besonderheiten muss ein Zeitprotokoll berücksichtigen?</h2>
+      <p>Zeit ist im Netzwerk kein einfacher Wert. Es gibt mehrere technische Herausforderungen:</p>
+      <h3>1. Latenz (Verzögerung)</h3>
+      <p>Ein Paket braucht Zeit vom Client zum Server.<br>
+      Wenn ein Zeitserver sagt: "Es ist 12:00:00", kommt diese Information nicht exakt zu diesem Zeitpunkt an.</p>
+      <p>Das Protokoll muss daher:</p>
+      <ul>
+        <li>Hin- und Rücklaufzeiten messen</li>
+        <li>Verzögerungen berechnen</li>
+        <li>asymmetrische Laufzeiten berücksichtigen</li>
+      </ul>
+      <hr class="trennlinie">
+      <h3>2. Jitter</h3>
+      <p>Die Netzwerkverzögerung ist nicht konstant.<br>
+      Sie schwankt. Diese Schwankung nennt man Jitter.</p>
+      <p>NTP muss daher:</p>
+      <ul>
+        <li>mehrere Zeitabfragen durchführen</li>
+        <li>Mittelwerte bilden</li>
+        <li>Ausreißer verwerfen</li>
+      </ul>
+      <hr class="trennlinie">
+      <h3>3. Drift (Uhrenabweichung)</h3>
+      <p>Jede Hardware-Uhr driftet.<br>
+      Selbst hochwertige Quarze weichen über Zeit leicht ab.</p>
+      <p>NTP musst:</p>
+      <ul>
+        <li>nicht nur einmalig korrigieren</li>
+        <li>sondern kontinuierlich nachregeln</li>
+        <li>die lokale Uhr langsam "ziehen" (slew), statt abrupt zu springen</li>
+      </ul>
+      <hr class="trennlinie">
+      <h3>4. Hierarisches System (Stratum)</h3>
+      <p>NTP arbeitet mit sogenannten <b>Stratum-Leveln:</b></p>
+      <ul>
+        <li>Stratum 0 ⟶ Atomuhren / GPS</li>
+        <li>Stratum 1 ⟶ direkt mit Stratum 0 verbunden</li>
+        <li>Stratum 2 ⟶ synchronisiert mit Stratum 1</li>
+        <li>usw.</li>
+      </ul>
+      <p>Je niedriger das Stratum, desto näher an der Referenzzeit.</p>
+      <p>Das verhindert Zeit-Chaos im Internet.</p>
+    </section>
+    <section class="content-section" id="warum_notwendig">
+      <h2>3. Warum ist Zeitsynchronisation technisch notwendig?</h2>
+      <h3>1. Active Directory & Kerberos</h3>
+      <p>Kerberos-Authentifizierung toleriert nur geringe Zeitabweichungen (standardmäßig ±5 Minuten).</p>
+      <p>Wenn Client und Domaincontroller zu stark abweichen:</p>
+      <p>⟶ Anmeldung schlägt fehl.</p>
+      <hr class="trennlinie">
+      <h3>2. Log-Dateien</h3>
+      <p>Ohne synchronisierte Zeit:</p>
+      <ul>
+        <li>Der Serverlog sagt: 10:00</li>
+        <li>Die Firewall sagt 09:57</li>
+        <li>Der Client sagt: 10:03</li>
+      </ul>
+      <p>Fehleranalyse wird unmöglich.</p>
+      <hr class="trennlinie">
+      <h3>3. Zertifikate</h3>
+      <p>TLS-Zertifikate haben:</p>
+      <ul>
+        <li>gültig ab</li>
+        <li>gültig bis</li>
+      </ul>
+      <p>Falsche Systemzeit ⟶ Zertifikat ungültig.</p>
+      <hr class="trennlinie">
+      <h3>4. Replikation & Datenbanken</h3>
+      <p>Cluster-Systeme benötigen konsistente Zeitstempel.</p>
+      <hr class="trennlinie">
+      <p>Kurz gesagt:<br>
+      Zeit ist eine sicherheitskritische Infrastrukturkomponente im Netzwerk.</p>
+    </section>
+    <section class="content-section" id="ntp_port">
+      <h2>4. Welchen Port nutzt NTP?</h2>
+      <p>NTP verwendet:</p>
+      <ul>
+        <li><b>UDP Port 123</b></li>
+      </ul>
+      <p>Wichtig:</p>
+      <p>NTP nutzt UDP, nicht TCP.</p>
+      <p>Warum UDP?</p>
+      <ul>
+        <li>geringe Latenz</li>
+        <li>geringer Overhead</li>
+        <li>Zeitabgleich benötigt keine verbindungsorientierte Kommunikation</li>
+      </ul>
+    </section>
+    <section class="content-section" id="ntp_funktion">
+      <h2>5. Grundlegende Funktionsweise von NTP</h2>
+      <p>Der Client sendet eine Anfrage an einem Zeitserver.</p>
+      <p>Der Server antwortet mit:</p>
+      <ul>
+        <li>Zeitstempel beim Empfang</li>
+        <li>Zeitstempel beim Senden</li>
+      </ul>
+      <p>Der Client berechnet daraus:</p>
+      <ul>
+        <li>Laufzeit</li>
+        <li>Zeitdifferenz</li>
+        <li>Offset</li>
+      </ul>
+      <p>Anschließend wird die lokale Uhr angepasst.</p>
+      <p>Das geschieht nicht abrupt, sondern meist durch leichtes Beschleunigen oder Verlangsamen der Systemzeit.</p>
+    </section>
+    <section class="content-section" id="praktischer_teil">
+      <h2>-- Praktischer Teil - Windows --</h2>
+    </section>
+    <section class="content-section" id="zeitquelle_abweichung">
+      <h2>6. Aktuelle Zeitquelle und Abweichung anzeigen</h2>
+      <p>Öffne eine Eingabeaufforderung als Administrator.</p>
+      <h3>Aktuelle Zeitquelle anzeigen:</h3>
+      <div class="code-box">
+        <button class="code-copy" type="button">Kopieren</button>
+        <p><b>Code</b><br>
+        w32tm /query /source</p>
+      </div>
+      <p>Das zeigt, von welchen Server dein Rechner aktuell die Zeit bezieht.</p>
+      <hr class="trennlinie">
+      <h3>Status anzeigen (inkl. Abweichung):</h3>
+      <div class="code-box">
+        <button class="code-copy" type="button">Kopieren</button>
+        <p><b>Code</b><br>
+        w32tm /query /status</p>
+      </div>
+      <p>Wichtige Felder:</p>
+      <ul>
+        <li>Source</li>
+        <li>Stratum</li>
+        <li>Last Successful Sync Time</li>
+        <li>Offset</li>
+      </ul>
+      <p>Der Offset zeigt, wie stark dein System aktuell abweicht.</p>
+    </section>
+    <section class="content-section" id="zeitsynchronisation_konfigurieren">
+      <h2>7. Zeitsynchronisation unter Windows Konfigurieren</h2>
+      <p>Windows verwendet den Dienst:</p>
+      <p><b>Windows-Zeitgeber (w32time)</b></p>
+      <hr class="trennlinie">
+      <h3>Methode 1 - Grafisch</h3>
+      <p>Systemsteuerung ⟶ Datum und Uhrzeit ⟶ Internet ⟶ Einstellungen ändern</p>
+      <p>Dort kann man:</p>
+      <ul>
+        <li>NTP-Server festlegen (z. B. time.windows.com)</li>
+        <li>Synchronisierung aktivieren</li>
+      </ul>
+        <hr class="trennlinie">
+        <h3>Methode 2 - Per Kommandozeile</h3>
+        <p>Zeitserver setzen:</p>
+        <div class="code-box">
+        <button class="code-copy" type="button">Kopieren</button>
+        <p>w32tm /config /manualpeerlist:"pool.ntp.org" /syncformflags:manual /update</p>
+      </div>
+      <p>Dienst neu starten:</p>
+      <div class="code-box">
+        <button class="code-copy" type="button">Kopieren</button>
+        <p>net stop w32time<br>
+        net start w32time</p>
+      </div>
+      <p>Sofort synchronisieren:</p>
+      <div class="code-box">
+        <button class="code-copy" type="button">Kopieren</button>
+        <p>w32tm /resync</p> 
+      </div>
+    </section>
+    <section class="content-section" id="zeit_domaenencontroller">
+      <h2>8. Zeit vom Domänencontroller beziehen</h2>
+      <p>In einer Active Directory Umgebung gilt:</p>
+      <ul>
+        <li>Clients synchronisieren mit dem Domaincontroller</li>
+        <li>Der PDC-Emulator synchronisiert mit einer externen Zeitquelle</li>
+      </ul>
+      <p>Das ist ein hierarchisches Modell.</p>
+      <p>Auf einem Domainclient:</p>
+      <div class="code-box">
+        <button class="code-copy" type="button">Kopieren</button>
+        <b>Code</b>
+        <p>w32tm /query /source</p>
+      </div>
+      <p>sollte als Quelle erscheinen:</p>
+      <p>Domänencontroller</p>
+    </section>
+    <section class="content-section" id="zeitsync_service">
+      <h2>9. Zeitsync-Service prüfen</h2>
+      <p>Dienststatus anzeigen:</p>
+      <div class="code-box">
+        <button class="code-copy" type="button">Kopieren</button>
+        <b>Code</b>
+        <p>services.msc</p>
+      </div>
+      <p>
+      <b>Dienst:</b> Windows-Zeitgeber<br>
+      <b>Startup-Typ sollte auf:</b> "Automatisch" stehen.
+      </p>
+    </section>
+    <div class="bottom-links">
+        <a href="Ausbildungsthemen.html" class="back-link">⟵ Zurück zum Inhaltsverzeichnis</a>
+        <a href="15 - Netzwerkprotokoll POP3_IMAP4.html" target="_blank" class="back-link">⟵ Zurück zu 15 - Netzwerkprotokoll POP3 / IMAP4</a>
+        <a href="17 - Netzwerkprotokoll SNMP.html" target="_blank" class="back-link">17 - Netzwerkprotokoll SNMP ⟶</a>
+      </div>
+    </main>
+    <aside class="right-column">
+      <div class="logo-stack">
+        <a class="logo-card" href="https://www.teccle-group.de" target="_blank" rel="noopener">
+          <img id="teccle-logo" src="TeccleLogo.png" alt="Teccle Group Logo" />
+        </a>
+        <span class="logo-divider" aria-hidden="true"></span>
+        <a class="logo-card" href="https://www.netzplan.de" target="_blank" rel="noopener">
+          <img src="NetzplanLogo.png" alt="Netzplan Logo" />
+        </a>
+      </div>
+      <div class="info-box">
+        <strong>Mehr entdecken</strong>
+        Direkt zu Support, Dokumentation oder zurück zur Übersicht.
+        <div class="info-links">
+          <a href="mailto:support@teccle-group.de">Support kontaktieren</a>
+          <br>
+          <a href="https://www.netzplan.de" target="_blank" rel="noopener">Dokumentation</a>
+          <br>
+          <a href="Ausbildungsthemen.html">Zur Übersicht</a>
+        </div>
+      </div>
+    </aside>
+  </div>
+  
+  <script>
+    function setLogoByMode() {
+      const logo = document.getElementById('teccle-logo');
+      if (document.body.classList.contains('dark')) {
+        logo.src = 'TeccleLogoBlack.png';
+      } else {
+        logo.src = 'TeccleLogo.png';
+      }
+    }
+    function toggleMode() {
+      document.body.classList.toggle('dark');
+      const btn = document.querySelector('.mode-toggle');
+      if (document.body.classList.contains('dark')) {
+        btn.textContent = '☀️ Hellmodus';
+      } else {
+        btn.textContent = '🌙 Dunkelmodus';
+      }
+      setLogoByMode();
+    }
+    function setupCodeCopy() {
+      const boxes = document.querySelectorAll('.code-box');
+      boxes.forEach((box) => {
+        const button = box.querySelector('.code-copy');
+        const codeLine = box.querySelector("p[style*='Courier New']") || box.querySelector('p');
+        if (!button || !codeLine) {
+          return;
+        }
+        button.addEventListener('click', async () => {
+          const text = codeLine.innerText.trim();
+          if (!text) {
+            return;
+          }
+          try {
+            await navigator.clipboard.writeText(text);
+            button.textContent = 'Kopiert';
+            setTimeout(() => {
+              button.textContent = 'Code kopieren';
+            }, 1200);
+          } catch (error) {
+            const helper = document.createElement('textarea');
+            helper.value = text;
+            helper.setAttribute('readonly', '');
+            helper.style.position = 'absolute';
+            helper.style.left = '-9999px';
+            document.body.appendChild(helper);
+            helper.select();
+            document.execCommand('copy');
+            document.body.removeChild(helper);
+            button.textContent = 'Kopiert';
+            setTimeout(() => {
+              button.textContent = 'Code kopieren';
+            }, 1200);
+          }
+        });
+      });
+    }
+    window.addEventListener('DOMContentLoaded', setLogoByMode);
+    window.addEventListener('DOMContentLoaded', setupCodeCopy);
+  </script>
+</body>
+
+</html>
